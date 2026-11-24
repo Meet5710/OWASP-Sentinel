@@ -1,0 +1,994 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  :root {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+  }
+
+  html {
+    scrollbar-gutter: stable;
+    transition: background-color 0.35s cubic-bezier(0.16, 1, 0.3, 1), color 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  body {
+    background-color: #05070e;
+    color: #f1f5f9;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    letter-spacing: -0.011em;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    letter-spacing: -0.022em;
+  }
+
+  code, pre, kbd, samp, .font-mono {
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+  }
+
+}
+
+/* ========================================================================= */
+/* UNIVERSAL HIGH-END DROPDOWN & SELECT THEMING (BULLETPROOF CONTRAST)       */
+/* ========================================================================= */
+select {
+  cursor: pointer;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+  background-color: #0f172a;
+  color: #f8fafc;
+}
+
+html.light select {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+}
+
+select option,
+select optgroup {
+  background-color: #0f172a !important;
+  color: #f8fafc !important;
+  padding: 10px 14px;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+}
+
+html.light select option,
+html.light select optgroup {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+}
+
+select option:checked,
+select option:hover {
+  background-color: #3b82f6 !important;
+  color: #ffffff !important;
+}
+
+html.light select option:checked,
+html.light select option:hover {
+  background-color: #2563eb !important;
+  color: #ffffff !important;
+}
+
+/* Smooth Tab Transitions & Fast GPU Momentum */
+@keyframes spatialTabEntrance {
+  0% {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.spatial-tab-pane {
+  animation: spatialTabEntrance 0.15s cubic-bezier(0.16, 1, 0.3, 1) both;
+  will-change: opacity, transform;
+  transform: translateZ(0);
+}
+
+.findings-table-row {
+  contain: layout style;
+}
+
+/* Micro-interaction for smooth theme rotation */
+@keyframes themeRotate {
+  0% {
+    transform: rotate(-30deg) scale(0.85);
+    opacity: 0;
+  }
+  100% {
+    transform: rotate(0) scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-theme-toggle {
+  animation: themeRotate 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Continuous Progress Bar Shimmer Beam */
+@keyframes progressShimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(250%);
+  }
+}
+
+.animate-progress-shimmer {
+  animation: progressShimmer 1.8s ease-in-out infinite;
+}
+
+/* Spatial Liquid Glass Background Elements */
+.spatial-bg-mesh {
+  background-color: #05070e;
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.12) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(6, 182, 212, 0.12) 0px, transparent 50%),
+    radial-gradient(at 50% 100%, rgba(168, 85, 247, 0.10) 0px, transparent 50%);
+  transition: background-color 0.35s cubic-bezier(0.16, 1, 0.3, 1), background-image 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes float-slow {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(30px, -20px) scale(1.08);
+  }
+}
+
+@keyframes float-reverse {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(-25px, 25px) scale(0.95);
+  }
+}
+
+.animate-float-slow {
+  animation: float-slow 18s ease-in-out infinite;
+  will-change: transform;
+}
+
+.animate-float-reverse {
+  animation: float-reverse 22s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* OWASP Sentinel Brand Logo Styling */
+.sentinel-brand-logo-text {
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 45%, #67e8f9 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: #ffffff;
+  display: inline-block;
+}
+
+html.light .sentinel-brand-logo-text {
+  background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 60%, #4338ca 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  color: #0f172a !important;
+}
+
+/* Light Theme High-Contrast Headings for Clip-Text Gradients */
+html.light .bg-clip-text.text-transparent:not(.sentinel-brand-logo-text) {
+  background-image: linear-gradient(135deg, #0f172a 0%, #1e1b4b 60%, #312e81 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  color: #0f172a !important;
+}
+
+/* Glassmorphism & Liquid Glass Surfaces - Dark Mode */
+.liquid-glass {
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 
+    0 10px 35px -5px rgba(0, 0, 0, 0.5),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.12);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.liquid-glass-card {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%), rgba(11, 15, 25, 0.65);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow: 
+    0 8px 32px 0 rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.14);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.liquid-glass-card-interactive {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.liquid-glass-card-interactive:hover {
+  transform: translateY(-2px);
+  border-top: 1px solid rgba(255, 255, 255, 0.35);
+  border-color: rgba(255, 255, 255, 0.16);
+  box-shadow: 
+    0 16px 40px -10px rgba(0, 0, 0, 0.6),
+    0 0 25px -5px rgba(99, 102, 241, 0.25),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.22);
+}
+
+.liquid-glass-pill {
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-top: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.1);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.liquid-glass-input {
+  background: rgba(10, 14, 26, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.liquid-glass-dropdown {
+  background: rgba(11, 15, 26, 0.95);
+  backdrop-filter: blur(28px) saturate(190%);
+  -webkit-backdrop-filter: blur(28px) saturate(190%);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 
+    0 24px 48px -12px rgba(0, 0, 0, 0.75),
+    0 0 25px -5px rgba(99, 102, 241, 0.2),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+.liquid-glass-input:focus {
+  outline: none;
+  border-color: rgba(99, 102, 241, 0.6);
+  box-shadow: 
+    0 0 0 3px rgba(99, 102, 241, 0.25),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.liquid-glass-btn-primary {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.9) 0%, rgba(139, 92, 246, 0.9) 100%);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-top: 1px solid rgba(255, 255, 255, 0.45);
+  box-shadow: 
+    0 4px 15px rgba(99, 102, 241, 0.35),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.25);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.liquid-glass-btn-primary:hover {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 1) 0%, rgba(139, 92, 246, 1) 100%);
+  box-shadow: 
+    0 6px 24px rgba(99, 102, 241, 0.5),
+    0 0 16px rgba(6, 182, 212, 0.35),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.35);
+  transform: translateY(-1px);
+}
+
+.liquid-glass-btn-primary:active {
+  transform: translateY(0) scale(0.97);
+}
+
+/* Dedicated Navigation Active Capsule Pill (Framer Motion layoutId Animated) */
+.liquid-glass-nav-pill {
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-top: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 
+    0 4px 18px rgba(99, 102, 241, 0.45),
+    0 0 14px rgba(129, 140, 248, 0.25),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.4);
+  pointer-events: none;
+  transition: none !important;
+  transform-origin: center center;
+}
+
+.liquid-glass-btn-secondary {
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.liquid-glass-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.22);
+  transform: translateY(-1px);
+}
+
+.liquid-glass-btn-secondary:active {
+  transform: translateY(0) scale(0.97);
+}
+
+/* Global Ultra-Smooth Spatial Button Micro-Interactions */
+button,
+a[role="button"],
+input[type="button"],
+input[type="submit"] {
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+button:active:not(:disabled),
+a[role="button"]:active {
+  transform: scale(0.97) !important;
+}
+
+/* Custom sleek spatial scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(11, 15, 25, 0.7);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 9999px;
+  backdrop-filter: blur(8px);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* ========================================================================= */
+/* LIGHT THEME - CRYSTAL SPATIAL LIQUID GLASS                                */
+/* ========================================================================= */
+
+html.light body {
+  background-color: #f8fafc;
+  color: #0f172a;
+}
+
+html.light .spatial-bg-mesh {
+  background-color: #f1f5f9;
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.12) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(6, 182, 212, 0.12) 0px, transparent 50%),
+    radial-gradient(at 50% 100%, rgba(168, 85, 247, 0.09) 0px, transparent 50%);
+}
+
+html.light .orb-primary {
+  background-color: rgba(99, 102, 241, 0.16) !important;
+}
+
+html.light .orb-secondary {
+  background-color: rgba(6, 182, 212, 0.14) !important;
+}
+
+html.light .orb-tertiary {
+  background-color: rgba(168, 85, 247, 0.12) !important;
+}
+
+/* Surfaces in Light Mode */
+html.light .liquid-glass {
+  background: rgba(255, 255, 255, 0.85) !important;
+  backdrop-filter: blur(28px) saturate(190%) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(190%) !important;
+  border: 1px solid rgba(226, 232, 240, 0.85) !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.95) !important;
+  box-shadow: 
+    0 10px 30px -5px rgba(0, 0, 0, 0.05),
+    0 1px 3px 0 rgba(0, 0, 0, 0.02),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+  color: #0f172a;
+}
+
+html.light .liquid-glass-card {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.94) 0%, rgba(255, 255, 255, 0.82) 100%), rgba(255, 255, 255, 0.85) !important;
+  backdrop-filter: blur(24px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+  border: 1px solid rgba(226, 232, 240, 0.88) !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.98) !important;
+  box-shadow: 
+    0 10px 25px -5px rgba(0, 0, 0, 0.04),
+    0 1px 2px 0 rgba(0, 0, 0, 0.02),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.95) !important;
+  color: #0f172a;
+}
+
+html.light .liquid-glass-card-interactive:hover {
+  transform: translateY(-2px);
+  border-top: 1px solid rgba(99, 102, 241, 0.4) !important;
+  border-color: rgba(99, 102, 241, 0.25) !important;
+  box-shadow: 
+    0 16px 40px -10px rgba(0, 0, 0, 0.08),
+    0 0 25px -5px rgba(99, 102, 241, 0.18),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.95) !important;
+}
+
+html.light .liquid-glass-pill {
+  background: rgba(241, 245, 249, 0.9) !important;
+  border: 1px solid rgba(203, 213, 225, 0.8) !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.95) !important;
+  box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.8) !important;
+  color: #334155;
+}
+
+html.light .liquid-glass-input {
+  background: rgba(255, 255, 255, 0.96) !important;
+  border: 1px solid rgba(203, 213, 225, 0.9) !important;
+  border-top: 1px solid rgba(226, 232, 240, 0.8) !important;
+  color: #0f172a !important;
+}
+
+html.light .liquid-glass-input::placeholder {
+  color: #94a3b8 !important;
+}
+
+html.light .liquid-glass-input:focus {
+  border-color: rgba(99, 102, 241, 0.8) !important;
+  box-shadow: 
+    0 0 0 3px rgba(99, 102, 241, 0.18),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.6) !important;
+}
+
+html.light .liquid-glass-dropdown {
+  background: rgba(255, 255, 255, 0.98) !important;
+  backdrop-filter: blur(28px) saturate(190%) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(190%) !important;
+  border: 1px solid rgba(203, 213, 225, 0.95) !important;
+  border-top: 1px solid rgba(255, 255, 255, 1) !important;
+  box-shadow: 
+    0 24px 45px -10px rgba(15, 23, 42, 0.15),
+    0 4px 14px 0 rgba(0, 0, 0, 0.04),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.95) !important;
+}
+
+html.light .liquid-glass-btn-secondary {
+  background: rgba(241, 245, 249, 0.85) !important;
+  border: 1px solid rgba(203, 213, 225, 0.8) !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.9) !important;
+  color: #1e293b !important;
+}
+
+html.light .liquid-glass-btn-secondary:hover {
+  background: rgba(226, 232, 240, 0.9) !important;
+  border-color: rgba(148, 163, 184, 0.8) !important;
+  color: #0f172a !important;
+  transform: translateY(-1px);
+}
+
+html.light .liquid-glass-btn-primary {
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%) !important;
+  color: #ffffff !important;
+  box-shadow: 
+    0 4px 16px rgba(99, 102, 241, 0.4),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.4) !important;
+}
+
+html.light .liquid-glass-nav-pill {
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.45) !important;
+  box-shadow: 
+    0 4px 18px rgba(99, 102, 241, 0.45),
+    0 1px 3px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.5) !important;
+  transition: none !important;
+}
+
+/* Light Theme Typography & High Contrast Fixes */
+html.light .liquid-glass h1:not([class*="text-amber-"]):not([class*="text-emerald-"]):not([class*="text-cyan-"]):not([class*="text-indigo-"]):not([class*="text-rose-"]):not([class*="text-purple-"]):not(.text-white-force),
+html.light .liquid-glass h2:not([class*="text-amber-"]):not([class*="text-emerald-"]):not([class*="text-cyan-"]):not([class*="text-indigo-"]):not([class*="text-rose-"]):not([class*="text-purple-"]):not(.text-white-force),
+html.light .liquid-glass h3:not([class*="text-amber-"]):not([class*="text-emerald-"]):not([class*="text-cyan-"]):not([class*="text-indigo-"]):not([class*="text-rose-"]):not([class*="text-purple-"]):not(.text-white-force) {
+  color: #0f172a;
+}
+
+/* Retain crisp white text on colored buttons, active pills, and solid badges */
+html.light .liquid-glass-btn-primary,
+html.light .liquid-glass-btn-primary *,
+html.light .liquid-glass-nav-pill,
+html.light .liquid-glass-nav-pill *,
+html.light .nav-tab-active-text,
+html.light .nav-tab-active-text *,
+html.light .bg-indigo-600,
+html.light .bg-indigo-600 *,
+html.light .bg-indigo-500,
+html.light .bg-indigo-500 *,
+html.light .bg-violet-600,
+html.light .bg-violet-600 *,
+html.light .text-white-force {
+  color: #ffffff !important;
+}
+
+/* Light Theme Borders */
+html.light .border-white\/10,
+html.light .border-white\/15,
+html.light .border-white\/20,
+html.light .border-white\/5,
+html.light .border-white\/\[0\.07\],
+html.light .border-white\/\[0\.08\],
+html.light .border-slate-800,
+html.light .border-slate-800\/80,
+html.light .border-slate-800\/60,
+html.light .border-slate-700,
+html.light .border-zinc-800,
+html.light .border-zinc-700 {
+  border-color: rgba(226, 232, 240, 0.9) !important;
+}
+
+html.light .divide-white\/5 > :not([hidden]) ~ :not([hidden]),
+html.light .divide-slate-800\/60 > :not([hidden]) ~ :not([hidden]) {
+  border-color: rgba(226, 232, 240, 0.7) !important;
+}
+
+/* ========================================================================= */
+/* MODAL DIMMED BACKDROP - IMMUTABLE ATMOSPHERIC DARK SCRIM IN ALL THEMES   */
+/* ========================================================================= */
+.modal-dimmed-backdrop,
+html.light .modal-dimmed-backdrop,
+html.dark .modal-dimmed-backdrop {
+  background-color: rgba(5, 8, 16, 0.78) !important;
+  backdrop-filter: blur(12px) saturate(140%) !important;
+  -webkit-backdrop-filter: blur(12px) saturate(140%) !important;
+}
+
+/* Comprehensive Light Theme Fallback for all Dark Containers (Eliminates Muddy Patches) */
+/* EXCLUDE anything inside .kali-terminal-container, .evidence-code-box, or .modal-dimmed-backdrop */
+html.light :not(.kali-terminal-container):not(.kali-terminal-container *):not(.evidence-code-box):not(.evidence-code-box *):not(.terminal-screen-force):not(.terminal-screen-force *):not(.modal-dimmed-backdrop):not(.modal-dimmed-backdrop *) > .bg-black\/5,
+html.light .bg-black\/10:not(.kali-terminal-container *):not(.evidence-code-box *):not(.terminal-screen-force *):not(.modal-dimmed-backdrop):not(.modal-dimmed-backdrop *),
+html.light .bg-black\/20:not(.kali-terminal-container *):not(.evidence-code-box *):not(.terminal-screen-force *):not(.modal-dimmed-backdrop):not(.modal-dimmed-backdrop *),
+html.light .bg-black\/25:not(.kali-terminal-container *):not(.evidence-code-box *):not(.terminal-screen-force *):not(.modal-dimmed-backdrop):not(.modal-dimmed-backdrop *),
+html.light .bg-black\/30:not(.kali-terminal-container *):not(.evidence-code-box *):not(.terminal-screen-force *):not(.modal-dimmed-backdrop):not(.modal-dimmed-backdrop *),
+html.light .bg-black\/40:not(.kali-terminal-container *):not(.evidence-code-box *):not(.terminal-screen-force *):not(.modal-dimmed-backdrop):not(.modal-dimmed-backdrop *),
+html.light .bg-black\/50:not(.kali-terminal-container *):not(.evidence-code-box *):not(.terminal-screen-force *):not(.modal-dimmed-backdrop):not(.modal-dimmed-backdrop *),
+html.light .bg-black\/60:not(.kali-terminal-container *):not(.evidence-code-box *):not(.terminal-screen-force *):not(.modal-dimmed-backdrop):not(.modal-dimmed-backdrop *),
+html.light .bg-black\/70:not(.kali-terminal-container *):not(.evidence-code-box *):not(.terminal-screen-force *):not(.modal-dimmed-backdrop):not(.modal-dimmed-backdrop *),
+html.light .bg-black\/80:not(.kali-terminal-container *):not(.evidence-code-box *):not(.terminal-screen-force *):not(.modal-dimmed-backdrop):not(.modal-dimmed-backdrop *),
+html.light .bg-black\/90:not(.kali-terminal-container *):not(.evidence-code-box *):not(.terminal-screen-force *):not(.modal-dimmed-backdrop):not(.modal-dimmed-backdrop *),
+html.light .bg-zinc-950:not(.kali-terminal-container *):not(.evidence-code-box *):not(.terminal-screen-force *):not(.modal-dimmed-backdrop):not(.modal-dimmed-backdrop *),
+html.light .bg-zinc-900:not(.kali-terminal-container *):not(.evidence-code-box *):not(.terminal-screen-force *):not(.modal-dimmed-backdrop):not(.modal-dimmed-backdrop *),
+html.light .bg-zinc-800:not(.kali-terminal-container *):not(.evidence-code-box *):not(.terminal-screen-force *):not(.modal-dimmed-backdrop):not(.modal-dimmed-backdrop *),
+html.light .bg-slate-950:not(.kali-terminal-container *):not(.evidence-code-box *):not(.terminal-screen-force *):not(.modal-dimmed-backdrop):not(.modal-dimmed-backdrop *),
+html.light .bg-slate-950\/70:not(.kali-terminal-container *):not(.evidence-code-box *):not(.terminal-screen-force *):not(.modal-dimmed-backdrop):not(.modal-dimmed-backdrop *),
+html.light .bg-slate-950\/60:not(.kali-terminal-container *):not(.evidence-code-box *):not(.terminal-screen-force *):not(.modal-dimmed-backdrop):not(.modal-dimmed-backdrop *),
+html.light .bg-slate-900:not(.kali-terminal-container *):not(.evidence-code-box *):not(.terminal-screen-force *):not(.modal-dimmed-backdrop):not(.modal-dimmed-backdrop *),
+html.light .bg-slate-900\/90:not(.kali-terminal-container *):not(.evidence-code-box *):not(.terminal-screen-force *):not(.modal-dimmed-backdrop):not(.modal-dimmed-backdrop *),
+html.light .bg-slate-900\/80:not(.kali-terminal-container *):not(.evidence-code-box *):not(.terminal-screen-force *):not(.modal-dimmed-backdrop):not(.modal-dimmed-backdrop *),
+html.light .bg-slate-900\/60:not(.kali-terminal-container *):not(.evidence-code-box *):not(.terminal-screen-force *):not(.modal-dimmed-backdrop):not(.modal-dimmed-backdrop *),
+html.light .bg-slate-900\/50:not(.kali-terminal-container *):not(.evidence-code-box *):not(.terminal-screen-force *):not(.modal-dimmed-backdrop):not(.modal-dimmed-backdrop *),
+html.light .bg-slate-900\/40:not(.kali-terminal-container *):not(.evidence-code-box *):not(.terminal-screen-force *):not(.modal-dimmed-backdrop):not(.modal-dimmed-backdrop *),
+html.light .bg-slate-900\/30:not(.kali-terminal-container *):not(.evidence-code-box *):not(.terminal-screen-force *):not(.modal-dimmed-backdrop):not(.modal-dimmed-backdrop *),
+html.light .bg-slate-900\/20:not(.kali-terminal-container *):not(.evidence-code-box *):not(.terminal-screen-force *):not(.modal-dimmed-backdrop):not(.modal-dimmed-backdrop *) {
+  background-color: rgba(248, 250, 252, 0.9) !important;
+  border-color: rgba(226, 232, 240, 0.85) !important;
+}
+
+/* ========================================================================= */
+/* KALI LINUX & LIVE SCAN TERMINALS - IMMUTABLE AUTHENTIC PITCH BLACK THEME */
+/* ========================================================================= */
+
+.kali-terminal-container,
+html.light .kali-terminal-container,
+.kali-terminal-screen,
+html.light .kali-terminal-screen,
+.terminal-screen-force,
+html.light .terminal-screen-force,
+.evidence-code-box,
+html.light .evidence-code-box,
+.evidence-console-screen,
+html.light .evidence-console-screen {
+  background-color: #06080f !important;
+  color: #f8fafc !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+.evidence-code-box,
+html.light .evidence-code-box {
+  background-color: #06080f !important;
+  color: #f1f5f9 !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+.evidence-code-box *,
+html.light .evidence-code-box * {
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.evidence-code-box pre,
+html.light .evidence-code-box pre,
+.evidence-code-box code,
+html.light .evidence-code-box code {
+  color: inherit !important;
+  background-color: transparent !important;
+}
+
+.evidence-code-box .text-slate-100,
+.evidence-code-box .text-slate-200,
+.evidence-code-box .text-slate-300,
+html.light .evidence-code-box .text-slate-100,
+html.light .evidence-code-box .text-slate-200,
+html.light .evidence-code-box .text-slate-300 {
+  color: #f1f5f9 !important;
+}
+
+.evidence-code-box .text-slate-400,
+html.light .evidence-code-box .text-slate-400 {
+  color: #94a3b8 !important;
+}
+
+.evidence-code-box .text-amber-200,
+.evidence-code-box .text-amber-300,
+.evidence-code-box .text-amber-400,
+html.light .evidence-code-box .text-amber-200,
+html.light .evidence-code-box .text-amber-300,
+html.light .evidence-code-box .text-amber-400 {
+  color: #fde047 !important;
+}
+
+.evidence-code-box .text-emerald-300,
+.evidence-code-box .text-emerald-400,
+html.light .evidence-code-box .text-emerald-300,
+html.light .evidence-code-box .text-emerald-400 {
+  color: #34d399 !important;
+}
+
+.evidence-code-box .text-cyan-300,
+.evidence-code-box .text-cyan-400,
+html.light .evidence-code-box .text-cyan-300,
+html.light .evidence-code-box .text-cyan-400 {
+  color: #38bdf8 !important;
+}
+
+.evidence-code-box .text-rose-300,
+.evidence-code-box .text-rose-400,
+html.light .evidence-code-box .text-rose-300,
+html.light .evidence-code-box .text-rose-400 {
+  color: #fb7185 !important;
+}
+
+.kali-terminal-header,
+html.light .kali-terminal-header {
+  background-color: #0d111c !important;
+  color: #f8fafc !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.kali-terminal-drawer,
+html.light .kali-terminal-drawer {
+  background-color: #090d16 !important;
+  color: #f8fafc !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.kali-terminal-env-strip,
+html.light .kali-terminal-env-strip {
+  background-color: #080c16 !important;
+  color: #f8fafc !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+/* Ensure any dark background inside kali terminal stays pitch black in light mode */
+.kali-terminal-container .bg-black,
+.kali-terminal-container [class*="bg-black"],
+.kali-terminal-container .bg-zinc-950,
+.kali-terminal-container .bg-zinc-900,
+.kali-terminal-container .bg-zinc-800,
+.kali-terminal-container .bg-slate-950,
+.kali-terminal-container .bg-slate-900,
+html.light .kali-terminal-container .bg-black,
+html.light .kali-terminal-container [class*="bg-black"],
+html.light .kali-terminal-container .bg-zinc-950,
+html.light .kali-terminal-container .bg-zinc-900,
+html.light .kali-terminal-container .bg-zinc-800,
+html.light .kali-terminal-container .bg-slate-950,
+html.light .kali-terminal-container .bg-slate-900 {
+  background-color: #0b0f19 !important;
+  color: #f8fafc !important;
+}
+
+/* Ensure inputs inside kali terminal are pure white and visible */
+.kali-terminal-container input,
+html.light .kali-terminal-container input,
+.kali-terminal-screen input,
+html.light .kali-terminal-screen input,
+.terminal-screen-force input,
+html.light .terminal-screen-force input {
+  color: #ffffff !important;
+  caret-color: #ffffff !important;
+}
+
+/* Protect all text inside kali terminal from light-mode darkening */
+.kali-terminal-container .text-white,
+html.light .kali-terminal-container .text-white,
+.kali-terminal-screen .text-white,
+html.light .kali-terminal-screen .text-white,
+.terminal-screen-force .text-white,
+html.light .terminal-screen-force .text-white {
+  color: #ffffff !important;
+}
+
+.kali-terminal-container .text-slate-100,
+.kali-terminal-container .text-slate-200,
+.kali-terminal-container .text-zinc-100,
+.kali-terminal-container .text-zinc-200,
+html.light .kali-terminal-container .text-slate-100,
+html.light .kali-terminal-container .text-slate-200,
+html.light .kali-terminal-container .text-zinc-100,
+html.light .kali-terminal-container .text-zinc-200 {
+  color: #f1f5f9 !important;
+}
+
+.kali-terminal-container .text-slate-300,
+.kali-terminal-container .text-zinc-300,
+html.light .kali-terminal-container .text-slate-300,
+html.light .kali-terminal-container .text-zinc-300 {
+  color: #cbd5e1 !important;
+}
+
+.kali-terminal-container .text-slate-400,
+.kali-terminal-container .text-zinc-400,
+html.light .kali-terminal-container .text-slate-400,
+html.light .kali-terminal-container .text-zinc-400 {
+  color: #94a3b8 !important;
+}
+
+.kali-terminal-container .text-slate-500,
+.kali-terminal-container .text-zinc-500,
+html.light .kali-terminal-container .text-slate-500,
+html.light .kali-terminal-container .text-zinc-500 {
+  color: #64748b !important;
+}
+
+/* All buttons, dropdowns, and interactive controls inside kali terminal must be dark, crisp, and high-contrast in ALL themes */
+.kali-terminal-container button,
+html.light .kali-terminal-container button,
+.kali-terminal-container .liquid-glass,
+html.light .kali-terminal-container .liquid-glass,
+.kali-terminal-container .liquid-glass-btn-secondary,
+html.light .kali-terminal-container .liquid-glass-btn-secondary,
+.kali-terminal-container .liquid-glass-pill,
+html.light .kali-terminal-container .liquid-glass-pill {
+  background-color: #141c30 !important;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+  color: #ffffff !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.kali-terminal-container button:hover,
+html.light .kali-terminal-container button:hover,
+.kali-terminal-container .liquid-glass:hover,
+html.light .kali-terminal-container .liquid-glass:hover,
+.kali-terminal-container .liquid-glass-btn-secondary:hover,
+html.light .kali-terminal-container .liquid-glass-btn-secondary:hover {
+  background-color: #1c2742 !important;
+  border-color: rgba(99, 102, 241, 0.6) !important;
+  color: #ffffff !important;
+}
+
+.kali-terminal-container select,
+html.light .kali-terminal-container select,
+.kali-terminal-container select option,
+html.light .kali-terminal-container select option {
+  background-color: #141c30 !important;
+  color: #ffffff !important;
+}
+
+/* Light Mode Text Legibility */
+html.light .text-zinc-500,
+html.light .text-zinc-600 {
+  color: #64748b !important;
+}
+
+html.light .text-zinc-400 {
+  color: #475569 !important;
+}
+
+html.light .text-zinc-300,
+html.light .text-zinc-200 {
+  color: #1e293b !important;
+}
+
+html.light .text-slate-400:not(.kali-terminal-container *):not(.evidence-code-box *):not(.terminal-screen-force *) {
+  color: #64748b !important;
+}
+
+html.light .text-slate-300:not(.kali-terminal-container *):not(.evidence-code-box *):not(.terminal-screen-force *) {
+  color: #334155 !important;
+}
+
+html.light .text-slate-200:not(.kali-terminal-container *):not(.evidence-code-box *):not(.terminal-screen-force *) {
+  color: #1e293b !important;
+}
+
+/* Table Row Hovers in Light Mode */
+html.light tr:hover {
+  background-color: rgba(99, 102, 241, 0.05) !important;
+}
+
+/* Jewel Tones for Badges in Light Mode */
+html.light .text-emerald-300:not(.kali-terminal-container *):not(.evidence-code-box *):not(.terminal-screen-force *),
+html.light .text-emerald-400:not(.kali-terminal-container *):not(.evidence-code-box *):not(.terminal-screen-force *) {
+  color: #047857 !important;
+}
+
+html.light .text-cyan-200:not(.kali-terminal-container *):not(.evidence-code-box *):not(.terminal-screen-force *),
+html.light .text-cyan-300:not(.kali-terminal-container *):not(.evidence-code-box *):not(.terminal-screen-force *),
+html.light .text-cyan-400:not(.kali-terminal-container *):not(.evidence-code-box *):not(.terminal-screen-force *) {
+  color: #0284c7 !important;
+}
+
+html.light .text-amber-200:not(.kali-terminal-container *):not(.evidence-code-box *):not(.terminal-screen-force *),
+html.light .text-amber-300:not(.kali-terminal-container *):not(.evidence-code-box *):not(.terminal-screen-force *),
+html.light .text-amber-400:not(.kali-terminal-container *):not(.evidence-code-box *):not(.terminal-screen-force *) {
+  color: #b45309 !important;
+}
+
+html.light .text-rose-200:not(.kali-terminal-container *):not(.evidence-code-box *):not(.terminal-screen-force *),
+html.light .text-rose-300:not(.kali-terminal-container *):not(.evidence-code-box *):not(.terminal-screen-force *),
+html.light .text-rose-400:not(.kali-terminal-container *):not(.evidence-code-box *):not(.terminal-screen-force *) {
+  color: #be123c !important;
+}
+
+html.light .text-indigo-300,
+html.light .text-indigo-400 {
+  color: #4f46e5 !important;
+}
+
+/* Scrollbar in Light Mode */
+html.light ::-webkit-scrollbar-track {
+  background: rgba(241, 245, 249, 0.8);
+}
+
+html.light ::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.16);
+}
+
+html.light ::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.28);
+}
+
+/* =========================================================================
+   PROOF OF CONCEPT (PoC) & PRINT TO PDF STYLES
+   Ensures instantaneous print preview (<100ms) with publication-grade output
+   ========================================================================= */
+@media print {
+  /* CRITICAL PERFORMANCE OPTIMIZATION:
+     Strip ALL expensive GPU blurs, animations, transitions, and shadows that stall print preview */
+  *, *::before, *::after {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    filter: none !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    animation: none !important;
+    transition: none !important;
+  }
+
+  /* Hide non-printable UI chrome only */
+  aside,
+  nav,
+  header,
+  footer,
+  .no-print,
+  button,
+  .liquid-glass-btn-primary,
+  .liquid-glass-btn-secondary,
+  .orb-primary,
+  .orb-secondary,
+  .orb-tertiary,
+  .fixed.-z-10,
+  .pointer-events-none,
+  [role="dialog"] {
+    display: none !important;
+  }
+
+  /* Reset document root to clean white canvas */
+  html, body {
+    background-color: #ffffff !important;
+    background-image: none !important;
+    color: #0f172a !important;
+    font-size: 10pt !important;
+    line-height: 1.4 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 100% !important;
+    overflow: visible !important;
+  }
+
+  /* Do NOT hide .spatial-bg-mesh; reset root layout containers to clean block flow */
+  #root,
+  .spatial-bg-mesh,
+  main {
+    background-color: #ffffff !important;
+    background-image: none !important;
+    color: #0f172a !important;
+    display: block !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow: visible !important;
+    position: static !important;
+    float: none !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Printable PoC Sheet takes full width with clean high-contrast styling */
+  #poc-printable-sheet {
+    display: block !important;
+    visibility: visible !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0.25in !important;
+    margin: 0 !important;
+    background: #ffffff !important;
+    color: #0f172a !important;
+    box-shadow: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+  }
+
+  #poc-printable-sheet * {
+    visibility: visible !important;
+  }
+
+  /* Prevent awkward page break splits inside findings or code blocks */
+  .break-inside-avoid {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+    margin-bottom: 12pt !important;
+  }
+
+  /* Ensure text colors are high-contrast black / dark slate */
+  h1, h2, h3, h4, h5, p, span, strong, b, td, th {
+    color: #0f172a !important;
+    text-shadow: none !important;
+  }
+
+  /* Code blocks in print */
+  pre, code {
+    font-family: 'Consolas', 'Courier New', monospace !important;
+    background-color: #f8fafc !important;
+    color: #0f172a !important;
+    border: 1px solid #cbd5e1 !important;
+    box-shadow: none !important;
+    white-space: pre-wrap !important;
+    word-break: break-all !important;
+  }
+
+  /* High contrast table borders */
+  table, th, td {
+    border-color: #cbd5e1 !important;
+    color: #0f172a !important;
+  }
+}
+

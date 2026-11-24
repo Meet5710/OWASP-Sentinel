@@ -1,0 +1,110 @@
+version: '3.8'
+
+services:
+  # 1. FastAPI Application Server & Unified React UI
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sentinel_web
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - APP_ENV=production
+      - DEBUG=false
+      - DATABASE_URL=postgresql://sentinel_user:sentinel_secret@db:5432/sentinel_db
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - HOST=0.0.0.0
+      - PORT=8000
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    networks:
+      - sentinel_net
+
+  # 2. Celery Asynchronous Assessment Worker
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sentinel_worker
+    restart: unless-stopped
+    command: celery -A app.core.celery_app.celery_app worker --loglevel=info -c 4
+    environment:
+      - APP_ENV=production
+      - DATABASE_URL=postgresql://sentinel_user:sentinel_secret@db:5432/sentinel_db
+      - CELERY_BROKER_URL=redis://redis:6379/0
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    networks:
+      - sentinel_net
+
+  # 3. Celery Beat Periodic Scheduler (Recurring Scans & Daily OWASP Checks)
+  beat:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sentinel_beat
+    restart: unless-stopped
+    command: celery -A app.core.celery_app.celery_app beat --loglevel=info
+    environment:
+      - APP_ENV=production
+      - DATABASE_URL=postgresql://sentinel_user:sentinel_secret@db:5432/sentinel_db
+      - CELERY_BROKER_URL=redis://redis:6379/0
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    networks:
+      - sentinel_net
+
+  # 4. Redis In-Memory Message Broker & State Cache
+  redis:
+    image: redis:7-alpine
+    container_name: sentinel_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - sentinel_net
+
+  # 5. PostgreSQL Production Database
+  db:
+    image: postgres:16-alpine
+    container_name: sentinel_postgres
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=sentinel_user
+      - POSTGRES_PASSWORD=sentinel_secret
+      - POSTGRES_DB=sentinel_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sentinel_user -d sentinel_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - sentinel_net
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  sentinel_net:
+    driver: bridge
+

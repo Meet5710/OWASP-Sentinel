@@ -1,0 +1,3546 @@
+[
+  {
+    "file": "050501.py",
+    "proto": "ftp",
+    "desc": "!/usr/bin/python",
+    "ports": [
+      "4444",
+      "21"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "051219.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "ports": [
+      "4444"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "051220.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "ports": [
+      "4444"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "060515.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/env python",
+    "ports": [
+      "0",
+      "1977"
+    ],
+    "paths": [],
+    "cve": "bid/17958"
+  },
+  {
+    "file": "060715.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/env python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "060721.py",
+    "proto": "smtp",
+    "desc": "!/usr/bin/env python",
+    "ports": [
+      "25"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "060813.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "060826.py",
+    "proto": "pop3",
+    "desc": "!/usr/bin/python",
+    "ports": [
+      "4444",
+      "110"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "060908.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "061028.py",
+    "proto": "dns",
+    "desc": "!/usr/bin/python",
+    "ports": [
+      "53"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "061107.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/env python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "061118.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "061127.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "ports": [
+      "69"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "061128.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "ports": [
+      "69"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "061209.py",
+    "proto": "dns",
+    "desc": "!/usr/bin/python",
+    "ports": [
+      "53"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "061225.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "070103.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "070105.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "070107.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [
+      "/wp-login.php?action=logout",
+      "/wp-trackback.php?p=",
+      "/wp-trackback.php?p="
+    ],
+    "cve": ""
+  },
+  {
+    "file": "070201.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "070301.py",
+    "proto": "smb",
+    "desc": "!/usr/bin/python",
+    "ports": [
+      "1025",
+      "139"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "070310.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "070314.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "070316.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "070320.py",
+    "proto": "ftp",
+    "desc": "usr/bin/python",
+    "ports": [
+      "21"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "070321.py",
+    "proto": "imap",
+    "desc": "!/usr/bin/python",
+    "ports": [
+      "4444",
+      "143"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "070322.py",
+    "proto": "imap",
+    "desc": "!/usr/bin/python",
+    "ports": [
+      "143"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "070323.py",
+    "proto": "exploit",
+    "desc": "usr/bin/python",
+    "ports": [
+      "554"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "070326.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "070329.py",
+    "proto": "imap",
+    "desc": "!/usr/bin/python",
+    "ports": [
+      "143"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "070330.py",
+    "proto": "smb",
+    "desc": "!/usr/bin/python",
+    "ports": [
+      "1025",
+      "139"
+    ],
+    "paths": [],
+    "cve": "CVE-2006-5276"
+  },
+  {
+    "file": "070412.py",
+    "proto": "http",
+    "desc": "usr/bin/python",
+    "ports": [
+      "80"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "070415.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": "bid/23470"
+  },
+  {
+    "file": "070430.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "070515.py",
+    "proto": "smtp",
+    "desc": "!/usr/bin/python",
+    "ports": [
+      "25"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "070516.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [
+      "111"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "070517.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [
+      "111"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "070518.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/env python",
+    "ports": [],
+    "paths": [],
+    "cve": "CVE-2007-1531"
+  },
+  {
+    "file": "070520.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "070603.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "ports": [
+      "4444"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "070607.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/env python",
+    "ports": [
+      "1234",
+      "8080"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "070610.py",
+    "proto": "ftp",
+    "desc": "!/usr/bin/python",
+    "ports": [
+      "21"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "070716.py",
+    "proto": "irc",
+    "desc": "!/usr/bin/python",
+    "ports": [
+      "6667",
+      "6667"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "070720.py",
+    "proto": "imap",
+    "desc": "Lotus Domino IMAP4 Server Release 6.5.4 / Windows 2000 Advanced Server",
+    "ports": [
+      "143"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "070807.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "070814.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "070825.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "ports": [
+      "389"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "070918.py",
+    "proto": "exploit",
+    "desc": "Practice Script 070918.py",
+    "ports": [],
+    "paths": [
+      "/home/index.shtml"
+    ],
+    "cve": "CVE-2000-0920"
+  },
+  {
+    "file": "070924.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "ports": [
+      "80"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "070925.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "071014.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "071016.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "ports": [],
+    "paths": [
+      "/home/index.shtml"
+    ],
+    "cve": ""
+  },
+  {
+    "file": "071028.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "ports": [
+      "4444"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "071029.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "071103.py",
+    "proto": "http",
+    "desc": "!C:\\python25\\python25.exe",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "071107.py",
+    "proto": "exploit",
+    "desc": "setlocale() exploit for aix 5.2 ( CVE-2006-4254  )",
+    "ports": [],
+    "paths": [
+      "/bin/sh",
+      "/usr/bin/passwd"
+    ],
+    "cve": "CVE-2006-4254"
+  },
+  {
+    "file": "071126.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "ports": [
+      "80"
+    ],
+    "paths": [
+      "/creazione.php",
+      "/../igotyourbox.php"
+    ],
+    "cve": ""
+  },
+  {
+    "file": "071127.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "071212.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "ports": [
+      "4444"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "071218.py",
+    "proto": "ftp",
+    "desc": "WftpdExpPro_HeapPoC.py",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "071807.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "080104.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "080107.py",
+    "proto": "exploit",
+    "desc": "Practice Script 080107.py",
+    "ports": [
+      "4444"
+    ],
+    "paths": [],
+    "cve": "CVE-2007-6335"
+  },
+  {
+    "file": "080109.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": "bid/26789"
+  },
+  {
+    "file": "080115.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "080124.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": "CVE-2008-0409"
+  },
+  {
+    "file": "080226.py",
+    "proto": "exploit",
+    "desc": "exploit.py",
+    "ports": [
+      "80"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "080228.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [
+      "/include/doc/get_image.php?lang=&img=../../www/oreon.conf.php",
+      "/include/doc/get_image.php?lang=&img=../../../../../etc/passwd"
+    ],
+    "cve": ""
+  },
+  {
+    "file": "080303.py",
+    "proto": "http",
+    "desc": "Practice Script 080303.py",
+    "ports": [
+      "8080"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "080310.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "080314.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "ports": [
+      "4444"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "080315.py",
+    "proto": "exploit",
+    "desc": "lame Dovecot IMAP [1.0.10 -> 1.1rc3] Exploit",
+    "ports": [],
+    "paths": [],
+    "cve": "CVE-2008-1218"
+  },
+  {
+    "file": "080316.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "080318.py",
+    "proto": "exploit",
+    "desc": "Discovered by 0in from DaRk-CodeRs Programming & Security Group",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "080323.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "080327.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "ports": [
+      "69",
+      "4444"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "080328.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [
+      "69",
+      "4444"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "080402.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "ports": [
+      "4444",
+      "7510"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "080403.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "080404.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "080405.py",
+    "proto": "exploit",
+    "desc": "usage: exploit.py FileName",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "080411.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "080415.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "ports": [
+      "6080"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "080416.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "080421.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "080428.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "080617.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "ports": [
+      "80"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "080630.py",
+    "proto": "imap",
+    "desc": "!/usr/bin/python",
+    "ports": [
+      "143"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "080709.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "080712.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "080724.py",
+    "proto": "dns",
+    "desc": "Copyright (C) 2008 Julien Desfossez <ju@klipix.org>",
+    "ports": [
+      "32883",
+      "53"
+    ],
+    "paths": [],
+    "cve": "CVE-2008-1447"
+  },
+  {
+    "file": "081014.py",
+    "proto": "ftp",
+    "desc": "Practice Script 081014.py",
+    "ports": [
+      "21"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "081015.py",
+    "proto": "ftp",
+    "desc": "RaidenFTPD V2.4 build 3620 exploit",
+    "ports": [
+      "21"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "081203.py",
+    "proto": "exploit",
+    "desc": "exploit.py",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "081214.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "081216.py",
+    "proto": "exploit",
+    "desc": "usage: exploit.py",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "081222.py",
+    "proto": "exploit",
+    "desc": "CoolPlayer (Skin) Buffer Overflow",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "090107.py",
+    "proto": "exploit",
+    "desc": "usage: exploit.py",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "090110.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "090113.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "090114.py",
+    "proto": "ftp",
+    "desc": "!/usr/bin/python",
+    "ports": [
+      "21"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "090115.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "090116.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [
+      "17000"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "090117.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "090120.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [
+      "/passwd.dat"
+    ],
+    "cve": ""
+  },
+  {
+    "file": "090203.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "090204.py",
+    "proto": "exploit",
+    "desc": "Exploit code (PoC) for OpenFiler 2.3 (current)",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "090205.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/env python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "090206.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "090210.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/env python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "090211.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/env python",
+    "ports": [],
+    "paths": [],
+    "cve": "CVE-2009-0388"
+  },
+  {
+    "file": "090302.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "ports": [
+      "80"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "090310.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "090311.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "090312.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "090313.py",
+    "proto": "exploit",
+    "desc": "usage: exploit.py",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "090321.py",
+    "proto": "exploit",
+    "desc": "exploit.py",
+    "ports": [],
+    "paths": [],
+    "cve": "bid/34120"
+  },
+  {
+    "file": "090401.py",
+    "proto": "smtp",
+    "desc": "Author : Ahmed Obied (ahmed.obied@gmail.com)",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "090404.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "090405.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/env python",
+    "ports": [
+      "80"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "090406.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/env",
+    "ports": [],
+    "paths": [
+      "/settings.php"
+    ],
+    "cve": ""
+  },
+  {
+    "file": "090419.py",
+    "proto": "exploit",
+    "desc": "Practice Script 090419.py",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "090421.py",
+    "proto": "exploit",
+    "desc": "Practice Script 090421.py",
+    "ports": [
+      "80"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "090422.py",
+    "proto": "exploit",
+    "desc": "TNS Listener (Oracle RDBMS) exploit, cause trap in Listener process",
+    "ports": [],
+    "paths": [],
+    "cve": "CVE-2009-0991"
+  },
+  {
+    "file": "090425.py",
+    "proto": "exploit",
+    "desc": "Practice Script 090425.py",
+    "ports": [
+      "80"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "090426.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "090428.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "ports": [
+      "80"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "090505.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "090506.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "090518.py",
+    "proto": "ftp",
+    "desc": "!/usr/bin/python",
+    "ports": [
+      "21"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "090519.py",
+    "proto": "exploit",
+    "desc": "Practice Script 090519.py",
+    "ports": [
+      "80"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "090605.py",
+    "proto": "http",
+    "desc": "Practice Script 090605.py",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "090618.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [
+      "/player.php?name="
+    ],
+    "cve": ""
+  },
+  {
+    "file": "090620.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "090622.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [
+      "/password_forgotten.php",
+      "/admin/sqlpatch.php"
+    ],
+    "cve": ""
+  },
+  {
+    "file": "090623.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/env python",
+    "ports": [
+      "3817"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "090701.py",
+    "proto": "exploit",
+    "desc": "Practice Script 090701.py",
+    "ports": [
+      "80"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "090722.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/env python",
+    "ports": [
+      "4444"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "090723.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/env python",
+    "ports": [],
+    "paths": [],
+    "cve": "CVE-2007-4897"
+  },
+  {
+    "file": "090724.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/env python",
+    "ports": [],
+    "paths": [],
+    "cve": "CVE-2007-4924"
+  },
+  {
+    "file": "090801.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "090803.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "ACOi.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "BladeProxy.py",
+    "proto": "http",
+    "desc": "Practice Script BladeProxy.py",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "ChAP.py",
+    "proto": "http",
+    "desc": "! /usr/bin/env python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "DNSRPCscanner.py",
+    "proto": "dns",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": "bid/23470"
+  },
+  {
+    "file": "EFSscan.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "ExploitMyUnion_linux.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/env python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "ExploitMyUnion_windows.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/env python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "GHY.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [
+      "995",
+      "995"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "MySQL_double_SHA1_brute.py",
+    "proto": "database",
+    "desc": "!/usr/bin/env python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "ProxyHarvest.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "RevS.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "ports": [],
+    "paths": [
+      "/bin/bash"
+    ],
+    "cve": ""
+  },
+  {
+    "file": "S2.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [
+      "/whois/",
+      "/whois/",
+      "/ashikali.html"
+    ],
+    "cve": ""
+  },
+  {
+    "file": "SMB_reroute.py",
+    "proto": "smb",
+    "desc": "!/usr/bin/env python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "Serverchk.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "Webclicker.py",
+    "proto": "http",
+    "desc": "sannes",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "Webserverwatcher.py",
+    "proto": "http",
+    "desc": "!usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "XSSscan.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "XSSscan_v1.1.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "XSSscan_v1.2.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "accbrute.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "admin-scan.py",
+    "proto": "http",
+    "desc": "usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "aimcrack.py",
+    "proto": "http",
+    "desc": "Instant Aim Hash Cracker",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "aiocracker.py",
+    "proto": "http",
+    "desc": "Attempts to crack hash ( md5, sha1, sha256, sha384, sha512) against an",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "alphalowcrack.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "analyse_malware.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "b2evobf.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [
+      "/htsrv/login.php"
+    ],
+    "cve": ""
+  },
+  {
+    "file": "b64decodebot.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "b64encodebot.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "banbot.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "bannerscan.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "base64tohex.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "batconv.py",
+    "proto": "http",
+    "desc": "EXE to BAT converter Version 2.0",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "bindshell.py",
+    "proto": "http",
+    "desc": "python bindshell, fancy version",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "bing_sqli_scan.py",
+    "proto": "database",
+    "desc": "usr/bin/env python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "blindext.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "blindfuzz.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "blowfish.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "boascan.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [
+      "/home/index.shtml"
+    ],
+    "cve": ""
+  },
+  {
+    "file": "bulletftp.py",
+    "proto": "ftp",
+    "desc": "!/usr/bin/python",
+    "ports": [
+      "21",
+      "21"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "cPanelbrute.py",
+    "proto": "http",
+    "desc": "!usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "cesarscan.py",
+    "proto": "ftp",
+    "desc": "!/usr/bin/python",
+    "ports": [
+      "21",
+      "21"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "cgibot.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "cgiscan.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [
+      "/d3hydr8.html"
+    ],
+    "cve": ""
+  },
+  {
+    "file": "cgiscan1.1.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [
+      "/d3hydr8.html"
+    ],
+    "cve": ""
+  },
+  {
+    "file": "cgiscan1.2.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [
+      "/d3hydr8.html"
+    ],
+    "cve": ""
+  },
+  {
+    "file": "cgiscan1.3.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [
+      "/d3hydr8.html"
+    ],
+    "cve": ""
+  },
+  {
+    "file": "cisco_decrypt.py",
+    "proto": "http",
+    "desc": "Yet Another Cisco Type 7 Password Decryptor",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "cmdsbot.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "cms.py",
+    "proto": "http",
+    "desc": "Practice Script cms.py",
+    "ports": [],
+    "paths": [
+      "/index.php",
+      "/index.php"
+    ],
+    "cve": ""
+  },
+  {
+    "file": "colfinder.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "convertor.py",
+    "proto": "http",
+    "desc": "Practice Script convertor.py",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "crackbot.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "ports": [],
+    "paths": [
+      "/home/d3hydr8/words.txt"
+    ],
+    "cve": ""
+  },
+  {
+    "file": "crackbot1.2.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "ports": [],
+    "paths": [
+      "/home/d3hydr8/words.txt"
+    ],
+    "cve": ""
+  },
+  {
+    "file": "crackbot_mysql.py",
+    "proto": "database",
+    "desc": "!/usr/bin/env python",
+    "ports": [],
+    "paths": [
+      "/home/d3hydr8/words.txt"
+    ],
+    "cve": ""
+  },
+  {
+    "file": "crackme.py",
+    "proto": "http",
+    "desc": "This tool extracts MD5's from a file and then searches online for crac",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "daemon.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "ports": [],
+    "paths": [
+      "/var/log/pydaemon.log",
+      "/var/run/pydaemon.pid",
+      "/root/data"
+    ],
+    "cve": ""
+  },
+  {
+    "file": "darkKML.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "darkMSSQL.py",
+    "proto": "database",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "darkPGSQLi.py",
+    "proto": "database",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "darkSMTP.py",
+    "proto": "smtp",
+    "desc": "!/usr/bin/python -O",
+    "ports": [
+      "25"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "darkSMTPv.py",
+    "proto": "smtp",
+    "desc": "!usr/bin/python",
+    "ports": [
+      "25"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "darkTouch.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "decoder.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "delicious-captcha-cracker.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "devilzc0de.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [
+      "/etc/passwd",
+      "/home/",
+      "/var/"
+    ],
+    "cve": ""
+  },
+  {
+    "file": "diggbf.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "dirscan.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "dnsbee.py",
+    "proto": "dns",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "dnsbrute.py",
+    "proto": "dns",
+    "desc": "!usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "dnsenum.py",
+    "proto": "dns",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "doorknocker.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "dorkScan.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [
+      "/d3hydr8.html"
+    ],
+    "cve": ""
+  },
+  {
+    "file": "dorkscan_advanced.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [
+      "/d3hydr8.html"
+    ],
+    "cve": ""
+  },
+  {
+    "file": "dpc-FTPhunt.py",
+    "proto": "ftp",
+    "desc": "!usr/bin/python",
+    "ports": [
+      "21"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "dpc-hashcrack.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "dpc-shodanscan.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "dumpbot.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "dumpcrack.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "dumpcrack1.1.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "dumpcrack1.2.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "encoder.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "encrak.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "evalencoder.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "eventcalendar_scanner.py",
+    "proto": "http",
+    "desc": "coded by p1mps",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "exlex_win.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "fireinthehole.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [
+      "/bin/",
+      "/usr/bin/",
+      "/usr/sbin/"
+    ],
+    "cve": ""
+  },
+  {
+    "file": "friendsterbf.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "ftpanon.py",
+    "proto": "ftp",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "ftpanonbot.py",
+    "proto": "ftp",
+    "desc": "!/usr/bin/env python",
+    "ports": [
+      "21"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "ftpbrute.py",
+    "proto": "ftp",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "ftpbrute_devilzc0de.py",
+    "proto": "ftp",
+    "desc": "!usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "ftpbrute_iprange.py",
+    "proto": "ftp",
+    "desc": "!usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "ftpbrute_random.py",
+    "proto": "ftp",
+    "desc": "!usr/bin/python",
+    "ports": [
+      "21"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "ftpbrute_random1.0.py",
+    "proto": "ftp",
+    "desc": "!usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "ftpcheck.py",
+    "proto": "ftp",
+    "desc": "!/usr/bin/env python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "ftprand.py",
+    "proto": "ftp",
+    "desc": "!/usr/bin/python",
+    "ports": [
+      "21"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "fuskbucketenglish.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [
+      "/fuskbucket/",
+      "/fuskbucket/",
+      "/home/user/fuskbucket/fuskflist1.txt"
+    ],
+    "cve": ""
+  },
+  {
+    "file": "gSQLHarvest.py",
+    "proto": "database",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "getresp.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "gmail_check.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "ports": [
+      "995"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "gmailbrute.py",
+    "proto": "http",
+    "desc": "!usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "gmailpopbrute.py",
+    "proto": "pop3",
+    "desc": "!usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "goog-mail.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "googleb0t.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "hashgen.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "hellobot.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "hexdump.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "hi5.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "honeypot.py",
+    "proto": "http",
+    "desc": "Practice Script honeypot.py",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "hostlookup.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "htcrack.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "httpcheck.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "imapbrute.py",
+    "proto": "imap",
+    "desc": "!usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "imapbrute_iprange.py",
+    "proto": "imap",
+    "desc": "!usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "imapbrute_random.py",
+    "proto": "imap",
+    "desc": "!usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "inside_pro_dl.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "ipbanscan.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "join.py",
+    "proto": "http",
+    "desc": "join all part files in a dir created by split.py.",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "joomlabrute.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "joomscan.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "lastlog.py",
+    "proto": "http",
+    "desc": "! /usr/bin/env python",
+    "ports": [],
+    "paths": [
+      "/var/log/lastlog"
+    ],
+    "cve": ""
+  },
+  {
+    "file": "lfi-rfi.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [
+      "/etc/passwd"
+    ],
+    "cve": ""
+  },
+  {
+    "file": "lfifuzz.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "lfiscan.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [
+      "/d3hydr8.html",
+      "/index.php",
+      "/index.php"
+    ],
+    "cve": ""
+  },
+  {
+    "file": "links.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "linkscan.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "linkscan1.3.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "linkscansimple.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "linksysbrute.py",
+    "proto": "http",
+    "desc": "!usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "load_fuzz.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "locbrute.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "malware_analyse.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "maxfr.py",
+    "proto": "http",
+    "desc": "Enumerate known hostnames for a given IP address.",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "md5bot.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "md5check.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "md5checksum.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "md5crack.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "md5db11.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "md5gen.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "md5randcrack.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "md5shabrute.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "md5sum.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "md5word.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "mdaemonscan.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "ports": [
+      "4444"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "mtsshbrute.py",
+    "proto": "ssh",
+    "desc": "!/usr/bin/env python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "mysql323crack.py",
+    "proto": "database",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "mysql5crack.py",
+    "proto": "database",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "mysql_default.py",
+    "proto": "database",
+    "desc": "!/usr/bin/env python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "mysqlbrute.py",
+    "proto": "database",
+    "desc": "!usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "mysqlbrute_iprange.py",
+    "proto": "database",
+    "desc": "!usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "mysqlbrute_random.py",
+    "proto": "database",
+    "desc": "!usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "netstat_tool.py",
+    "proto": "http",
+    "desc": "Practice Script netstat_tool.py",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "ngeotrace.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [
+      "/usr/local/share/GeoIP/GeoIPCity.dat"
+    ],
+    "cve": ""
+  },
+  {
+    "file": "niktolistscan.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [
+      "/home/d3hydr8/tools/nikto/output"
+    ],
+    "cve": ""
+  },
+  {
+    "file": "nmapbot.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "nntpbrute.py",
+    "proto": "http",
+    "desc": "!usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "nntpbrute_iprange.py",
+    "proto": "http",
+    "desc": "!usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "nntpbrute_random.py",
+    "proto": "http",
+    "desc": "!usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "nukescan.py",
+    "proto": "http",
+    "desc": "!usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "oledbstract.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "openPorts.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "openports_audit.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "ora11gPWCrack.py",
+    "proto": "http",
+    "desc": "!python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "oraclefuz.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [
+      "1521"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "pastebin.py",
+    "proto": "http",
+    "desc": "Uploads source files to pastebin.com",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "phpBBbrute.py",
+    "proto": "http",
+    "desc": "!usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "phpass.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "phpbbscan.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [
+      "/d3hydr8.html",
+      "/bb/",
+      "/phpbb/"
+    ],
+    "cve": ""
+  },
+  {
+    "file": "pide.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "ports": [],
+    "paths": [
+      "/var/db/pide/pide.db",
+      "/var/db/pide/pide.db.new",
+      "/etc/pide.conf"
+    ],
+    "cve": ""
+  },
+  {
+    "file": "pincrack.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "pkl.py",
+    "proto": "http",
+    "desc": "! /usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "pmabf.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "popbrute.py",
+    "proto": "pop3",
+    "desc": "!usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "popbrute_iprange.py",
+    "proto": "pop3",
+    "desc": "!usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "popbrute_random.py",
+    "proto": "pop3",
+    "desc": "!usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "portforward.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "portscan.py",
+    "proto": "http",
+    "desc": "A simple port scanner to scan a range of ports on a single host.",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "proxybot.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "proxyfuzz.py",
+    "proto": "http",
+    "desc": "Proxyfuzz: a TCP and UDP proxy man-in-the-middle fuzzer",
+    "ports": [
+      "0",
+      "0"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "psbot.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "ports": [],
+    "paths": [
+      "/bin/bash"
+    ],
+    "cve": ""
+  },
+  {
+    "file": "ptf.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "pycrack.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "pyscan.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "rCFuzz.py",
+    "proto": "http",
+    "desc": "rCfuzz.py v0.1 (c) 2008",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "randwebservscan.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "registry.py",
+    "proto": "http",
+    "desc": "Practice Script registry.py",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "relayfind.py",
+    "proto": "http",
+    "desc": "!usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "rfiscan.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "rootbrute.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "rot13.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "rpt.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [
+      "/ashikali.html",
+      "/etc/passwd",
+      "/home/"
+    ],
+    "cve": ""
+  },
+  {
+    "file": "rwhois.py",
+    "proto": "http",
+    "desc": "! /usr/bin/python --",
+    "ports": [
+      "43"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "s.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [
+      "6668"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "s1.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [
+      "/whois/",
+      "/whois/",
+      "/ashikali.html"
+    ],
+    "cve": ""
+  },
+  {
+    "file": "scanbot.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "schemafuzz.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "serenbf.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "sex.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "sha1crack.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "sha1gen.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "shellgen.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "shoutmix_tool.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "simpleDorkGUi.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "smtpbrute.py",
+    "proto": "smtp",
+    "desc": "!usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "smtpbrute_iprange.py",
+    "proto": "smtp",
+    "desc": "!usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "smtpbrute_random.py",
+    "proto": "smtp",
+    "desc": "!usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "smtpd.py",
+    "proto": "smtp",
+    "desc": "!/usr/local/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "sniff.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "snmp_brute.py",
+    "proto": "http",
+    "desc": "!usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "spam.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "ports": [
+      "587"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "spambot.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "split.py",
+    "proto": "http",
+    "desc": "split a file into a set of portions; join.py puts them",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "spomb.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "sqlbrute.py",
+    "proto": "database",
+    "desc": "!/usr/bin/env python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "sqlfuzz.py",
+    "proto": "database",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [
+      "/etc/passwd",
+      "/etc/shadow",
+      "/etc/fstab"
+    ],
+    "cve": ""
+  },
+  {
+    "file": "sqlic.py",
+    "proto": "database",
+    "desc": "!/usr/bin/env python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "sqlifinderb0t.py",
+    "proto": "database",
+    "desc": "!/usr/bin/env python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "sqlresp.py",
+    "proto": "database",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "sqlscan.py",
+    "proto": "database",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "sqltest.py",
+    "proto": "database",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "ssh-sniffer.0.7.py",
+    "proto": "ssh",
+    "desc": "! /usr/bin/env python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "sshbrute.py",
+    "proto": "ssh",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "sshbrute_fork.py",
+    "proto": "ssh",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "sshbrute_iprange.py",
+    "proto": "ssh",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "sshbrute_random.py",
+    "proto": "ssh",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "subsearch.py",
+    "proto": "http",
+    "desc": "!usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "surgescan.py",
+    "proto": "smtp",
+    "desc": "!/usr/bin/python",
+    "ports": [
+      "110",
+      "25"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "telnetbrute.py",
+    "proto": "http",
+    "desc": "!usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "telnetbrute_iprange.py",
+    "proto": "http",
+    "desc": "!usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "telnetbrute_random.py",
+    "proto": "http",
+    "desc": "!usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "uniGen.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "urlinfo.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "vbscan.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [
+      "/d3hydr8.html",
+      "/vb/",
+      "/vBulletin/"
+    ],
+    "cve": ""
+  },
+  {
+    "file": "vnc.py",
+    "proto": "http",
+    "desc": "Practice Script vnc.py",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "vulndetect.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [
+      "80"
+    ],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "wMunch.py",
+    "proto": "http",
+    "desc": "Wordlist Muncher: wMunch.Py",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "webanalyser.py",
+    "proto": "http",
+    "desc": "Download Chilkat library,it free :)",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "webauthbrute.py",
+    "proto": "http",
+    "desc": "!usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "webauthbrute_random.py",
+    "proto": "http",
+    "desc": "!usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "webauthbrute_random_usersupport.py",
+    "proto": "http",
+    "desc": "!usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "webbot.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "webmin.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "webmin_rand.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [
+      "/etc/shadow",
+      "/etc/master.passwd"
+    ],
+    "cve": ""
+  },
+  {
+    "file": "webmin_scanner.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "webminbrute.py",
+    "proto": "http",
+    "desc": "!usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "webscan.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "webservscan.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "wepcrack.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "wepdecode.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "wepgen.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "win.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "wininfo.py",
+    "proto": "http",
+    "desc": "Practice Script wininfo.py",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "winrand.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "woof.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "ports": [
+      "8080",
+      "8008"
+    ],
+    "paths": [
+      "/etc/woofrc"
+    ],
+    "cve": ""
+  },
+  {
+    "file": "wordpressbf.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "wpacrack.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "wpbrute.py",
+    "proto": "http",
+    "desc": "Source code",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "wpscan.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "wwwsrvinfo.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "xoopscan.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [
+      "/index.php"
+    ],
+    "cve": ""
+  },
+  {
+    "file": "xsschecker.py",
+    "proto": "http",
+    "desc": "Practice Script xsschecker.py",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "xsstest.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "xtea.py",
+    "proto": "http",
+    "desc": "Practice Script xtea.py",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "xxsdefense.py",
+    "proto": "http",
+    "desc": "A list of the only tags allowed.  Be careful adding to this.  Adding",
+    "ports": [],
+    "paths": [],
+    "cve": ""
+  },
+  {
+    "file": "yahoocheck.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "ports": [
+      "995"
+    ],
+    "paths": [],
+    "cve": ""
+  }
+]

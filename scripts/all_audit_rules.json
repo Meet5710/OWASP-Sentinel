@@ -1,0 +1,5449 @@
+[
+  {
+    "script": "050501.py",
+    "proto": "ftp",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "port_service",
+    "port": 21,
+    "service": "FTP",
+    "bug": "EXPOSED_FTP_SERVICE",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Auditing FTP service & authentication boundaries on port 21/TCP (!/usr/bin/python)..."
+  },
+  {
+    "script": "051219.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/python)..."
+  },
+  {
+    "script": "051220.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/python)..."
+  },
+  {
+    "script": "060515.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/env python",
+    "cve": "bid/17958",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/env python)..."
+  },
+  {
+    "script": "060715.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/env python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/env python)..."
+  },
+  {
+    "script": "060721.py",
+    "proto": "smtp",
+    "desc": "!/usr/bin/env python",
+    "cve": "",
+    "type": "port_service",
+    "port": 25,
+    "service": "SMTP",
+    "bug": "EXPOSED_MAIL_RELAY",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Auditing SMTP mail server relay & signal handling on port 25/TCP (!/usr/bin/env python)..."
+  },
+  {
+    "script": "060813.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against 060813.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "060826.py",
+    "proto": "pop3",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "port_service",
+    "port": 110,
+    "service": "POP3",
+    "bug": "EXPOSED_POP3_SERVICE",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Auditing POP3 mail access & authentication on port 110/TCP (!/usr/bin/python)..."
+  },
+  {
+    "script": "060908.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/python)..."
+  },
+  {
+    "script": "061028.py",
+    "proto": "dns",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "port_service",
+    "port": 53,
+    "service": "DNS",
+    "bug": "EXPOSED_DNS_SERVICE",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Auditing DNS zone resolution & cache poisoning defenses on port 53/UDP (!/usr/bin/python)..."
+  },
+  {
+    "script": "061107.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/env python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/env python)..."
+  },
+  {
+    "script": "061118.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/python)..."
+  },
+  {
+    "script": "061127.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/python)..."
+  },
+  {
+    "script": "061128.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/python)..."
+  },
+  {
+    "script": "061209.py",
+    "proto": "dns",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "port_service",
+    "port": 53,
+    "service": "DNS",
+    "bug": "EXPOSED_DNS_SERVICE",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Auditing DNS zone resolution & cache poisoning defenses on port 53/UDP (!/usr/bin/python)..."
+  },
+  {
+    "script": "061225.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/python)..."
+  },
+  {
+    "script": "070103.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/python)..."
+  },
+  {
+    "script": "070105.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/python)..."
+  },
+  {
+    "script": "070107.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/python)..."
+  },
+  {
+    "script": "070201.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/python)..."
+  },
+  {
+    "script": "070301.py",
+    "proto": "smb",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "port_service",
+    "port": 445,
+    "service": "SMB",
+    "bug": "EXPOSED_SMB_SERVICE",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Auditing SMB network file sharing & IPC boundaries on port 445/TCP (!/usr/bin/python)..."
+  },
+  {
+    "script": "070310.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/python)..."
+  },
+  {
+    "script": "070314.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/python)..."
+  },
+  {
+    "script": "070316.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/python)..."
+  },
+  {
+    "script": "070320.py",
+    "proto": "ftp",
+    "desc": "usr/bin/python",
+    "cve": "",
+    "type": "port_service",
+    "port": 21,
+    "service": "FTP",
+    "bug": "EXPOSED_FTP_SERVICE",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Auditing FTP service & authentication boundaries on port 21/TCP (usr/bin/python)..."
+  },
+  {
+    "script": "070321.py",
+    "proto": "imap",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "port_service",
+    "port": 143,
+    "service": "IMAP",
+    "bug": "EXPOSED_IMAP_SERVICE",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Auditing IMAP messaging service & buffer boundaries on port 143/TCP (!/usr/bin/python)..."
+  },
+  {
+    "script": "070322.py",
+    "proto": "imap",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "port_service",
+    "port": 143,
+    "service": "IMAP",
+    "bug": "EXPOSED_IMAP_SERVICE",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Auditing IMAP messaging service & buffer boundaries on port 143/TCP (!/usr/bin/python)..."
+  },
+  {
+    "script": "070323.py",
+    "proto": "exploit",
+    "desc": "usr/bin/python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (usr/bin/python)..."
+  },
+  {
+    "script": "070326.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/python)..."
+  },
+  {
+    "script": "070329.py",
+    "proto": "imap",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "port_service",
+    "port": 143,
+    "service": "IMAP",
+    "bug": "EXPOSED_IMAP_SERVICE",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Auditing IMAP messaging service & buffer boundaries on port 143/TCP (!/usr/bin/python)..."
+  },
+  {
+    "script": "070330.py",
+    "proto": "smb",
+    "desc": "!/usr/bin/python",
+    "cve": "CVE-2006-5276",
+    "type": "port_service",
+    "port": 445,
+    "service": "SMB",
+    "bug": "EXPOSED_SMB_SERVICE",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Auditing SMB network file sharing & IPC boundaries on port 445/TCP (!/usr/bin/python)..."
+  },
+  {
+    "script": "070412.py",
+    "proto": "http",
+    "desc": "usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against 070412.py (usr/bin/python)..."
+  },
+  {
+    "script": "070415.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "cve": "bid/23470",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/python)..."
+  },
+  {
+    "script": "070430.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against 070430.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "070515.py",
+    "proto": "smtp",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "port_service",
+    "port": 25,
+    "service": "SMTP",
+    "bug": "EXPOSED_MAIL_RELAY",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Auditing SMTP mail server relay & signal handling on port 25/TCP (!/usr/bin/python)..."
+  },
+  {
+    "script": "070516.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against 070516.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "070517.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against 070517.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "070518.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/env python",
+    "cve": "CVE-2007-1531",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/env python)..."
+  },
+  {
+    "script": "070520.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against 070520.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "070603.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/python)..."
+  },
+  {
+    "script": "070607.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/env python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/env python)..."
+  },
+  {
+    "script": "070610.py",
+    "proto": "ftp",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "port_service",
+    "port": 21,
+    "service": "FTP",
+    "bug": "EXPOSED_FTP_SERVICE",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Auditing FTP service & authentication boundaries on port 21/TCP (!/usr/bin/python)..."
+  },
+  {
+    "script": "070716.py",
+    "proto": "irc",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against 070716.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "070720.py",
+    "proto": "imap",
+    "desc": "Lotus Domino IMAP4 Server Release 6.5.4 / Windows 2000 Advanced Server",
+    "cve": "",
+    "type": "port_service",
+    "port": 143,
+    "service": "IMAP",
+    "bug": "EXPOSED_IMAP_SERVICE",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Auditing IMAP messaging service & buffer boundaries on port 143/TCP (Lotus Domino IMAP4 Server Release 6.5.4 )..."
+  },
+  {
+    "script": "070807.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against 070807.py (!/usr/bin/env python)..."
+  },
+  {
+    "script": "070814.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/python)..."
+  },
+  {
+    "script": "070825.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/python)..."
+  },
+  {
+    "script": "070918.py",
+    "proto": "exploit",
+    "desc": "Practice Script 070918.py",
+    "cve": "CVE-2000-0920",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (Practice Script 070918.py)..."
+  },
+  {
+    "script": "070924.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/python)..."
+  },
+  {
+    "script": "070925.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against 070925.py (!/usr/bin/env python)..."
+  },
+  {
+    "script": "071014.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/python)..."
+  },
+  {
+    "script": "071016.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against 071016.py (!/usr/bin/env python)..."
+  },
+  {
+    "script": "071028.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/python)..."
+  },
+  {
+    "script": "071029.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/python)..."
+  },
+  {
+    "script": "071103.py",
+    "proto": "http",
+    "desc": "!C:\\python25\\python25.exe",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against 071103.py (!C:\\python25\\python25.exe)..."
+  },
+  {
+    "script": "071107.py",
+    "proto": "exploit",
+    "desc": "setlocale() exploit for aix 5.2 ( CVE-2006-4254  )",
+    "cve": "CVE-2006-4254",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (setlocale() exploit for aix 5.2 ( CVE-20)..."
+  },
+  {
+    "script": "071126.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/python)..."
+  },
+  {
+    "script": "071127.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/python)..."
+  },
+  {
+    "script": "071212.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/python)..."
+  },
+  {
+    "script": "071218.py",
+    "proto": "ftp",
+    "desc": "WftpdExpPro_HeapPoC.py",
+    "cve": "",
+    "type": "port_service",
+    "port": 21,
+    "service": "FTP",
+    "bug": "EXPOSED_FTP_SERVICE",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Auditing FTP service & authentication boundaries on port 21/TCP (WftpdExpPro_HeapPoC.py)..."
+  },
+  {
+    "script": "071807.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against 071807.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "080104.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/python)..."
+  },
+  {
+    "script": "080107.py",
+    "proto": "exploit",
+    "desc": "Practice Script 080107.py",
+    "cve": "CVE-2007-6335",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (Practice Script 080107.py)..."
+  },
+  {
+    "script": "080109.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "cve": "bid/26789",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/python)..."
+  },
+  {
+    "script": "080115.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/python)..."
+  },
+  {
+    "script": "080124.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "cve": "CVE-2008-0409",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/python)..."
+  },
+  {
+    "script": "080226.py",
+    "proto": "exploit",
+    "desc": "exploit.py",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (exploit.py)..."
+  },
+  {
+    "script": "080228.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against 080228.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "080303.py",
+    "proto": "http",
+    "desc": "Practice Script 080303.py",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against 080303.py (Practice Script 080303.py)..."
+  },
+  {
+    "script": "080310.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/python)..."
+  },
+  {
+    "script": "080314.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/python)..."
+  },
+  {
+    "script": "080315.py",
+    "proto": "exploit",
+    "desc": "lame Dovecot IMAP [1.0.10 -> 1.1rc3] Exploit",
+    "cve": "CVE-2008-1218",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (lame Dovecot IMAP [1.0.10 -> 1.1rc3] Exp)..."
+  },
+  {
+    "script": "080316.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/python)..."
+  },
+  {
+    "script": "080318.py",
+    "proto": "exploit",
+    "desc": "Discovered by 0in from DaRk-CodeRs Programming & Security Group",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (Discovered by 0in from DaRk-CodeRs Progr)..."
+  },
+  {
+    "script": "080323.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/python)..."
+  },
+  {
+    "script": "080327.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/python)..."
+  },
+  {
+    "script": "080328.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against 080328.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "080402.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/python)..."
+  },
+  {
+    "script": "080403.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against 080403.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "080404.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against 080404.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "080405.py",
+    "proto": "exploit",
+    "desc": "usage: exploit.py FileName",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (usage: exploit.py FileName)..."
+  },
+  {
+    "script": "080411.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against 080411.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "080415.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/python)..."
+  },
+  {
+    "script": "080416.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/python)..."
+  },
+  {
+    "script": "080421.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against 080421.py (!/usr/bin/env python)..."
+  },
+  {
+    "script": "080428.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/python)..."
+  },
+  {
+    "script": "080617.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/python)..."
+  },
+  {
+    "script": "080630.py",
+    "proto": "imap",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "port_service",
+    "port": 143,
+    "service": "IMAP",
+    "bug": "EXPOSED_IMAP_SERVICE",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Auditing IMAP messaging service & buffer boundaries on port 143/TCP (!/usr/bin/python)..."
+  },
+  {
+    "script": "080709.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/python)..."
+  },
+  {
+    "script": "080712.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/python)..."
+  },
+  {
+    "script": "080724.py",
+    "proto": "dns",
+    "desc": "Copyright (C) 2008 Julien Desfossez <ju@klipix.org>",
+    "cve": "CVE-2008-1447",
+    "type": "port_service",
+    "port": 53,
+    "service": "DNS",
+    "bug": "EXPOSED_DNS_SERVICE",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Auditing DNS zone resolution & cache poisoning defenses on port 53/UDP (Copyright (C) 2008 Julien Desfossez <ju@)..."
+  },
+  {
+    "script": "081014.py",
+    "proto": "ftp",
+    "desc": "Practice Script 081014.py",
+    "cve": "",
+    "type": "port_service",
+    "port": 21,
+    "service": "FTP",
+    "bug": "EXPOSED_FTP_SERVICE",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Auditing FTP service & authentication boundaries on port 21/TCP (Practice Script 081014.py)..."
+  },
+  {
+    "script": "081015.py",
+    "proto": "ftp",
+    "desc": "RaidenFTPD V2.4 build 3620 exploit",
+    "cve": "",
+    "type": "port_service",
+    "port": 21,
+    "service": "FTP",
+    "bug": "EXPOSED_FTP_SERVICE",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Auditing FTP service & authentication boundaries on port 21/TCP (RaidenFTPD V2.4 build 3620 exploit)..."
+  },
+  {
+    "script": "081203.py",
+    "proto": "exploit",
+    "desc": "exploit.py",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (exploit.py)..."
+  },
+  {
+    "script": "081214.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/python)..."
+  },
+  {
+    "script": "081216.py",
+    "proto": "exploit",
+    "desc": "usage: exploit.py",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (usage: exploit.py)..."
+  },
+  {
+    "script": "081222.py",
+    "proto": "exploit",
+    "desc": "CoolPlayer (Skin) Buffer Overflow",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (CoolPlayer (Skin) Buffer Overflow)..."
+  },
+  {
+    "script": "090107.py",
+    "proto": "exploit",
+    "desc": "usage: exploit.py",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (usage: exploit.py)..."
+  },
+  {
+    "script": "090110.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against 090110.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "090113.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/python)..."
+  },
+  {
+    "script": "090114.py",
+    "proto": "ftp",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "port_service",
+    "port": 21,
+    "service": "FTP",
+    "bug": "EXPOSED_FTP_SERVICE",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Auditing FTP service & authentication boundaries on port 21/TCP (!/usr/bin/python)..."
+  },
+  {
+    "script": "090115.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against 090115.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "090116.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against 090116.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "090117.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against 090117.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "090120.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/python)..."
+  },
+  {
+    "script": "090203.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against 090203.py (!/usr/bin/env python)..."
+  },
+  {
+    "script": "090204.py",
+    "proto": "exploit",
+    "desc": "Exploit code (PoC) for OpenFiler 2.3 (current)",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (Exploit code (PoC) for OpenFiler 2.3 (cu)..."
+  },
+  {
+    "script": "090205.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/env python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/env python)..."
+  },
+  {
+    "script": "090206.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/python)..."
+  },
+  {
+    "script": "090210.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/env python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/env python)..."
+  },
+  {
+    "script": "090211.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/env python",
+    "cve": "CVE-2009-0388",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/env python)..."
+  },
+  {
+    "script": "090302.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/python)..."
+  },
+  {
+    "script": "090310.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/python)..."
+  },
+  {
+    "script": "090311.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/python)..."
+  },
+  {
+    "script": "090312.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/python)..."
+  },
+  {
+    "script": "090313.py",
+    "proto": "exploit",
+    "desc": "usage: exploit.py",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (usage: exploit.py)..."
+  },
+  {
+    "script": "090321.py",
+    "proto": "exploit",
+    "desc": "exploit.py",
+    "cve": "bid/34120",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (exploit.py)..."
+  },
+  {
+    "script": "090401.py",
+    "proto": "smtp",
+    "desc": "Author : Ahmed Obied (ahmed.obied@gmail.com)",
+    "cve": "",
+    "type": "port_service",
+    "port": 25,
+    "service": "SMTP",
+    "bug": "EXPOSED_MAIL_RELAY",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Auditing SMTP mail server relay & signal handling on port 25/TCP (Author : Ahmed Obied (ahmed.obied@gmail.)..."
+  },
+  {
+    "script": "090404.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/python)..."
+  },
+  {
+    "script": "090405.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/env python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/env python)..."
+  },
+  {
+    "script": "090406.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/env",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/env)..."
+  },
+  {
+    "script": "090419.py",
+    "proto": "exploit",
+    "desc": "Practice Script 090419.py",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (Practice Script 090419.py)..."
+  },
+  {
+    "script": "090421.py",
+    "proto": "exploit",
+    "desc": "Practice Script 090421.py",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (Practice Script 090421.py)..."
+  },
+  {
+    "script": "090422.py",
+    "proto": "exploit",
+    "desc": "TNS Listener (Oracle RDBMS) exploit, cause trap in Listener process",
+    "cve": "CVE-2009-0991",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (TNS Listener (Oracle RDBMS) exploit, cau)..."
+  },
+  {
+    "script": "090425.py",
+    "proto": "exploit",
+    "desc": "Practice Script 090425.py",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (Practice Script 090425.py)..."
+  },
+  {
+    "script": "090426.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against 090426.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "090428.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/python)..."
+  },
+  {
+    "script": "090505.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/python)..."
+  },
+  {
+    "script": "090506.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/python)..."
+  },
+  {
+    "script": "090518.py",
+    "proto": "ftp",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "port_service",
+    "port": 21,
+    "service": "FTP",
+    "bug": "EXPOSED_FTP_SERVICE",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Auditing FTP service & authentication boundaries on port 21/TCP (!/usr/bin/python)..."
+  },
+  {
+    "script": "090519.py",
+    "proto": "exploit",
+    "desc": "Practice Script 090519.py",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (Practice Script 090519.py)..."
+  },
+  {
+    "script": "090605.py",
+    "proto": "http",
+    "desc": "Practice Script 090605.py",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against 090605.py (Practice Script 090605.py)..."
+  },
+  {
+    "script": "090618.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/python)..."
+  },
+  {
+    "script": "090620.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against 090620.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "090622.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/python)..."
+  },
+  {
+    "script": "090623.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/env python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/env python)..."
+  },
+  {
+    "script": "090701.py",
+    "proto": "exploit",
+    "desc": "Practice Script 090701.py",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (Practice Script 090701.py)..."
+  },
+  {
+    "script": "090722.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/env python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/env python)..."
+  },
+  {
+    "script": "090723.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/env python",
+    "cve": "CVE-2007-4897",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/env python)..."
+  },
+  {
+    "script": "090724.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/env python",
+    "cve": "CVE-2007-4924",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/env python)..."
+  },
+  {
+    "script": "090801.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/python)..."
+  },
+  {
+    "script": "090803.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/python)..."
+  },
+  {
+    "script": "ACOi.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "cve": "",
+    "type": "http_env",
+    "bug": "SENSITIVE_DATA_EXPOSURE",
+    "owasp": [
+      "A01:2021",
+      "Broken Access Control"
+    ],
+    "probe_msg": "Auditing web root for exposed environment configuration files & backups..."
+  },
+  {
+    "script": "BladeProxy.py",
+    "proto": "http",
+    "desc": "Practice Script BladeProxy.py",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against BladeProxy.py (Practice Script BladeProxy.py)..."
+  },
+  {
+    "script": "ChAP.py",
+    "proto": "http",
+    "desc": "! /usr/bin/env python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against ChAP.py (! /usr/bin/env python)..."
+  },
+  {
+    "script": "DNSRPCscanner.py",
+    "proto": "dns",
+    "desc": "!/usr/bin/python",
+    "cve": "bid/23470",
+    "type": "port_service",
+    "port": 53,
+    "service": "DNS",
+    "bug": "EXPOSED_DNS_SERVICE",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Auditing DNS zone resolution & cache poisoning defenses on port 53/UDP (!/usr/bin/python)..."
+  },
+  {
+    "script": "EFSscan.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/python)..."
+  },
+  {
+    "script": "ExploitMyUnion_linux.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/env python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/env python)..."
+  },
+  {
+    "script": "ExploitMyUnion_windows.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/env python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/env python)..."
+  },
+  {
+    "script": "GHY.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against GHY.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "MySQL_double_SHA1_brute.py",
+    "proto": "database",
+    "desc": "!/usr/bin/env python",
+    "cve": "",
+    "type": "database",
+    "port": 3306,
+    "service": "Database",
+    "bug": "EXPOSED_DATABASE_SERVICE",
+    "owasp": [
+      "A01:2021",
+      "Broken Access Control"
+    ],
+    "probe_msg": "Auditing database port perimeter & SQL injection vectors (!/usr/bin/env python)..."
+  },
+  {
+    "script": "ProxyHarvest.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against ProxyHarvest.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "RevS.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against RevS.py (!/usr/bin/env python)..."
+  },
+  {
+    "script": "S2.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against S2.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "SMB_reroute.py",
+    "proto": "smb",
+    "desc": "!/usr/bin/env python",
+    "cve": "",
+    "type": "port_service",
+    "port": 445,
+    "service": "SMB",
+    "bug": "EXPOSED_SMB_SERVICE",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Auditing SMB network file sharing & IPC boundaries on port 445/TCP (!/usr/bin/env python)..."
+  },
+  {
+    "script": "Serverchk.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_banner",
+    "bug": "SERVER_BANNER_DISCLOSURE",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Auditing server daemon banners and infrastructure disclosures (!/usr/bin/python)..."
+  },
+  {
+    "script": "Webclicker.py",
+    "proto": "http",
+    "desc": "sannes",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against Webclicker.py (sannes)..."
+  },
+  {
+    "script": "Webserverwatcher.py",
+    "proto": "http",
+    "desc": "!usr/bin/python",
+    "cve": "",
+    "type": "http_banner",
+    "bug": "SERVER_BANNER_DISCLOSURE",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Auditing server daemon banners and infrastructure disclosures (!usr/bin/python)..."
+  },
+  {
+    "script": "XSSscan.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_xss",
+    "bug": "XSS_INJECTION",
+    "owasp": [
+      "A03:2021",
+      "Injection"
+    ],
+    "probe_msg": "Auditing Content-Security-Policy injection defense and MIME-sniffing protection..."
+  },
+  {
+    "script": "XSSscan_v1.1.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_xss",
+    "bug": "XSS_INJECTION",
+    "owasp": [
+      "A03:2021",
+      "Injection"
+    ],
+    "probe_msg": "Auditing Content-Security-Policy injection defense and MIME-sniffing protection..."
+  },
+  {
+    "script": "XSSscan_v1.2.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_xss",
+    "bug": "XSS_INJECTION",
+    "owasp": [
+      "A03:2021",
+      "Injection"
+    ],
+    "probe_msg": "Auditing Content-Security-Policy injection defense and MIME-sniffing protection..."
+  },
+  {
+    "script": "accbrute.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against accbrute.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "admin-scan.py",
+    "proto": "http",
+    "desc": "usr/bin/python",
+    "cve": "",
+    "type": "http_admin",
+    "bug": "EXPOSED_ADMIN_INTERFACE",
+    "owasp": [
+      "A07:2021",
+      "Identification and Authentication Failures"
+    ],
+    "probe_msg": "Auditing administrative authentication portals and login routes (usr/bin/python)..."
+  },
+  {
+    "script": "aimcrack.py",
+    "proto": "http",
+    "desc": "Instant Aim Hash Cracker",
+    "cve": "",
+    "type": "http_cookie",
+    "bug": "INSECURE_COOKIE_DIRECTIVES",
+    "owasp": [
+      "A02:2021",
+      "Cryptographic Failures"
+    ],
+    "probe_msg": "Auditing session cookie flags, transit protection, and cryptographic controls..."
+  },
+  {
+    "script": "aiocracker.py",
+    "proto": "http",
+    "desc": "Attempts to crack hash ( md5, sha1, sha256, sha384, sha512) against an",
+    "cve": "",
+    "type": "http_cookie",
+    "bug": "INSECURE_COOKIE_DIRECTIVES",
+    "owasp": [
+      "A02:2021",
+      "Cryptographic Failures"
+    ],
+    "probe_msg": "Auditing session cookie flags, transit protection, and cryptographic controls..."
+  },
+  {
+    "script": "alphalowcrack.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "cve": "",
+    "type": "http_cookie",
+    "bug": "INSECURE_COOKIE_DIRECTIVES",
+    "owasp": [
+      "A02:2021",
+      "Cryptographic Failures"
+    ],
+    "probe_msg": "Auditing session cookie flags, transit protection, and cryptographic controls..."
+  },
+  {
+    "script": "analyse_malware.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against analyse_malware.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "b2evobf.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against b2evobf.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "b64decodebot.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against b64decodebot.py (!/usr/bin/env python)..."
+  },
+  {
+    "script": "b64encodebot.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against b64encodebot.py (!/usr/bin/env python)..."
+  },
+  {
+    "script": "banbot.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against banbot.py (!/usr/bin/env python)..."
+  },
+  {
+    "script": "bannerscan.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_banner",
+    "bug": "SERVER_BANNER_DISCLOSURE",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Auditing server daemon banners and infrastructure disclosures (!/usr/bin/python)..."
+  },
+  {
+    "script": "base64tohex.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against base64tohex.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "batconv.py",
+    "proto": "http",
+    "desc": "EXE to BAT converter Version 2.0",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against batconv.py (EXE to BAT converter Version 2.0)..."
+  },
+  {
+    "script": "bindshell.py",
+    "proto": "http",
+    "desc": "python bindshell, fancy version",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against bindshell.py (python bindshell, fancy version)..."
+  },
+  {
+    "script": "bing_sqli_scan.py",
+    "proto": "database",
+    "desc": "usr/bin/env python",
+    "cve": "",
+    "type": "database",
+    "port": 3306,
+    "service": "Database",
+    "bug": "EXPOSED_DATABASE_SERVICE",
+    "owasp": [
+      "A01:2021",
+      "Broken Access Control"
+    ],
+    "probe_msg": "Auditing database port perimeter & SQL injection vectors (usr/bin/env python)..."
+  },
+  {
+    "script": "blindext.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against blindext.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "blindfuzz.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against blindfuzz.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "blowfish.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against blowfish.py (!/usr/bin/env python)..."
+  },
+  {
+    "script": "boascan.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/python)..."
+  },
+  {
+    "script": "bulletftp.py",
+    "proto": "ftp",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "port_service",
+    "port": 21,
+    "service": "FTP",
+    "bug": "EXPOSED_FTP_SERVICE",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Auditing FTP service & authentication boundaries on port 21/TCP (!/usr/bin/python)..."
+  },
+  {
+    "script": "cPanelbrute.py",
+    "proto": "http",
+    "desc": "!usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against cPanelbrute.py (!usr/bin/python)..."
+  },
+  {
+    "script": "cesarscan.py",
+    "proto": "ftp",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "port_service",
+    "port": 21,
+    "service": "FTP",
+    "bug": "EXPOSED_FTP_SERVICE",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Auditing FTP service & authentication boundaries on port 21/TCP (!/usr/bin/python)..."
+  },
+  {
+    "script": "cgibot.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "cve": "",
+    "type": "http_cgi",
+    "bug": "EXPOSED_CGI_INTERFACE",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Auditing /cgi-bin/ scripts and remote command execution pathways..."
+  },
+  {
+    "script": "cgiscan.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_cgi",
+    "bug": "EXPOSED_CGI_INTERFACE",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Auditing /cgi-bin/ scripts and remote command execution pathways..."
+  },
+  {
+    "script": "cgiscan1.1.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_cgi",
+    "bug": "EXPOSED_CGI_INTERFACE",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Auditing /cgi-bin/ scripts and remote command execution pathways..."
+  },
+  {
+    "script": "cgiscan1.2.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_cgi",
+    "bug": "EXPOSED_CGI_INTERFACE",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Auditing /cgi-bin/ scripts and remote command execution pathways..."
+  },
+  {
+    "script": "cgiscan1.3.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_cgi",
+    "bug": "EXPOSED_CGI_INTERFACE",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Auditing /cgi-bin/ scripts and remote command execution pathways..."
+  },
+  {
+    "script": "cisco_decrypt.py",
+    "proto": "http",
+    "desc": "Yet Another Cisco Type 7 Password Decryptor",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against cisco_decrypt.py (Yet Another Cisco Type 7 Password Decryp)..."
+  },
+  {
+    "script": "cmdsbot.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against cmdsbot.py (!/usr/bin/env python)..."
+  },
+  {
+    "script": "cms.py",
+    "proto": "http",
+    "desc": "Practice Script cms.py",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against cms.py (Practice Script cms.py)..."
+  },
+  {
+    "script": "colfinder.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against colfinder.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "convertor.py",
+    "proto": "http",
+    "desc": "Practice Script convertor.py",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against convertor.py (Practice Script convertor.py)..."
+  },
+  {
+    "script": "crackbot.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "cve": "",
+    "type": "http_cookie",
+    "bug": "INSECURE_COOKIE_DIRECTIVES",
+    "owasp": [
+      "A02:2021",
+      "Cryptographic Failures"
+    ],
+    "probe_msg": "Auditing session cookie flags, transit protection, and cryptographic controls..."
+  },
+  {
+    "script": "crackbot1.2.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "cve": "",
+    "type": "http_cookie",
+    "bug": "INSECURE_COOKIE_DIRECTIVES",
+    "owasp": [
+      "A02:2021",
+      "Cryptographic Failures"
+    ],
+    "probe_msg": "Auditing session cookie flags, transit protection, and cryptographic controls..."
+  },
+  {
+    "script": "crackbot_mysql.py",
+    "proto": "database",
+    "desc": "!/usr/bin/env python",
+    "cve": "",
+    "type": "database",
+    "port": 3306,
+    "service": "Database",
+    "bug": "EXPOSED_DATABASE_SERVICE",
+    "owasp": [
+      "A01:2021",
+      "Broken Access Control"
+    ],
+    "probe_msg": "Auditing database port perimeter & SQL injection vectors (!/usr/bin/env python)..."
+  },
+  {
+    "script": "crackme.py",
+    "proto": "http",
+    "desc": "This tool extracts MD5's from a file and then searches online for crac",
+    "cve": "",
+    "type": "http_cookie",
+    "bug": "INSECURE_COOKIE_DIRECTIVES",
+    "owasp": [
+      "A02:2021",
+      "Cryptographic Failures"
+    ],
+    "probe_msg": "Auditing session cookie flags, transit protection, and cryptographic controls..."
+  },
+  {
+    "script": "daemon.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against daemon.py (!/usr/bin/env python)..."
+  },
+  {
+    "script": "darkKML.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against darkKML.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "darkMSSQL.py",
+    "proto": "database",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "database",
+    "port": 3306,
+    "service": "Database",
+    "bug": "EXPOSED_DATABASE_SERVICE",
+    "owasp": [
+      "A01:2021",
+      "Broken Access Control"
+    ],
+    "probe_msg": "Auditing database port perimeter & SQL injection vectors (!/usr/bin/python)..."
+  },
+  {
+    "script": "darkPGSQLi.py",
+    "proto": "database",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "database",
+    "port": 3306,
+    "service": "Database",
+    "bug": "EXPOSED_DATABASE_SERVICE",
+    "owasp": [
+      "A01:2021",
+      "Broken Access Control"
+    ],
+    "probe_msg": "Auditing database port perimeter & SQL injection vectors (!/usr/bin/python)..."
+  },
+  {
+    "script": "darkSMTP.py",
+    "proto": "smtp",
+    "desc": "!/usr/bin/python -O",
+    "cve": "",
+    "type": "port_service",
+    "port": 25,
+    "service": "SMTP",
+    "bug": "EXPOSED_MAIL_RELAY",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Auditing SMTP mail server relay & signal handling on port 25/TCP (!/usr/bin/python -O)..."
+  },
+  {
+    "script": "darkSMTPv.py",
+    "proto": "smtp",
+    "desc": "!usr/bin/python",
+    "cve": "",
+    "type": "port_service",
+    "port": 25,
+    "service": "SMTP",
+    "bug": "EXPOSED_MAIL_RELAY",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Auditing SMTP mail server relay & signal handling on port 25/TCP (!usr/bin/python)..."
+  },
+  {
+    "script": "darkTouch.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against darkTouch.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "decoder.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against decoder.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "delicious-captcha-cracker.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_cookie",
+    "bug": "INSECURE_COOKIE_DIRECTIVES",
+    "owasp": [
+      "A02:2021",
+      "Cryptographic Failures"
+    ],
+    "probe_msg": "Auditing session cookie flags, transit protection, and cryptographic controls..."
+  },
+  {
+    "script": "devilzc0de.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against devilzc0de.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "diggbf.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against diggbf.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "dirscan.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against dirscan.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "dnsbee.py",
+    "proto": "dns",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "port_service",
+    "port": 53,
+    "service": "DNS",
+    "bug": "EXPOSED_DNS_SERVICE",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Auditing DNS zone resolution & cache poisoning defenses on port 53/UDP (!/usr/bin/python)..."
+  },
+  {
+    "script": "dnsbrute.py",
+    "proto": "dns",
+    "desc": "!usr/bin/python",
+    "cve": "",
+    "type": "port_service",
+    "port": 53,
+    "service": "DNS",
+    "bug": "EXPOSED_DNS_SERVICE",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Auditing DNS zone resolution & cache poisoning defenses on port 53/UDP (!usr/bin/python)..."
+  },
+  {
+    "script": "dnsenum.py",
+    "proto": "dns",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "port_service",
+    "port": 53,
+    "service": "DNS",
+    "bug": "EXPOSED_DNS_SERVICE",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Auditing DNS zone resolution & cache poisoning defenses on port 53/UDP (!/usr/bin/python)..."
+  },
+  {
+    "script": "doorknocker.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against doorknocker.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "dorkScan.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_dork",
+    "bug": "SENSITIVE_DIRECTORY_DISCLOSURE",
+    "owasp": [
+      "A01:2021",
+      "Broken Access Control"
+    ],
+    "probe_msg": "Auditing crawler exclusions, hidden routes, and sensitive paths in robots.txt..."
+  },
+  {
+    "script": "dorkscan_advanced.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_dork",
+    "bug": "SENSITIVE_DIRECTORY_DISCLOSURE",
+    "owasp": [
+      "A01:2021",
+      "Broken Access Control"
+    ],
+    "probe_msg": "Auditing crawler exclusions, hidden routes, and sensitive paths in robots.txt..."
+  },
+  {
+    "script": "dpc-FTPhunt.py",
+    "proto": "ftp",
+    "desc": "!usr/bin/python",
+    "cve": "",
+    "type": "port_service",
+    "port": 21,
+    "service": "FTP",
+    "bug": "EXPOSED_FTP_SERVICE",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Auditing FTP service & authentication boundaries on port 21/TCP (!usr/bin/python)..."
+  },
+  {
+    "script": "dpc-hashcrack.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_cookie",
+    "bug": "INSECURE_COOKIE_DIRECTIVES",
+    "owasp": [
+      "A02:2021",
+      "Cryptographic Failures"
+    ],
+    "probe_msg": "Auditing session cookie flags, transit protection, and cryptographic controls..."
+  },
+  {
+    "script": "dpc-shodanscan.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against dpc-shodanscan.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "dumpbot.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against dumpbot.py (!/usr/bin/env python)..."
+  },
+  {
+    "script": "dumpcrack.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_cookie",
+    "bug": "INSECURE_COOKIE_DIRECTIVES",
+    "owasp": [
+      "A02:2021",
+      "Cryptographic Failures"
+    ],
+    "probe_msg": "Auditing session cookie flags, transit protection, and cryptographic controls..."
+  },
+  {
+    "script": "dumpcrack1.1.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_cookie",
+    "bug": "INSECURE_COOKIE_DIRECTIVES",
+    "owasp": [
+      "A02:2021",
+      "Cryptographic Failures"
+    ],
+    "probe_msg": "Auditing session cookie flags, transit protection, and cryptographic controls..."
+  },
+  {
+    "script": "dumpcrack1.2.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_cookie",
+    "bug": "INSECURE_COOKIE_DIRECTIVES",
+    "owasp": [
+      "A02:2021",
+      "Cryptographic Failures"
+    ],
+    "probe_msg": "Auditing session cookie flags, transit protection, and cryptographic controls..."
+  },
+  {
+    "script": "encoder.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against encoder.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "encrak.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against encrak.py (!/usr/bin/env python)..."
+  },
+  {
+    "script": "evalencoder.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against evalencoder.py (!/usr/bin/env python)..."
+  },
+  {
+    "script": "eventcalendar_scanner.py",
+    "proto": "http",
+    "desc": "coded by p1mps",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against eventcalendar_scanner.py (coded by p1mps)..."
+  },
+  {
+    "script": "exlex_win.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against exlex_win.py (!/usr/bin/env python)..."
+  },
+  {
+    "script": "fireinthehole.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against fireinthehole.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "friendsterbf.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against friendsterbf.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "ftpanon.py",
+    "proto": "ftp",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "port_service",
+    "port": 21,
+    "service": "FTP",
+    "bug": "EXPOSED_FTP_SERVICE",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Auditing FTP service & authentication boundaries on port 21/TCP (!/usr/bin/python)..."
+  },
+  {
+    "script": "ftpanonbot.py",
+    "proto": "ftp",
+    "desc": "!/usr/bin/env python",
+    "cve": "",
+    "type": "port_service",
+    "port": 21,
+    "service": "FTP",
+    "bug": "EXPOSED_FTP_SERVICE",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Auditing FTP service & authentication boundaries on port 21/TCP (!/usr/bin/env python)..."
+  },
+  {
+    "script": "ftpbrute.py",
+    "proto": "ftp",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "port_service",
+    "port": 21,
+    "service": "FTP",
+    "bug": "EXPOSED_FTP_SERVICE",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Auditing FTP service & authentication boundaries on port 21/TCP (!/usr/bin/python)..."
+  },
+  {
+    "script": "ftpbrute_devilzc0de.py",
+    "proto": "ftp",
+    "desc": "!usr/bin/python",
+    "cve": "",
+    "type": "port_service",
+    "port": 21,
+    "service": "FTP",
+    "bug": "EXPOSED_FTP_SERVICE",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Auditing FTP service & authentication boundaries on port 21/TCP (!usr/bin/python)..."
+  },
+  {
+    "script": "ftpbrute_iprange.py",
+    "proto": "ftp",
+    "desc": "!usr/bin/python",
+    "cve": "",
+    "type": "port_service",
+    "port": 21,
+    "service": "FTP",
+    "bug": "EXPOSED_FTP_SERVICE",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Auditing FTP service & authentication boundaries on port 21/TCP (!usr/bin/python)..."
+  },
+  {
+    "script": "ftpbrute_random.py",
+    "proto": "ftp",
+    "desc": "!usr/bin/python",
+    "cve": "",
+    "type": "port_service",
+    "port": 21,
+    "service": "FTP",
+    "bug": "EXPOSED_FTP_SERVICE",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Auditing FTP service & authentication boundaries on port 21/TCP (!usr/bin/python)..."
+  },
+  {
+    "script": "ftpbrute_random1.0.py",
+    "proto": "ftp",
+    "desc": "!usr/bin/python",
+    "cve": "",
+    "type": "port_service",
+    "port": 21,
+    "service": "FTP",
+    "bug": "EXPOSED_FTP_SERVICE",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Auditing FTP service & authentication boundaries on port 21/TCP (!usr/bin/python)..."
+  },
+  {
+    "script": "ftpcheck.py",
+    "proto": "ftp",
+    "desc": "!/usr/bin/env python",
+    "cve": "",
+    "type": "port_service",
+    "port": 21,
+    "service": "FTP",
+    "bug": "EXPOSED_FTP_SERVICE",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Auditing FTP service & authentication boundaries on port 21/TCP (!/usr/bin/env python)..."
+  },
+  {
+    "script": "ftprand.py",
+    "proto": "ftp",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "port_service",
+    "port": 21,
+    "service": "FTP",
+    "bug": "EXPOSED_FTP_SERVICE",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Auditing FTP service & authentication boundaries on port 21/TCP (!/usr/bin/python)..."
+  },
+  {
+    "script": "fuskbucketenglish.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against fuskbucketenglish.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "gSQLHarvest.py",
+    "proto": "database",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "database",
+    "port": 3306,
+    "service": "Database",
+    "bug": "EXPOSED_DATABASE_SERVICE",
+    "owasp": [
+      "A01:2021",
+      "Broken Access Control"
+    ],
+    "probe_msg": "Auditing database port perimeter & SQL injection vectors (!/usr/bin/python)..."
+  },
+  {
+    "script": "getresp.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against getresp.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "gmail_check.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against gmail_check.py (!/usr/bin/env python)..."
+  },
+  {
+    "script": "gmailbrute.py",
+    "proto": "http",
+    "desc": "!usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against gmailbrute.py (!usr/bin/python)..."
+  },
+  {
+    "script": "gmailpopbrute.py",
+    "proto": "pop3",
+    "desc": "!usr/bin/python",
+    "cve": "",
+    "type": "port_service",
+    "port": 110,
+    "service": "POP3",
+    "bug": "EXPOSED_POP3_SERVICE",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Auditing POP3 mail access & authentication on port 110/TCP (!usr/bin/python)..."
+  },
+  {
+    "script": "goog-mail.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against goog-mail.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "googleb0t.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against googleb0t.py (!/usr/bin/env python)..."
+  },
+  {
+    "script": "hashgen.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against hashgen.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "hellobot.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against hellobot.py (!/usr/bin/env python)..."
+  },
+  {
+    "script": "hexdump.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against hexdump.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "hi5.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against hi5.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "honeypot.py",
+    "proto": "http",
+    "desc": "Practice Script honeypot.py",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against honeypot.py (Practice Script honeypot.py)..."
+  },
+  {
+    "script": "hostlookup.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against hostlookup.py (!/usr/bin/env python)..."
+  },
+  {
+    "script": "htcrack.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_cookie",
+    "bug": "INSECURE_COOKIE_DIRECTIVES",
+    "owasp": [
+      "A02:2021",
+      "Cryptographic Failures"
+    ],
+    "probe_msg": "Auditing session cookie flags, transit protection, and cryptographic controls..."
+  },
+  {
+    "script": "httpcheck.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against httpcheck.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "imapbrute.py",
+    "proto": "imap",
+    "desc": "!usr/bin/python",
+    "cve": "",
+    "type": "port_service",
+    "port": 143,
+    "service": "IMAP",
+    "bug": "EXPOSED_IMAP_SERVICE",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Auditing IMAP messaging service & buffer boundaries on port 143/TCP (!usr/bin/python)..."
+  },
+  {
+    "script": "imapbrute_iprange.py",
+    "proto": "imap",
+    "desc": "!usr/bin/python",
+    "cve": "",
+    "type": "port_service",
+    "port": 143,
+    "service": "IMAP",
+    "bug": "EXPOSED_IMAP_SERVICE",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Auditing IMAP messaging service & buffer boundaries on port 143/TCP (!usr/bin/python)..."
+  },
+  {
+    "script": "imapbrute_random.py",
+    "proto": "imap",
+    "desc": "!usr/bin/python",
+    "cve": "",
+    "type": "port_service",
+    "port": 143,
+    "service": "IMAP",
+    "bug": "EXPOSED_IMAP_SERVICE",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Auditing IMAP messaging service & buffer boundaries on port 143/TCP (!usr/bin/python)..."
+  },
+  {
+    "script": "inside_pro_dl.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against inside_pro_dl.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "ipbanscan.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against ipbanscan.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "join.py",
+    "proto": "http",
+    "desc": "join all part files in a dir created by split.py.",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against join.py (join all part files in a dir created by )..."
+  },
+  {
+    "script": "joomlabrute.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against joomlabrute.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "joomscan.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against joomscan.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "lastlog.py",
+    "proto": "http",
+    "desc": "! /usr/bin/env python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against lastlog.py (! /usr/bin/env python)..."
+  },
+  {
+    "script": "lfi-rfi.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against lfi-rfi.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "lfifuzz.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against lfifuzz.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "lfiscan.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against lfiscan.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "links.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against links.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "linkscan.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against linkscan.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "linkscan1.3.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against linkscan1.3.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "linkscansimple.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against linkscansimple.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "linksysbrute.py",
+    "proto": "http",
+    "desc": "!usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against linksysbrute.py (!usr/bin/python)..."
+  },
+  {
+    "script": "load_fuzz.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against load_fuzz.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "locbrute.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against locbrute.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "malware_analyse.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against malware_analyse.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "maxfr.py",
+    "proto": "http",
+    "desc": "Enumerate known hostnames for a given IP address.",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against maxfr.py (Enumerate known hostnames for a given IP)..."
+  },
+  {
+    "script": "md5bot.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against md5bot.py (!/usr/bin/env python)..."
+  },
+  {
+    "script": "md5check.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against md5check.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "md5checksum.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against md5checksum.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "md5crack.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_cookie",
+    "bug": "INSECURE_COOKIE_DIRECTIVES",
+    "owasp": [
+      "A02:2021",
+      "Cryptographic Failures"
+    ],
+    "probe_msg": "Auditing session cookie flags, transit protection, and cryptographic controls..."
+  },
+  {
+    "script": "md5db11.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against md5db11.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "md5gen.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against md5gen.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "md5randcrack.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_cookie",
+    "bug": "INSECURE_COOKIE_DIRECTIVES",
+    "owasp": [
+      "A02:2021",
+      "Cryptographic Failures"
+    ],
+    "probe_msg": "Auditing session cookie flags, transit protection, and cryptographic controls..."
+  },
+  {
+    "script": "md5shabrute.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against md5shabrute.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "md5sum.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against md5sum.py (!/usr/bin/env python)..."
+  },
+  {
+    "script": "md5word.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against md5word.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "mdaemonscan.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/python)..."
+  },
+  {
+    "script": "mtsshbrute.py",
+    "proto": "ssh",
+    "desc": "!/usr/bin/env python",
+    "cve": "",
+    "type": "port_service",
+    "port": 22,
+    "service": "SSH",
+    "bug": "EXPOSED_SSH_SERVICE",
+    "owasp": [
+      "A07:2021",
+      "Identification and Authentication Failures"
+    ],
+    "probe_msg": "Auditing SSH remote administration & daemon disclosures on port 22/TCP (!/usr/bin/env python)..."
+  },
+  {
+    "script": "mysql323crack.py",
+    "proto": "database",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "database",
+    "port": 3306,
+    "service": "Database",
+    "bug": "EXPOSED_DATABASE_SERVICE",
+    "owasp": [
+      "A01:2021",
+      "Broken Access Control"
+    ],
+    "probe_msg": "Auditing database port perimeter & SQL injection vectors (!/usr/bin/python)..."
+  },
+  {
+    "script": "mysql5crack.py",
+    "proto": "database",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "database",
+    "port": 3306,
+    "service": "Database",
+    "bug": "EXPOSED_DATABASE_SERVICE",
+    "owasp": [
+      "A01:2021",
+      "Broken Access Control"
+    ],
+    "probe_msg": "Auditing database port perimeter & SQL injection vectors (!/usr/bin/python)..."
+  },
+  {
+    "script": "mysql_default.py",
+    "proto": "database",
+    "desc": "!/usr/bin/env python",
+    "cve": "",
+    "type": "database",
+    "port": 3306,
+    "service": "Database",
+    "bug": "EXPOSED_DATABASE_SERVICE",
+    "owasp": [
+      "A01:2021",
+      "Broken Access Control"
+    ],
+    "probe_msg": "Auditing database port perimeter & SQL injection vectors (!/usr/bin/env python)..."
+  },
+  {
+    "script": "mysqlbrute.py",
+    "proto": "database",
+    "desc": "!usr/bin/python",
+    "cve": "",
+    "type": "database",
+    "port": 3306,
+    "service": "Database",
+    "bug": "EXPOSED_DATABASE_SERVICE",
+    "owasp": [
+      "A01:2021",
+      "Broken Access Control"
+    ],
+    "probe_msg": "Auditing database port perimeter & SQL injection vectors (!usr/bin/python)..."
+  },
+  {
+    "script": "mysqlbrute_iprange.py",
+    "proto": "database",
+    "desc": "!usr/bin/python",
+    "cve": "",
+    "type": "database",
+    "port": 3306,
+    "service": "Database",
+    "bug": "EXPOSED_DATABASE_SERVICE",
+    "owasp": [
+      "A01:2021",
+      "Broken Access Control"
+    ],
+    "probe_msg": "Auditing database port perimeter & SQL injection vectors (!usr/bin/python)..."
+  },
+  {
+    "script": "mysqlbrute_random.py",
+    "proto": "database",
+    "desc": "!usr/bin/python",
+    "cve": "",
+    "type": "database",
+    "port": 3306,
+    "service": "Database",
+    "bug": "EXPOSED_DATABASE_SERVICE",
+    "owasp": [
+      "A01:2021",
+      "Broken Access Control"
+    ],
+    "probe_msg": "Auditing database port perimeter & SQL injection vectors (!usr/bin/python)..."
+  },
+  {
+    "script": "netstat_tool.py",
+    "proto": "http",
+    "desc": "Practice Script netstat_tool.py",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against netstat_tool.py (Practice Script netstat_tool.py)..."
+  },
+  {
+    "script": "ngeotrace.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against ngeotrace.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "niktolistscan.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against niktolistscan.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "nmapbot.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against nmapbot.py (!/usr/bin/env python)..."
+  },
+  {
+    "script": "nntpbrute.py",
+    "proto": "http",
+    "desc": "!usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against nntpbrute.py (!usr/bin/python)..."
+  },
+  {
+    "script": "nntpbrute_iprange.py",
+    "proto": "http",
+    "desc": "!usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against nntpbrute_iprange.py (!usr/bin/python)..."
+  },
+  {
+    "script": "nntpbrute_random.py",
+    "proto": "http",
+    "desc": "!usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against nntpbrute_random.py (!usr/bin/python)..."
+  },
+  {
+    "script": "nukescan.py",
+    "proto": "http",
+    "desc": "!usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against nukescan.py (!usr/bin/python)..."
+  },
+  {
+    "script": "oledbstract.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against oledbstract.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "openPorts.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against openPorts.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "openports_audit.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against openports_audit.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "ora11gPWCrack.py",
+    "proto": "http",
+    "desc": "!python",
+    "cve": "",
+    "type": "http_cookie",
+    "bug": "INSECURE_COOKIE_DIRECTIVES",
+    "owasp": [
+      "A02:2021",
+      "Cryptographic Failures"
+    ],
+    "probe_msg": "Auditing session cookie flags, transit protection, and cryptographic controls..."
+  },
+  {
+    "script": "oraclefuz.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against oraclefuz.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "pastebin.py",
+    "proto": "http",
+    "desc": "Uploads source files to pastebin.com",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against pastebin.py (Uploads source files to pastebin.com)..."
+  },
+  {
+    "script": "phpBBbrute.py",
+    "proto": "http",
+    "desc": "!usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against phpBBbrute.py (!usr/bin/python)..."
+  },
+  {
+    "script": "phpass.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against phpass.py (!/usr/bin/env python)..."
+  },
+  {
+    "script": "phpbbscan.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against phpbbscan.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "pide.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against pide.py (!/usr/bin/env python)..."
+  },
+  {
+    "script": "pincrack.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "cve": "",
+    "type": "http_cookie",
+    "bug": "INSECURE_COOKIE_DIRECTIVES",
+    "owasp": [
+      "A02:2021",
+      "Cryptographic Failures"
+    ],
+    "probe_msg": "Auditing session cookie flags, transit protection, and cryptographic controls..."
+  },
+  {
+    "script": "pkl.py",
+    "proto": "http",
+    "desc": "! /usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against pkl.py (! /usr/bin/python)..."
+  },
+  {
+    "script": "pmabf.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against pmabf.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "popbrute.py",
+    "proto": "pop3",
+    "desc": "!usr/bin/python",
+    "cve": "",
+    "type": "port_service",
+    "port": 110,
+    "service": "POP3",
+    "bug": "EXPOSED_POP3_SERVICE",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Auditing POP3 mail access & authentication on port 110/TCP (!usr/bin/python)..."
+  },
+  {
+    "script": "popbrute_iprange.py",
+    "proto": "pop3",
+    "desc": "!usr/bin/python",
+    "cve": "",
+    "type": "port_service",
+    "port": 110,
+    "service": "POP3",
+    "bug": "EXPOSED_POP3_SERVICE",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Auditing POP3 mail access & authentication on port 110/TCP (!usr/bin/python)..."
+  },
+  {
+    "script": "popbrute_random.py",
+    "proto": "pop3",
+    "desc": "!usr/bin/python",
+    "cve": "",
+    "type": "port_service",
+    "port": 110,
+    "service": "POP3",
+    "bug": "EXPOSED_POP3_SERVICE",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Auditing POP3 mail access & authentication on port 110/TCP (!usr/bin/python)..."
+  },
+  {
+    "script": "portforward.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against portforward.py (!/usr/bin/env python)..."
+  },
+  {
+    "script": "portscan.py",
+    "proto": "http",
+    "desc": "A simple port scanner to scan a range of ports on a single host.",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against portscan.py (A simple port scanner to scan a range of)..."
+  },
+  {
+    "script": "proxybot.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against proxybot.py (!/usr/bin/env python)..."
+  },
+  {
+    "script": "proxyfuzz.py",
+    "proto": "http",
+    "desc": "Proxyfuzz: a TCP and UDP proxy man-in-the-middle fuzzer",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against proxyfuzz.py (Proxyfuzz: a TCP and UDP proxy man-in-th)..."
+  },
+  {
+    "script": "psbot.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against psbot.py (!/usr/bin/env python)..."
+  },
+  {
+    "script": "ptf.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against ptf.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "pycrack.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_cookie",
+    "bug": "INSECURE_COOKIE_DIRECTIVES",
+    "owasp": [
+      "A02:2021",
+      "Cryptographic Failures"
+    ],
+    "probe_msg": "Auditing session cookie flags, transit protection, and cryptographic controls..."
+  },
+  {
+    "script": "pyscan.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against pyscan.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "rCFuzz.py",
+    "proto": "http",
+    "desc": "rCfuzz.py v0.1 (c) 2008",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against rCFuzz.py (rCfuzz.py v0.1 (c) 2008)..."
+  },
+  {
+    "script": "randwebservscan.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against randwebservscan.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "registry.py",
+    "proto": "http",
+    "desc": "Practice Script registry.py",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against registry.py (Practice Script registry.py)..."
+  },
+  {
+    "script": "relayfind.py",
+    "proto": "http",
+    "desc": "!usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against relayfind.py (!usr/bin/python)..."
+  },
+  {
+    "script": "rfiscan.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against rfiscan.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "rootbrute.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against rootbrute.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "rot13.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against rot13.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "rpt.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against rpt.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "rwhois.py",
+    "proto": "http",
+    "desc": "! /usr/bin/python --",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against rwhois.py (! /usr/bin/python --)..."
+  },
+  {
+    "script": "s.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against s.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "s1.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against s1.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "scanbot.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against scanbot.py (!/usr/bin/env python)..."
+  },
+  {
+    "script": "schemafuzz.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against schemafuzz.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "serenbf.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against serenbf.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "sex.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against sex.py (!/usr/bin/env python)..."
+  },
+  {
+    "script": "sha1crack.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_cookie",
+    "bug": "INSECURE_COOKIE_DIRECTIVES",
+    "owasp": [
+      "A02:2021",
+      "Cryptographic Failures"
+    ],
+    "probe_msg": "Auditing session cookie flags, transit protection, and cryptographic controls..."
+  },
+  {
+    "script": "sha1gen.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against sha1gen.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "shellgen.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against shellgen.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "shoutmix_tool.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against shoutmix_tool.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "simpleDorkGUi.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_dork",
+    "bug": "SENSITIVE_DIRECTORY_DISCLOSURE",
+    "owasp": [
+      "A01:2021",
+      "Broken Access Control"
+    ],
+    "probe_msg": "Auditing crawler exclusions, hidden routes, and sensitive paths in robots.txt..."
+  },
+  {
+    "script": "smtpbrute.py",
+    "proto": "smtp",
+    "desc": "!usr/bin/python",
+    "cve": "",
+    "type": "port_service",
+    "port": 25,
+    "service": "SMTP",
+    "bug": "EXPOSED_MAIL_RELAY",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Auditing SMTP mail server relay & signal handling on port 25/TCP (!usr/bin/python)..."
+  },
+  {
+    "script": "smtpbrute_iprange.py",
+    "proto": "smtp",
+    "desc": "!usr/bin/python",
+    "cve": "",
+    "type": "port_service",
+    "port": 25,
+    "service": "SMTP",
+    "bug": "EXPOSED_MAIL_RELAY",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Auditing SMTP mail server relay & signal handling on port 25/TCP (!usr/bin/python)..."
+  },
+  {
+    "script": "smtpbrute_random.py",
+    "proto": "smtp",
+    "desc": "!usr/bin/python",
+    "cve": "",
+    "type": "port_service",
+    "port": 25,
+    "service": "SMTP",
+    "bug": "EXPOSED_MAIL_RELAY",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Auditing SMTP mail server relay & signal handling on port 25/TCP (!usr/bin/python)..."
+  },
+  {
+    "script": "smtpd.py",
+    "proto": "smtp",
+    "desc": "!/usr/local/bin/python",
+    "cve": "",
+    "type": "port_service",
+    "port": 25,
+    "service": "SMTP",
+    "bug": "EXPOSED_MAIL_RELAY",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Auditing SMTP mail server relay & signal handling on port 25/TCP (!/usr/local/bin/python)..."
+  },
+  {
+    "script": "sniff.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against sniff.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "snmp_brute.py",
+    "proto": "http",
+    "desc": "!usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against snmp_brute.py (!usr/bin/python)..."
+  },
+  {
+    "script": "spam.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against spam.py (!/usr/bin/env python)..."
+  },
+  {
+    "script": "spambot.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against spambot.py (!/usr/bin/env python)..."
+  },
+  {
+    "script": "split.py",
+    "proto": "http",
+    "desc": "split a file into a set of portions; join.py puts them",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against split.py (split a file into a set of portions; joi)..."
+  },
+  {
+    "script": "spomb.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against spomb.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "sqlbrute.py",
+    "proto": "database",
+    "desc": "!/usr/bin/env python",
+    "cve": "",
+    "type": "database",
+    "port": 3306,
+    "service": "Database",
+    "bug": "EXPOSED_DATABASE_SERVICE",
+    "owasp": [
+      "A01:2021",
+      "Broken Access Control"
+    ],
+    "probe_msg": "Auditing database port perimeter & SQL injection vectors (!/usr/bin/env python)..."
+  },
+  {
+    "script": "sqlfuzz.py",
+    "proto": "database",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "database",
+    "port": 3306,
+    "service": "Database",
+    "bug": "EXPOSED_DATABASE_SERVICE",
+    "owasp": [
+      "A01:2021",
+      "Broken Access Control"
+    ],
+    "probe_msg": "Auditing database port perimeter & SQL injection vectors (!/usr/bin/python)..."
+  },
+  {
+    "script": "sqlic.py",
+    "proto": "database",
+    "desc": "!/usr/bin/env python",
+    "cve": "",
+    "type": "database",
+    "port": 3306,
+    "service": "Database",
+    "bug": "EXPOSED_DATABASE_SERVICE",
+    "owasp": [
+      "A01:2021",
+      "Broken Access Control"
+    ],
+    "probe_msg": "Auditing database port perimeter & SQL injection vectors (!/usr/bin/env python)..."
+  },
+  {
+    "script": "sqlifinderb0t.py",
+    "proto": "database",
+    "desc": "!/usr/bin/env python",
+    "cve": "",
+    "type": "database",
+    "port": 3306,
+    "service": "Database",
+    "bug": "EXPOSED_DATABASE_SERVICE",
+    "owasp": [
+      "A01:2021",
+      "Broken Access Control"
+    ],
+    "probe_msg": "Auditing database port perimeter & SQL injection vectors (!/usr/bin/env python)..."
+  },
+  {
+    "script": "sqlresp.py",
+    "proto": "database",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "database",
+    "port": 3306,
+    "service": "Database",
+    "bug": "EXPOSED_DATABASE_SERVICE",
+    "owasp": [
+      "A01:2021",
+      "Broken Access Control"
+    ],
+    "probe_msg": "Auditing database port perimeter & SQL injection vectors (!/usr/bin/python)..."
+  },
+  {
+    "script": "sqlscan.py",
+    "proto": "database",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "database",
+    "port": 3306,
+    "service": "Database",
+    "bug": "EXPOSED_DATABASE_SERVICE",
+    "owasp": [
+      "A01:2021",
+      "Broken Access Control"
+    ],
+    "probe_msg": "Auditing database port perimeter & SQL injection vectors (!/usr/bin/python)..."
+  },
+  {
+    "script": "sqltest.py",
+    "proto": "database",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "database",
+    "port": 3306,
+    "service": "Database",
+    "bug": "EXPOSED_DATABASE_SERVICE",
+    "owasp": [
+      "A01:2021",
+      "Broken Access Control"
+    ],
+    "probe_msg": "Auditing database port perimeter & SQL injection vectors (!/usr/bin/python)..."
+  },
+  {
+    "script": "ssh-sniffer.0.7.py",
+    "proto": "ssh",
+    "desc": "! /usr/bin/env python",
+    "cve": "",
+    "type": "port_service",
+    "port": 22,
+    "service": "SSH",
+    "bug": "EXPOSED_SSH_SERVICE",
+    "owasp": [
+      "A07:2021",
+      "Identification and Authentication Failures"
+    ],
+    "probe_msg": "Auditing SSH remote administration & daemon disclosures on port 22/TCP (! /usr/bin/env python)..."
+  },
+  {
+    "script": "sshbrute.py",
+    "proto": "ssh",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "port_service",
+    "port": 22,
+    "service": "SSH",
+    "bug": "EXPOSED_SSH_SERVICE",
+    "owasp": [
+      "A07:2021",
+      "Identification and Authentication Failures"
+    ],
+    "probe_msg": "Auditing SSH remote administration & daemon disclosures on port 22/TCP (!/usr/bin/python)..."
+  },
+  {
+    "script": "sshbrute_fork.py",
+    "proto": "ssh",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "port_service",
+    "port": 22,
+    "service": "SSH",
+    "bug": "EXPOSED_SSH_SERVICE",
+    "owasp": [
+      "A07:2021",
+      "Identification and Authentication Failures"
+    ],
+    "probe_msg": "Auditing SSH remote administration & daemon disclosures on port 22/TCP (!/usr/bin/python)..."
+  },
+  {
+    "script": "sshbrute_iprange.py",
+    "proto": "ssh",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "port_service",
+    "port": 22,
+    "service": "SSH",
+    "bug": "EXPOSED_SSH_SERVICE",
+    "owasp": [
+      "A07:2021",
+      "Identification and Authentication Failures"
+    ],
+    "probe_msg": "Auditing SSH remote administration & daemon disclosures on port 22/TCP (!/usr/bin/python)..."
+  },
+  {
+    "script": "sshbrute_random.py",
+    "proto": "ssh",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "port_service",
+    "port": 22,
+    "service": "SSH",
+    "bug": "EXPOSED_SSH_SERVICE",
+    "owasp": [
+      "A07:2021",
+      "Identification and Authentication Failures"
+    ],
+    "probe_msg": "Auditing SSH remote administration & daemon disclosures on port 22/TCP (!/usr/bin/python)..."
+  },
+  {
+    "script": "subsearch.py",
+    "proto": "http",
+    "desc": "!usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against subsearch.py (!usr/bin/python)..."
+  },
+  {
+    "script": "surgescan.py",
+    "proto": "smtp",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "port_service",
+    "port": 25,
+    "service": "SMTP",
+    "bug": "EXPOSED_MAIL_RELAY",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Auditing SMTP mail server relay & signal handling on port 25/TCP (!/usr/bin/python)..."
+  },
+  {
+    "script": "telnetbrute.py",
+    "proto": "http",
+    "desc": "!usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against telnetbrute.py (!usr/bin/python)..."
+  },
+  {
+    "script": "telnetbrute_iprange.py",
+    "proto": "http",
+    "desc": "!usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against telnetbrute_iprange.py (!usr/bin/python)..."
+  },
+  {
+    "script": "telnetbrute_random.py",
+    "proto": "http",
+    "desc": "!usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against telnetbrute_random.py (!usr/bin/python)..."
+  },
+  {
+    "script": "uniGen.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against uniGen.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "urlinfo.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against urlinfo.py (!/usr/bin/env python)..."
+  },
+  {
+    "script": "vbscan.py",
+    "proto": "exploit",
+    "desc": "!/usr/bin/python",
+    "cve": "CVE-REMOTE-EXPLOIT",
+    "type": "exploit_cve",
+    "bug": "VULNERABLE_SERVICE_DAEMON",
+    "owasp": [
+      "A06:2021",
+      "Vulnerable and Outdated Components"
+    ],
+    "probe_msg": "Auditing remote service daemon against exploit vector (!/usr/bin/python)..."
+  },
+  {
+    "script": "vnc.py",
+    "proto": "http",
+    "desc": "Practice Script vnc.py",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against vnc.py (Practice Script vnc.py)..."
+  },
+  {
+    "script": "vulndetect.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against vulndetect.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "wMunch.py",
+    "proto": "http",
+    "desc": "Wordlist Muncher: wMunch.Py",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against wMunch.py (Wordlist Muncher: wMunch.Py)..."
+  },
+  {
+    "script": "webanalyser.py",
+    "proto": "http",
+    "desc": "Download Chilkat library,it free :)",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against webanalyser.py (Download Chilkat library,it free :))..."
+  },
+  {
+    "script": "webauthbrute.py",
+    "proto": "http",
+    "desc": "!usr/bin/python",
+    "cve": "",
+    "type": "http_admin",
+    "bug": "EXPOSED_ADMIN_INTERFACE",
+    "owasp": [
+      "A07:2021",
+      "Identification and Authentication Failures"
+    ],
+    "probe_msg": "Auditing administrative authentication portals and login routes (!usr/bin/python)..."
+  },
+  {
+    "script": "webauthbrute_random.py",
+    "proto": "http",
+    "desc": "!usr/bin/python",
+    "cve": "",
+    "type": "http_admin",
+    "bug": "EXPOSED_ADMIN_INTERFACE",
+    "owasp": [
+      "A07:2021",
+      "Identification and Authentication Failures"
+    ],
+    "probe_msg": "Auditing administrative authentication portals and login routes (!usr/bin/python)..."
+  },
+  {
+    "script": "webauthbrute_random_usersupport.py",
+    "proto": "http",
+    "desc": "!usr/bin/python",
+    "cve": "",
+    "type": "http_admin",
+    "bug": "EXPOSED_ADMIN_INTERFACE",
+    "owasp": [
+      "A07:2021",
+      "Identification and Authentication Failures"
+    ],
+    "probe_msg": "Auditing administrative authentication portals and login routes (!usr/bin/python)..."
+  },
+  {
+    "script": "webbot.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against webbot.py (!/usr/bin/env python)..."
+  },
+  {
+    "script": "webmin.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against webmin.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "webmin_rand.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against webmin_rand.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "webmin_scanner.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against webmin_scanner.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "webminbrute.py",
+    "proto": "http",
+    "desc": "!usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against webminbrute.py (!usr/bin/python)..."
+  },
+  {
+    "script": "webscan.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against webscan.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "webservscan.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against webservscan.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "wepcrack.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_cookie",
+    "bug": "INSECURE_COOKIE_DIRECTIVES",
+    "owasp": [
+      "A02:2021",
+      "Cryptographic Failures"
+    ],
+    "probe_msg": "Auditing session cookie flags, transit protection, and cryptographic controls..."
+  },
+  {
+    "script": "wepdecode.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against wepdecode.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "wepgen.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against wepgen.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "win.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against win.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "wininfo.py",
+    "proto": "http",
+    "desc": "Practice Script wininfo.py",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against wininfo.py (Practice Script wininfo.py)..."
+  },
+  {
+    "script": "winrand.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against winrand.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "woof.py",
+    "proto": "http",
+    "desc": "!/usr/bin/env python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against woof.py (!/usr/bin/env python)..."
+  },
+  {
+    "script": "wordpressbf.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_cms_wordpress",
+    "bug": "EXPOSED_WORDPRESS_ENDPOINT",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Auditing WordPress CMS endpoints and XML-RPC interfaces (!/usr/bin/python)..."
+  },
+  {
+    "script": "wpacrack.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_cookie",
+    "bug": "INSECURE_COOKIE_DIRECTIVES",
+    "owasp": [
+      "A02:2021",
+      "Cryptographic Failures"
+    ],
+    "probe_msg": "Auditing session cookie flags, transit protection, and cryptographic controls..."
+  },
+  {
+    "script": "wpbrute.py",
+    "proto": "http",
+    "desc": "Source code",
+    "cve": "",
+    "type": "http_cms_wordpress",
+    "bug": "EXPOSED_WORDPRESS_ENDPOINT",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Auditing WordPress CMS endpoints and XML-RPC interfaces (Source code)..."
+  },
+  {
+    "script": "wpscan.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_cms_wordpress",
+    "bug": "EXPOSED_WORDPRESS_ENDPOINT",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Auditing WordPress CMS endpoints and XML-RPC interfaces (!/usr/bin/python)..."
+  },
+  {
+    "script": "wwwsrvinfo.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against wwwsrvinfo.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "xoopscan.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against xoopscan.py (!/usr/bin/python)..."
+  },
+  {
+    "script": "xsschecker.py",
+    "proto": "http",
+    "desc": "Practice Script xsschecker.py",
+    "cve": "",
+    "type": "http_xss",
+    "bug": "XSS_INJECTION",
+    "owasp": [
+      "A03:2021",
+      "Injection"
+    ],
+    "probe_msg": "Auditing Content-Security-Policy injection defense and MIME-sniffing protection..."
+  },
+  {
+    "script": "xsstest.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_xss",
+    "bug": "XSS_INJECTION",
+    "owasp": [
+      "A03:2021",
+      "Injection"
+    ],
+    "probe_msg": "Auditing Content-Security-Policy injection defense and MIME-sniffing protection..."
+  },
+  {
+    "script": "xtea.py",
+    "proto": "http",
+    "desc": "Practice Script xtea.py",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against xtea.py (Practice Script xtea.py)..."
+  },
+  {
+    "script": "xxsdefense.py",
+    "proto": "http",
+    "desc": "A list of the only tags allowed.  Be careful adding to this.  Adding",
+    "cve": "",
+    "type": "http_clickjack",
+    "bug": "MISSING_ANTI_CLICKJACKING",
+    "owasp": [
+      "A01:2021",
+      "Broken Access Control"
+    ],
+    "probe_msg": "Evaluating anti-framing defenses and clickjacking restrictions..."
+  },
+  {
+    "script": "yahoocheck.py",
+    "proto": "http",
+    "desc": "!/usr/bin/python",
+    "cve": "",
+    "type": "http_endpoint",
+    "bug": "INSECURE_ENDPOINT_BEHAVIOR",
+    "owasp": [
+      "A05:2021",
+      "Security Misconfiguration"
+    ],
+    "probe_msg": "Executing security audit check against yahoocheck.py (!/usr/bin/python)..."
+  }
+]

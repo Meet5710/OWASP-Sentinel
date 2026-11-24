@@ -1,0 +1,24 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "XSSSpect Scan",
+      "type": "shell",
+      "command": "python -m xssspect.main scan --url ${input:targetUrl}",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    }
+  ],
+  "inputs": [
+    {
+      "id": "targetUrl",
+      "type": "promptString",
+      "description": "Authorized target URL to assess with XSSSpect",
+      "default": "https://example.com/search?q=test"
+    }
+  ]
+}
+

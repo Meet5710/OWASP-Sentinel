@@ -1,0 +1,30 @@
+services:
+  # 1. OWASP Sentinel Web Application (Unified FastAPI + React UI)
+  - type: web
+    name: vuln-sentinel
+    runtime: docker
+    plan: free
+    region: oregon
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: DEBUG
+        value: "false"
+      - key: HOST
+        value: 0.0.0.0
+      - key: PORT
+        value: 8000
+      - key: DATABASE_URL
+        fromDatabase:
+          name: sentinel-db
+          property: connectionString
+
+databases:
+  # 2. Managed PostgreSQL Database
+  - name: sentinel-db
+    plan: free
+    region: oregon
+    databaseName: sentinel_db
+    user: sentinel_user
+
