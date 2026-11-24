@@ -13,10 +13,12 @@ from sqlalchemy.orm import Session, sessionmaker
 from app.core.config import settings
 from app.db.base import Base
 
-# Ensure Render and Heroku postgres:// URLs are converted to postgresql:// for SQLAlchemy 2.0
+# Ensure Render, Heroku and cloud postgres URLs work seamlessly with SQLAlchemy
 db_url = settings.DATABASE_URL
 if db_url.startswith("postgres://"):
-    db_url = db_url.replace("postgres://", "postgresql://", 1)
+    db_url = db_url.replace("postgres://", "postgresql+psycopg2://", 1)
+elif db_url.startswith("postgresql://") and not db_url.startswith("postgresql+"):
+    db_url = db_url.replace("postgresql://", "postgresql+psycopg2://", 1)
 
 # Configure connection arguments
 connect_args = {}
