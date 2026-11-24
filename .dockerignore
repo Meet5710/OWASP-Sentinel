@@ -7,6 +7,10 @@ __pycache__/
 htmlcov/
 *.log
 sentinel.db
+*.sqlite
+*.sqlite3
+*.backup
+*.exe
 .env
 .venv/
 env/
@@ -16,4 +20,9 @@ frontend/node_modules/
 frontend/dist/
 .git/
 .gitignore
+.tmp_*
+*.tmp.json
+.t.json
+.test_tmp.json
+.terminal_sandbox/
 

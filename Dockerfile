@@ -34,11 +34,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application backend codebase
-COPY app/ ./app
-COPY alembic/ ./alembic
-COPY alembic.ini .
-COPY main.py .
+# Copy application codebase (including app, scripts, scanners, and configuration)
+COPY . .
 
 # Copy compiled frontend single-page application from Stage 1
 COPY --from=frontend-builder /build/frontend/dist ./frontend/dist
