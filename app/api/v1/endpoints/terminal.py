@@ -2499,7 +2499,10 @@ def _live_practice_script_probe(
 async def execute_terminal_command(request: TerminalExecuteRequest) -> TerminalExecuteResponse:
     start_time = time.perf_counter()
 
-    target_host = request.target_host or "target.local"
+    raw_th = (request.target_host or "target.local").strip()
+    if "://" in raw_th:
+        raw_th = urllib.parse.urlparse(raw_th).netloc
+    target_host = raw_th.split(":")[0].strip() or "target.local"
     target_port = request.target_port or "443"
     target_url = request.target_url or f"https://{target_host}"
     target_scheme = request.target_scheme or ("https" if target_port == "443" else "http")
@@ -2942,8 +2945,10 @@ async def execute_terminal_command(request: TerminalExecuteRequest) -> TerminalE
                                         ).first()
 
                                         if not latest_scan:
-                                            grant = db_session.scalars(select(ScopeGrant).where(ScopeGrant.asset_id == asset.id)).first()
-                                            grant_id = grant.id if grant else "da6815f2-6cf8-4edf-841e-3c8e710f34c2"
+                                            grant = db_session.scalars(select(ScopeGrant).where(ScopeGrant.id == asset.scope_grant_id)).first() if asset.scope_grant_id else None
+                                            if not grant:
+                                                grant = db_session.scalars(select(ScopeGrant).where(ScopeGrant.is_active == True)).first()
+                                            grant_id = grant.id if grant else (asset.scope_grant_id or "da6815f2-6cf8-4edf-841e-3c8e710f34c2")
                                             scan_id_temp = f"kali-term-{int(time.time())}"
                                             latest_scan = ScanJob(
                                                 id=scan_id_temp,
@@ -2951,6 +2956,8 @@ async def execute_terminal_command(request: TerminalExecuteRequest) -> TerminalE
                                                 scope_grant_id=grant_id,
                                                 status="COMPLETED",
                                                 total_checks=407,
+                                                started_at=datetime.now(timezone.utc),
+                                                completed_at=datetime.now(timezone.utc),
                                                 scan_metadata={"type": "KALI_PRACTICE_SCRIPTS"},
                                             )
                                             db_session.add(latest_scan)
@@ -3361,7 +3368,10 @@ async def execute_terminal_command(request: TerminalExecuteRequest) -> TerminalE
     description="Executes a command against target and yields live newline-delimited JSON events as stdout/stderr streams.",
 )
 async def execute_terminal_stream(request: TerminalExecuteRequest):
-    target_host = (request.target_host or "127.0.0.1").split(":")[0].strip()
+    raw_th = (request.target_host or "127.0.0.1").strip()
+    if "://" in raw_th:
+        raw_th = urllib.parse.urlparse(raw_th).netloc
+    target_host = raw_th.split(":")[0].strip() or "127.0.0.1"
     target_port = request.target_port or "443"
     target_url = request.target_url or f"https://{target_host}"
     target_scheme = request.target_scheme or ("https" if target_port == "443" else "http")
@@ -3531,17 +3541,46 @@ async def execute_terminal_stream(request: TerminalExecuteRequest):
 
                     if asset and "scan_practice_scripts" in expanded_cmd:
                         audit_res = None
-                        cache_file = PROJECT_ROOT / f".tmp_practice_audit_{target_host}_{target_port}.json"
-                        if cache_file.exists():
-                            try:
-                                with open(cache_file, "r", encoding="utf-8") as cf:
-                                    audit_res = json.load(cf)
-                                cache_file.unlink(missing_ok=True)
-                            except Exception:
-                                pass
+                        cache_candidates = [
+                            PROJECT_ROOT / f".tmp_practice_audit_{target_host}_{target_port}.json",
+                            Path.cwd() / f".tmp_practice_audit_{target_host}_{target_port}.json",
+                        ]
+                        if asset.host:
+                            cache_candidates.append(PROJECT_ROOT / f".tmp_practice_audit_{asset.host}_{target_port}.json")
+                            cache_candidates.append(Path.cwd() / f".tmp_practice_audit_{asset.host}_{target_port}.json")
 
-                        if not audit_res:
-                            audit_res = {"discovered_bugs": []}
+                        for cand in cache_candidates:
+                            if cand.exists():
+                                try:
+                                    with open(cand, "r", encoding="utf-8") as cf:
+                                        audit_res = json.load(cf)
+                                    cand.unlink(missing_ok=True)
+                                    break
+                                except Exception:
+                                    pass
+
+                        if not audit_res or not audit_res.get("discovered_bugs"):
+                            for f in PROJECT_ROOT.glob(".tmp_practice_audit_*.json"):
+                                try:
+                                    with open(f, "r", encoding="utf-8") as cf:
+                                        tmp_data = json.load(cf)
+                                    if tmp_data.get("discovered_bugs"):
+                                        audit_res = tmp_data
+                                        f.unlink(missing_ok=True)
+                                        break
+                                except Exception:
+                                    pass
+
+                        if not audit_res or not audit_res.get("discovered_bugs"):
+                            try:
+                                from scan_practice_scripts import execute_practice_audit
+                                audit_res = execute_practice_audit(
+                                    target_host=asset.host or target_host,
+                                    target_port=int(target_port) if str(target_port).isdigit() else 443,
+                                    target_scheme=target_scheme or "https",
+                                )
+                            except Exception:
+                                audit_res = {"discovered_bugs": []}
 
                         discovered = audit_res.get("discovered_bugs", [])
                         discovered_bugs_count = len(discovered)
@@ -3549,8 +3588,10 @@ async def execute_terminal_stream(request: TerminalExecuteRequest):
                             from app.models.db.scan import ScanJob
                             from app.models.db.scope import ScopeGrant
 
-                            grant = db_session.scalars(select(ScopeGrant).where(ScopeGrant.asset_id == asset.id)).first()
-                            grant_id = grant.id if grant else "da6815f2-6cf8-4edf-841e-3c8e710f34c2"
+                            grant = db_session.scalars(select(ScopeGrant).where(ScopeGrant.id == asset.scope_grant_id)).first() if asset.scope_grant_id else None
+                            if not grant:
+                                grant = db_session.scalars(select(ScopeGrant).where(ScopeGrant.is_active == True)).first()
+                            grant_id = grant.id if grant else (asset.scope_grant_id or "da6815f2-6cf8-4edf-841e-3c8e710f34c2")
                             scan_id_temp = f"kali-term-{int(time.time())}"
                             latest_scan = ScanJob(
                                 id=scan_id_temp,
@@ -3558,8 +3599,8 @@ async def execute_terminal_stream(request: TerminalExecuteRequest):
                                 scope_grant_id=grant_id,
                                 status="COMPLETED",
                                 total_checks=len(discovered),
-                                started_at=datetime.utcnow(),
-                                completed_at=datetime.utcnow(),
+                                started_at=datetime.now(timezone.utc),
+                                completed_at=datetime.now(timezone.utc),
                                 scan_metadata={"type": "KALI_PRACTICE_SCRIPTS", "target_host": target_host},
                             )
                             db_session.add(latest_scan)
@@ -3668,16 +3709,18 @@ async def execute_terminal_stream(request: TerminalExecuteRequest):
                             from app.models.db.scan import ScanJob
                             from app.models.db.scope import ScopeGrant
 
-                            grant = db_session.scalars(select(ScopeGrant).where(ScopeGrant.asset_id == asset.id)).first()
-                            grant_id = grant.id if grant else "da6815f2-6cf8-4edf-841e-3c8e710f34c2"
+                            grant = db_session.scalars(select(ScopeGrant).where(ScopeGrant.id == asset.scope_grant_id)).first() if asset.scope_grant_id else None
+                            if not grant:
+                                grant = db_session.scalars(select(ScopeGrant).where(ScopeGrant.is_active == True)).first()
+                            grant_id = grant.id if grant else (asset.scope_grant_id or "da6815f2-6cf8-4edf-841e-3c8e710f34c2")
                             scan_id_temp = f"kali-pentest-{int(time.time())}"
                             p_scan = ScanJob(
                                 id=scan_id_temp,
                                 target_id=asset.id,
                                 scope_grant_id=grant_id,
                                 status="COMPLETED",
-                                started_at=datetime.utcnow(),
-                                completed_at=datetime.utcnow(),
+                                started_at=datetime.now(timezone.utc),
+                                completed_at=datetime.now(timezone.utc),
                                 total_checks=len(pentest_items),
                                 scan_metadata={"type": "KALI_ADVANCED_PENTEST"},
                             )
@@ -3786,16 +3829,18 @@ async def execute_terminal_stream(request: TerminalExecuteRequest):
                             from app.models.db.scan import ScanJob
                             from app.models.db.scope import ScopeGrant
 
-                            grant = db_session.scalars(select(ScopeGrant).where(ScopeGrant.asset_id == asset.id)).first()
-                            grant_id = grant.id if grant else "da6815f2-6cf8-4edf-841e-3c8e710f34c2"
+                            grant = db_session.scalars(select(ScopeGrant).where(ScopeGrant.id == asset.scope_grant_id)).first() if asset.scope_grant_id else None
+                            if not grant:
+                                grant = db_session.scalars(select(ScopeGrant).where(ScopeGrant.is_active == True)).first()
+                            grant_id = grant.id if grant else (asset.scope_grant_id or "da6815f2-6cf8-4edf-841e-3c8e710f34c2")
                             scan_id_temp = f"kali-xsstrike-{int(time.time())}"
                             p_scan = ScanJob(
                                 id=scan_id_temp,
                                 target_id=asset.id,
                                 scope_grant_id=grant_id,
                                 status="COMPLETED",
-                                started_at=datetime.utcnow(),
-                                completed_at=datetime.utcnow(),
+                                started_at=datetime.now(timezone.utc),
+                                completed_at=datetime.now(timezone.utc),
                                 total_checks=len(xs_items),
                                 scan_metadata={"type": "KALI_XSSTRIKE_SCAN"},
                             )

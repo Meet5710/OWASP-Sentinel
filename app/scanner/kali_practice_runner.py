@@ -88,7 +88,7 @@ async def run_kali_practice_scripts_assessment(
     )
 
     # Check if target is unreachable or offline
-    if not audit_res.get("reachable", False):
+    if not (audit_res.get("reachable", False) or audit_res.get("is_live", False)):
         if resp is not None:
             # Fallback for unit testing mocks and simulated synthetic responses
             hdrs = dict(resp.headers)

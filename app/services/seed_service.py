@@ -55,11 +55,11 @@ class BaselineSeedService:
     """Service to load and seed baseline security findings into the database."""
 
     @classmethod
-    def seed_baseline_findings(cls, db: Session) -> bool:
-        """Seed baseline findings, scans, observations, and categories if database is empty."""
+    def seed_baseline_findings(cls, db: Session, force: bool = False) -> bool:
+        """Seed baseline findings, scans, observations, and categories if database is empty or forced."""
         try:
             existing_findings = db.query(Finding).count()
-            if existing_findings > 0:
+            if existing_findings > 0 and not force:
                 logger.info("Database already contains %d findings; skipping baseline seeding.", existing_findings)
                 return False
 
@@ -233,3 +233,4 @@ class BaselineSeedService:
             db.rollback()
             logger.error("Failed to seed baseline findings dataset: %s", e, exc_info=True)
             return False
+

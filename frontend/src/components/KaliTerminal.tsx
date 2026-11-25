@@ -720,6 +720,7 @@ export const KaliTerminal: React.FC<KaliTerminalProps> = ({
               target_port: tPort,
               target_url: tUrl,
               target_scheme: practiceScanTarget.scheme,
+              target_id: practiceScanTarget.id,
             });
             const lines = (res.stdout || '').split('\n').filter(Boolean);
             lines.forEach((l) => processLine(l));
@@ -742,6 +743,7 @@ export const KaliTerminal: React.FC<KaliTerminalProps> = ({
             target_port: tPort,
             target_url: tUrl,
             target_scheme: practiceScanTarget.scheme,
+            target_id: practiceScanTarget.id,
           },
           (line: string) => {
             processLine(line);
@@ -763,6 +765,7 @@ export const KaliTerminal: React.FC<KaliTerminalProps> = ({
             target_port: tPort,
             target_url: tUrl,
             target_scheme: practiceScanTarget.scheme,
+            target_id: practiceScanTarget.id,
           });
           const lines = (res.stdout || '').split('\n').filter(Boolean);
           lines.forEach((l) => appendLog('output', l));

@@ -7441,6 +7441,7 @@ def execute_practice_audit(
     audit_output = {
         "target_url": target_url,
         "is_live": True,
+        "reachable": True,
         "status_code": status_code or 200,
         "raw_status": status_line or (f"HTTP/1.1 {status_code} OK" if status_code else "HTTP/1.1 200 OK"),
         "headers": headers_cased if headers_cased else headers,

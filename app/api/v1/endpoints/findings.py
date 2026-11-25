@@ -86,6 +86,23 @@ def list_findings(
     ]
 
 
+@router.post(
+    "/seed-baseline",
+    summary="Seed Baseline Findings Dataset",
+    description="Loads official baseline findings, category mappings, and technical observations.",
+)
+def seed_baseline(
+    force: bool = False,
+    db: Session = Depends(get_db),
+):
+    """Seed baseline dataset on demand."""
+    from app.services.seed_service import BaselineSeedService
+    from app.models.db.finding import Finding
+    seeded = BaselineSeedService.seed_baseline_findings(db, force=force)
+    total = db.query(Finding).count()
+    return {"status": "ok", "seeded": seeded, "total_findings": total}
+
+
 @router.get(
     "/stats/owasp-summary",
     response_model=OWASPFindingsSummaryResponse,
