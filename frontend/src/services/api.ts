@@ -889,20 +889,23 @@ export const api = {
   // Kali Pentester
   // ---------------------------------------------------------------------------
 
-  async getKaliTools(): Promise<Array<{
+  async getKaliTools(backendBaseUrl?: string): Promise<Array<{
     name: string;
     description: string;
     available: boolean;
     example_args: string;
   }>> {
-    return request('/kali/tools');
+    return kaliRequest('/kali/tools', {}, backendBaseUrl);
   },
 
-  async executeKaliTool(data: {
-    target: string;
-    tool: string;
-    extra_args?: string;
-  }): Promise<{
+  async executeKaliTool(
+    data: {
+      target: string;
+      tool: string;
+      extra_args?: string;
+    },
+    backendBaseUrl?: string,
+  ): Promise<{
     target: string;
     tool_executed: string;
     command_ran: string;
@@ -913,10 +916,57 @@ export const api = {
     timestamp: string;
     tool_available: boolean;
   }> {
-    return request('/kali/execute', {
-      method: 'POST',
-      body: JSON.stringify(data),
-    });
+    return kaliRequest(
+      '/kali/execute',
+      {
+        method: 'POST',
+        body: JSON.stringify(data),
+      },
+      backendBaseUrl,
+    );
   },
 };
+
+function resolveKaliUrl(endpoint: string, backendBaseUrl?: string): string {
+  const cleaned = (backendBaseUrl || '').trim().replace(/\/+$/, '');
+  if (!cleaned) {
+    return `${API_BASE}${endpoint}`;
+  }
+  const base = cleaned.endsWith('/api/v1') ? cleaned : `${cleaned}/api/v1`;
+  return `${base}${endpoint}`;
+}
+
+async function kaliRequest<T>(
+  endpoint: string,
+  options: RequestInit = {},
+  backendBaseUrl?: string,
+): Promise<T> {
+  const url = resolveKaliUrl(endpoint, backendBaseUrl);
+  const headers = {
+    'Content-Type': 'application/json',
+    'ngrok-skip-browser-warning': 'true',
+    ...(options.headers || {}),
+  };
+
+  const response = await fetch(url, { ...options, headers });
+
+  if (!response.ok) {
+    let errorDetail = `HTTP ${response.status} ${response.statusText}`;
+    try {
+      const errJson = await response.json();
+      if (typeof errJson.detail === 'string') {
+        errorDetail = errJson.detail;
+      } else if (errJson.detail && typeof errJson.detail.message === 'string') {
+        errorDetail = errJson.detail.message;
+      } else if (typeof errJson.message === 'string') {
+        errorDetail = errJson.message;
+      }
+    } catch {
+      // ignore non-JSON body
+    }
+    throw new Error(errorDetail);
+  }
+
+  return (await response.json()) as T;
+}
 
