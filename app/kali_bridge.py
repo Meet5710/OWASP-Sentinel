@@ -1,8 +1,8 @@
 """OWASP Sentinel - Kali Linux MCP Bridge.
 
 Forwards penetration-testing tool commands to the Kali Linux Tools API / MCP
-server running behind the local SSH tunnel (default ``http://127.0.0.1:5001``)
-or configured via ``KALI_API_URL``.
+server running behind the local SSH tunnel (``127.0.0.1:5001`` or ``5000``)
+or via the ngrok bridge URL when running in production on Render.
 """
 
 from __future__ import annotations
@@ -17,13 +17,28 @@ import requests
 
 logger = logging.getLogger("sentinel.kali_bridge")
 
-# Points to the local SSH tunnel forwarding the Kali MCP API server.
-DEFAULT_KALI_API_URL = "http://127.0.0.1:5001"
+# Local SSH tunnel ports on the host running the Kali VM connection.
+DEFAULT_LOCAL_KALI_URLS = ("http://127.0.0.1:5001", "http://127.0.0.1:5000")
+# Public ngrok bridge URL used automatically by production (Render) when KALI_API_URL is unset.
+DEFAULT_REMOTE_KALI_URL = "https://paltry-graded-landslide.ngrok-free.dev"
+
+
+def _candidate_kali_urls() -> list[str]:
+    """Return ordered Kali MCP candidate URLs for the active runtime environment."""
+    env_url = os.environ.get("KALI_API_URL", "").strip().rstrip("/")
+    if env_url:
+        return [env_url]
+
+    app_env = os.environ.get("APP_ENV", "development").strip().lower()
+    if app_env == "production":
+        return [DEFAULT_REMOTE_KALI_URL]
+
+    return list(DEFAULT_LOCAL_KALI_URLS)
 
 
 def get_kali_api_url() -> str:
-    """Return the configured Kali MCP server base URL."""
-    return os.environ.get("KALI_API_URL", DEFAULT_KALI_API_URL).strip().rstrip("/")
+    """Return the primary Kali MCP server base URL."""
+    return _candidate_kali_urls()[0]
 
 
 TOOL_COMMANDS: dict[str, str] = {
@@ -89,8 +104,7 @@ def build_kali_command(tool: str, target: str, extra_args: str = "") -> str:
     safe_target = shlex.quote(normalized_target)
     extra = extra_args.strip()
 
-    # If user explicitly supplied subcommand/flag prefixes matching our default template,
-    # avoid duplicating them (e.g. gobuster "dir -w ...", nmap "-sV -sC", amass "enum -d").
+    # Avoid duplicating subcommand/flag prefixes when example_args match template defaults.
     if extra and tool_key == "gobuster" and extra.startswith("dir "):
         return " ".join(f"gobuster {extra} -u {safe_target}".split())
     if extra and tool_key == "amass" and extra.startswith("enum "):
@@ -107,64 +121,77 @@ def build_kali_command(tool: str, target: str, extra_args: str = "") -> str:
 
 def check_kali_health(timeout: float = 2.0) -> tuple[bool, dict[str, bool]]:
     """Query the Kali MCP server /health endpoint for live connectivity and tool status."""
-    base_url = get_kali_api_url()
-    try:
-        resp = requests.get(
-            f"{base_url}/health",
-            headers={"ngrok-skip-browser-warning": "true"},
-            timeout=timeout,
-        )
-        resp.raise_for_status()
-        data = resp.json()
-        tools_status = data.get("tools_status")
-        if isinstance(tools_status, dict):
-            return True, {str(k).lower(): bool(v) for k, v in tools_status.items()}
-        return True, {}
-    except Exception as exc:
-        logger.debug("Kali MCP health check failed (%s): %s", base_url, exc)
-        return False, {}
+    for base_url in _candidate_kali_urls():
+        try:
+            resp = requests.get(
+                f"{base_url}/health",
+                headers={"ngrok-skip-browser-warning": "true"},
+                timeout=timeout,
+            )
+            resp.raise_for_status()
+            data = resp.json()
+            if data.get("kali_connected") is False or data.get("status") == "offline":
+                continue
+            tools_status = data.get("tools_status")
+            if isinstance(tools_status, dict):
+                return True, {str(k).lower(): bool(v) for k, v in tools_status.items()}
+            return True, {}
+        except Exception as exc:
+            logger.debug("Kali MCP health check failed (%s): %s", base_url, exc)
+    return False, {}
 
 
 def run_tool_on_kali(command: str, timeout: int = 600) -> dict:
     """Execute a command via the Kali MCP server."""
-    base_url = get_kali_api_url()
-    logger.info("Sending to Kali MCP (%s): %s", base_url, command)
+    candidates = _candidate_kali_urls()
+    last_exc: Exception | None = None
+    last_url = candidates[0]
     started = time.monotonic()
-    try:
-        response = requests.post(
-            f"{base_url}/api/command",
-            json={"command": command},
-            headers={"ngrok-skip-browser-warning": "true"},
-            timeout=timeout,
-        )
-        response.raise_for_status()
-        data = response.json()
-        elapsed = round(
-            float(data.get("elapsed_seconds") or (time.monotonic() - started)),
-            2,
-        )
 
-        output = data.get("output") or data.get("stdout") or ""
-        stderr = data.get("stderr") or ""
-        returncode = data.get("return_code")
-        if returncode is None:
-            returncode = data.get("returncode", 0)
+    for base_url in candidates:
+        last_url = base_url
+        logger.info("Sending to Kali MCP (%s): %s", base_url, command)
+        try:
+            response = requests.post(
+                f"{base_url}/api/command",
+                json={"command": command},
+                headers={"ngrok-skip-browser-warning": "true"},
+                timeout=timeout,
+            )
+            response.raise_for_status()
+            data = response.json()
+            elapsed = round(
+                float(data.get("elapsed_seconds") or (time.monotonic() - started)),
+                2,
+            )
 
-        return {
-            "stdout": output,
-            "stderr": stderr,
-            "returncode": int(returncode),
-            "elapsed_seconds": elapsed,
-        }
-    except Exception as exc:
-        elapsed = round(time.monotonic() - started, 2)
-        logger.error("Kali bridge error: %s", exc)
-        return {
-            "stdout": "",
-            "stderr": (
-                f"[!] Failed to connect to Kali MCP Server at {base_url}. "
-                f"Is the SSH tunnel running?\nError: {exc}"
-            ),
-            "returncode": -1,
-            "elapsed_seconds": elapsed,
-        }
+            output = data.get("output") or data.get("stdout") or ""
+            stderr = data.get("stderr") or ""
+            returncode = data.get("return_code")
+            if returncode is None:
+                returncode = data.get("returncode", 0)
+
+            return {
+                "stdout": output,
+                "stderr": stderr,
+                "returncode": int(returncode),
+                "elapsed_seconds": elapsed,
+            }
+        except requests.ConnectionError as exc:
+            last_exc = exc
+            continue
+        except Exception as exc:
+            last_exc = exc
+            break
+
+    elapsed = round(time.monotonic() - started, 2)
+    logger.error("Kali bridge error (%s): %s", last_url, last_exc)
+    return {
+        "stdout": "",
+        "stderr": (
+            f"[!] Failed to connect to Kali MCP Server at {last_url}. "
+            f"Is the SSH tunnel running?\nError: {last_exc}"
+        ),
+        "returncode": -1,
+        "elapsed_seconds": elapsed,
+    }

@@ -13,7 +13,7 @@ _project_root = Path(__file__).resolve().parent.parent
 if str(_project_root) not in sys.path:
     sys.path.insert(0, str(_project_root))
 
-from fastapi import FastAPI, Request, status
+from fastapi import FastAPI, HTTPException, Request, status
 from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
@@ -156,6 +156,39 @@ def create_app() -> FastAPI:
     @app.post("/api/scan", tags=["Scan"])
     def execute_scan(request: ScanRequest):
         return run_owasp_scan(target_url=request.target_url, selected_ids=request.selected_checks, auth={})
+
+    # Local-only Kali MCP Bridge Relay (allows Render -> ngrok -> local 8001 -> SSH tunnel 5001/5000)
+    from app.kali_bridge import check_kali_health, run_tool_on_kali
+
+    class KaliCommandRelayRequest(BaseModel):
+        command: str = Field(..., description="Command string to forward to local Kali MCP tunnel")
+
+    @app.get("/health", tags=["Kali Relay"])
+    def relay_kali_health():
+        if settings.APP_ENV.lower() == "production":
+            return {"status": "online", "kali_connected": False}
+        connected, tools_status = check_kali_health()
+        if not connected:
+            return JSONResponse(
+                status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+                content={"status": "offline", "kali_connected": False, "tools_status": {}},
+            )
+        return {"status": "healthy", "kali_connected": True, "tools_status": tools_status}
+
+    @app.post("/api/command", tags=["Kali Relay"])
+    def relay_kali_command(payload: KaliCommandRelayRequest):
+        if settings.APP_ENV.lower() == "production":
+            raise HTTPException(
+                status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+                detail="Direct /api/command relay is only available on the local bridge host.",
+            )
+        res = run_tool_on_kali(payload.command)
+        return {
+            "stdout": res.get("stdout", ""),
+            "stderr": res.get("stderr", ""),
+            "return_code": res.get("returncode", 0),
+            "elapsed_seconds": res.get("elapsed_seconds", 0.0),
+        }
 
     # Static Assets & Frontend Web Application
     frontend_dist = Path(__file__).resolve().parent.parent / "frontend" / "dist"
