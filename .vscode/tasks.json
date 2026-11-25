@@ -2,6 +2,72 @@
   "version": "2.0.0",
   "tasks": [
     {
+      "label": "1. Backend (8001) + Ngrok",
+      "type": "shell",
+      "command": "Start-Job -ScriptBlock { Start-Sleep -Seconds 3; try { $t = Invoke-RestMethod -Uri 'http://127.0.0.1:8001/api/v1/tunnel/start' -Method Post -ContentType 'application/json' -Body '{}' -TimeoutSec 15; Write-Host \"[+] Ngrok: $($t.public_url)\" -ForegroundColor Green } catch { Write-Host \"[!] Ngrok warning: $($_.Exception.Message)\" -ForegroundColor Yellow } } | Out-Null; python -m uvicorn app.main:app --host 127.0.0.1 --port 8001",
+      "isBackground": true,
+      "problemMatcher": [],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "group": "sentinel-backend",
+        "showReuseMessage": false
+      },
+      "runOptions": {
+        "instanceLimit": 1
+      }
+    },
+    {
+      "label": "2. Frontend (5173)",
+      "type": "shell",
+      "command": "npm.cmd run dev",
+      "isBackground": true,
+      "problemMatcher": [],
+      "options": {
+        "cwd": "${workspaceFolder}\\frontend"
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "group": "sentinel-frontend",
+        "showReuseMessage": false
+      },
+      "runOptions": {
+        "instanceLimit": 1
+      }
+    },
+    {
+      "label": "3. Kali SSH Tunnel (lucy)",
+      "type": "shell",
+      "command": "ssh -o ServerAliveInterval=30 -o ServerAliveCountMax=3 -N -L 5001:127.0.0.1:5000 lucy@192.168.253.133",
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "group": "sentinel-kali-ssh",
+        "showReuseMessage": false
+      },
+      "runOptions": {
+        "instanceLimit": 1
+      }
+    },
+    {
+      "label": "Start All Services (3 Terminals)",
+      "dependsOn": [
+        "1. Backend (8001) + Ngrok",
+        "2. Frontend (5173)",
+        "3. Kali SSH Tunnel (lucy)"
+      ],
+      "problemMatcher": [],
+      "runOptions": {
+        "runOn": "folderOpen"
+      }
+    },
+    {
       "label": "XSSSpect Scan",
       "type": "shell",
       "command": "python -m xssspect.main scan --url ${input:targetUrl}",
@@ -21,4 +87,3 @@
     }
   ]
 }
-
