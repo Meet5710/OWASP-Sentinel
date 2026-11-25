@@ -74,11 +74,13 @@ def register_asset(db: Session, request: AssetRegisterRequest) -> AuthorizedAsse
         # Requires explicit manual administrator approval
         approval_status = "PENDING"
 
-    # 7. Check for Duplicate Target under same scope
+    # 7. Check for Duplicate Target (under same scope or baseline asset matching URL/host)
     stmt = (
         select(AuthorizedAsset)
-        .where(AuthorizedAsset.scope_grant_id == scope.id)
-        .where(AuthorizedAsset.canonical_url == val_res.canonical_url)
+        .where(
+            (AuthorizedAsset.canonical_url == val_res.canonical_url) |
+            (AuthorizedAsset.host == val_res.host)
+        )
     )
     existing = db.scalars(stmt).first()
     if existing:
@@ -86,7 +88,9 @@ def register_asset(db: Session, request: AssetRegisterRequest) -> AuthorizedAsse
             existing.approval_status = "APPROVED"
             existing.approved_at = datetime.now(timezone.utc)
             existing.approved_by = "Security Administrator"
+            existing.scope_grant_id = scope.id
             db.commit()
+            db.refresh(existing)
         return existing
 
     # 8. Create Authorized Asset Record

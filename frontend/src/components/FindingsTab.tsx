@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   ShieldAlert,
@@ -244,9 +244,29 @@ export const FindingsTab: React.FC<FindingsTabProps> = ({
     }
   };
 
+  // Helper to match findings to an asset by ID, hostname, canonical URL, or evidence URL
+  const isFindingForAsset = useCallback((f: Finding, assetId: string) => {
+    if (!assetId || assetId === '__ALL__') return true;
+    if (f.target_id === assetId) return true;
+    const activeAsset = assets.find((a) => a.id === assetId);
+    if (!activeAsset) return false;
+    const findingAsset = assets.find((a) => a.id === f.target_id);
+    if (findingAsset && (
+      findingAsset.canonical_url === activeAsset.canonical_url ||
+      findingAsset.host === activeAsset.host
+    )) {
+      return true;
+    }
+    const targetUrl = f.evidence?.target_url || f.evidence?.vulnerable_url || f.evidence?.affected_url || '';
+    if (targetUrl && activeAsset.host && targetUrl.includes(activeAsset.host)) {
+      return true;
+    }
+    return false;
+  }, [assets]);
+
   // Filter Logic: Filter from consolidated findings
   const filteredFindings = consolidatedFindings.filter((f) => {
-    if (filterTarget && filterTarget !== '__ALL__' && f.target_id !== filterTarget) return false;
+    if (filterTarget && filterTarget !== '__ALL__' && !isFindingForAsset(f, filterTarget)) return false;
     if (filterSeverity && f.severity !== filterSeverity) return false;
     if (filterStatus && f.validation_status !== filterStatus) return false;
 
@@ -516,12 +536,12 @@ export const FindingsTab: React.FC<FindingsTabProps> = ({
               {assets
                 .slice()
                 .sort((a, b) => {
-                  const countA = consolidatedFindings.filter((f) => f.target_id === a.id).length;
-                  const countB = consolidatedFindings.filter((f) => f.target_id === b.id).length;
+                  const countA = consolidatedFindings.filter((f) => isFindingForAsset(f, a.id)).length;
+                  const countB = consolidatedFindings.filter((f) => isFindingForAsset(f, b.id)).length;
                   return countB - countA;
                 })
                 .map((a) => {
-                  const count = consolidatedFindings.filter((f) => f.target_id === a.id).length;
+                  const count = consolidatedFindings.filter((f) => isFindingForAsset(f, a.id)).length;
                   return (
                     <option key={a.id} value={a.id} className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">
                       {a.canonical_url} {count > 0 ? `(${count} findings)` : '(0 findings)'}

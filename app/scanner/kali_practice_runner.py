@@ -84,7 +84,7 @@ async def run_kali_practice_scripts_assessment(
         target_host=host,
         target_port=int(port) if str(port).isdigit() else 443,
         target_scheme=context.scheme or ("https" if port == 443 else "http"),
-        timeout=8.0,
+        timeout=4.0,
     )
 
     # Check if target is unreachable or offline

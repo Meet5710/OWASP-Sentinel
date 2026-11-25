@@ -54,44 +54,80 @@ def parse_json(val: Any, default: Any) -> Any:
 class BaselineSeedService:
     """Service to load and seed baseline security findings into the database."""
 
+    last_status: str = ""
+
     @classmethod
     def seed_baseline_findings(cls, db: Session, force: bool = False) -> bool:
         """Seed baseline findings, scans, observations, and categories if database is empty or forced."""
         try:
             existing_findings = db.query(Finding).count()
             if existing_findings > 0 and not force:
+                cls.last_status = f"Skipped: Database already contains {existing_findings} findings."
                 logger.info("Database already contains %d findings; skipping baseline seeding.", existing_findings)
                 return False
 
-            fixture_path = Path(__file__).resolve().parent.parent / "db" / "fixtures" / "baseline_data.json.gz"
-            if not fixture_path.exists():
-                logger.warning("Baseline findings fixture not found at %s", fixture_path)
+            candidates = [
+                Path(__file__).resolve().parent.parent / "db" / "fixtures" / "baseline_data.json.gz",
+                Path(__file__).resolve().parent.parent.parent / "app" / "db" / "fixtures" / "baseline_data.json.gz",
+                Path.cwd() / "app" / "db" / "fixtures" / "baseline_data.json.gz",
+                Path.cwd() / "db" / "fixtures" / "baseline_data.json.gz",
+            ]
+            fixture_path = None
+            for p in candidates:
+                if p.exists():
+                    fixture_path = p
+                    break
+
+            if not fixture_path:
+                cls.last_status = f"Error: Baseline fixture not found in {[str(c) for c in candidates]}."
+                logger.warning(cls.last_status)
                 return False
 
             logger.info("Seeding baseline findings dataset from %s...", fixture_path)
             with gzip.open(fixture_path, "rt", encoding="utf-8") as f:
                 data = json.load(f)
 
+            # Track ID remappings if org or scope exists with a different ID
+            org_id_map = {}
+            scope_id_map = {}
+
             # 1. Organizations
             for row in data.get("organizations", []):
-                if not db.query(Organization).filter(Organization.id == row["id"]).first():
+                existing_org = db.query(Organization).filter(
+                    (Organization.id == row["id"]) | (Organization.name == row["name"])
+                ).first()
+                if existing_org:
+                    org_id_map[row["id"]] = existing_org.id
+                else:
                     org = Organization(
                         id=row["id"],
                         name=row["name"],
-                        contact_email=row["contact_email"],
+                        contact_email=row.get("contact_email", "admin@sentinel.local"),
                         description=row.get("description"),
                         created_at=parse_dt(row.get("created_at")),
                         updated_at=parse_dt(row.get("updated_at")),
                     )
                     db.add(org)
+                    org_id_map[row["id"]] = org.id
             db.flush()
+
+            fallback_org_id = next(iter(org_id_map.values()), None)
+            if not fallback_org_id:
+                any_org = db.query(Organization).first()
+                fallback_org_id = any_org.id if any_org else None
 
             # 2. Scope Grants
             for row in data.get("scope_grants", []):
-                if not db.query(ScopeGrant).filter(ScopeGrant.id == row["id"]).first():
+                existing_scope = db.query(ScopeGrant).filter(
+                    (ScopeGrant.id == row["id"]) | (ScopeGrant.scope_code == row["scope_code"])
+                ).first()
+                if existing_scope:
+                    scope_id_map[row["id"]] = existing_scope.id
+                else:
+                    target_org_id = org_id_map.get(row["organization_id"], fallback_org_id)
                     scope = ScopeGrant(
                         id=row["id"],
-                        organization_id=row["organization_id"],
+                        organization_id=target_org_id,
                         scope_code=row["scope_code"],
                         title=row["title"],
                         authorized_by=row["authorized_by"],
@@ -109,15 +145,23 @@ class BaselineSeedService:
                         updated_at=parse_dt(row.get("updated_at")),
                     )
                     db.add(scope)
+                    scope_id_map[row["id"]] = scope.id
             db.flush()
+
+            fallback_scope_id = next(iter(scope_id_map.values()), None)
+            if not fallback_scope_id:
+                any_scope = db.query(ScopeGrant).first()
+                fallback_scope_id = any_scope.id if any_scope else None
 
             # 3. Authorized Assets (Seed with approval_status="BASELINE" to keep user Target Inventory clean)
             for row in data.get("authorized_assets", []):
                 if not db.query(AuthorizedAsset).filter(AuthorizedAsset.id == row["id"]).first():
+                    target_org_id = org_id_map.get(row["organization_id"], fallback_org_id)
+                    target_scope_id = scope_id_map.get(row["scope_grant_id"], fallback_scope_id)
                     asset = AuthorizedAsset(
                         id=row["id"],
-                        organization_id=row["organization_id"],
-                        scope_grant_id=row["scope_grant_id"],
+                        organization_id=target_org_id,
+                        scope_grant_id=target_scope_id,
                         target_input=row["target_input"],
                         canonical_url=row["canonical_url"],
                         host=row["host"],
@@ -140,10 +184,11 @@ class BaselineSeedService:
             # 4. Scan Jobs
             for row in data.get("scan_jobs", []):
                 if not db.query(ScanJob).filter(ScanJob.id == row["id"]).first():
+                    target_scope_id = scope_id_map.get(row["scope_grant_id"], fallback_scope_id)
                     scan = ScanJob(
                         id=row["id"],
                         target_id=row["target_id"],
-                        scope_grant_id=row["scope_grant_id"],
+                        scope_grant_id=target_scope_id,
                         status=row.get("status", "COMPLETED"),
                         started_at=parse_dt(row.get("started_at")),
                         completed_at=parse_dt(row.get("completed_at")),
@@ -220,17 +265,19 @@ class BaselineSeedService:
                     db.add(mapping)
 
             db.commit()
-            logger.info(
-                "Successfully seeded baseline data: %d findings, %d category mappings, %d observations, %d scan jobs.",
-                len(data.get("findings", [])),
-                len(data.get("finding_category_mappings", [])),
-                len(data.get("technical_observations", [])),
-                len(data.get("scan_jobs", [])),
+            msg = (
+                f"Successfully seeded baseline data: {len(data.get('findings', []))} findings, "
+                f"{len(data.get('finding_category_mappings', []))} category mappings, "
+                f"{len(data.get('technical_observations', []))} observations, "
+                f"{len(data.get('scan_jobs', []))} scan jobs."
             )
+            cls.last_status = msg
+            logger.info(msg)
             return True
 
         except Exception as e:
             db.rollback()
+            cls.last_status = f"Database Exception during seeding: {type(e).__name__}: {e}"
             logger.error("Failed to seed baseline findings dataset: %s", e, exc_info=True)
             return False
 

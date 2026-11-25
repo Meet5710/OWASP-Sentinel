@@ -6899,7 +6899,7 @@ def execute_practice_audit(
             elif "bot" in s_name or "shell" in s_name:
                 outcome = "EGRESS_BLOCKED"
             log(f"[-] [Practice_Scripts/{s_name}] Endpoint probe dispatched -> HTTP {status_code or 200} (Target endpoint responds within standard parameters) [{outcome}]")
-        time.sleep(0.010)
+        time.sleep(0.001)
 
     
 
@@ -6920,7 +6920,7 @@ def execute_practice_audit(
                         [sys.executable, str(adv_file), target_url, "-o", str(tmp_json), "--format", "json", "--no-crawl", "--no-test-creds", "--timeout", "2", "--threads", "15", "-q"],
                         capture_output=True,
                         text=True,
-                        timeout=15,
+                        timeout=5,
                         encoding="utf-8",
                         errors="replace",
                     )
@@ -6934,7 +6934,7 @@ def execute_practice_audit(
                         [sys.executable, str(adv_file), target_url],
                         capture_output=True,
                         text=True,
-                        timeout=15,
+                        timeout=5,
                         encoding="utf-8",
                         errors="replace",
                     )
@@ -7204,11 +7204,11 @@ def execute_practice_audit(
             xs_env = dict(os.environ)
             xs_env["PYTHONPATH"] = f"{xs_dir}{';' if sys.platform == 'win32' else ':'}{xs_env.get('PYTHONPATH', '')}"
             xs_proc = subprocess.run(
-                [sys.executable, str(xs_file), "-u", target_url, "--crawl", "-l", "1", "--skip", "--timeout", "4"],
+                [sys.executable, str(xs_file), "-u", target_url, "--crawl", "-l", "1", "--skip", "--timeout", "3"],
                 cwd=str(xs_dir),
                 capture_output=True,
                 text=True,
-                timeout=15,
+                timeout=5,
                 encoding="utf-8",
                 errors="replace",
                 env=xs_env,

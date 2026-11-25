@@ -100,7 +100,7 @@ def seed_baseline(
     from app.models.db.finding import Finding
     seeded = BaselineSeedService.seed_baseline_findings(db, force=force)
     total = db.query(Finding).count()
-    return {"status": "ok", "seeded": seeded, "total_findings": total}
+    return {"status": "ok", "seeded": seeded, "message": BaselineSeedService.last_status, "total_findings": total}
 
 
 @router.get(
