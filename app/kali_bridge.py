@@ -28,27 +28,54 @@ def get_kali_api_url() -> str:
 
 TOOL_COMMANDS: dict[str, str] = {
     "nmap": "nmap -sV -sC {extra} {target}",
+    "rustscan": "rustscan -a {target} {extra}",
+    "masscan": "masscan {target} {extra}",
+    "amass": "amass enum -d {target} {extra}",
+    "subfinder": "subfinder -d {target} {extra}",
+    "fierce": "fierce --domain {target} {extra}",
+    "dnsrecon": "dnsrecon -d {target} {extra}",
+    "sublist3r": "sublist3r -d {target} {extra}",
+    "theharvester": "theHarvester -d {target} -b all {extra}",
     "nikto": "nikto -h {target} {extra}",
     "gobuster": "gobuster dir -u {target} -w /usr/share/wordlists/dirb/common.txt {extra}",
+    "feroxbuster": "feroxbuster -u {target} {extra}",
+    "ffuf": "ffuf -u {target}/FUZZ -w /usr/share/wordlists/dirb/common.txt {extra}",
+    "dirsearch": "dirsearch -u {target} {extra}",
     "sqlmap": "sqlmap -u {target} --batch --level=1 --risk=1 {extra}",
     "nuclei": "nuclei -u {target} {extra}",
     "wpscan": "wpscan --url {target} {extra}",
     "whatweb": "whatweb {extra} {target}",
     "wafw00f": "wafw00f {extra} {target}",
     "dirb": "dirb {target} {extra}",
-    "fierce": "fierce --domain {target} {extra}",
-    "dnsrecon": "dnsrecon -d {target} {extra}",
-    "sublist3r": "sublist3r -d {target} {extra}",
+    "httpx": "httpx -u {target} {extra}",
+    "katana": "katana -u {target} {extra}",
+    "dalfox": "dalfox url {target} {extra}",
 }
 
-# Tools that require a bare hostname/domain/IP instead of a full http(s):// URL.
-HOST_ONLY_TOOLS = {"nmap", "fierce", "dnsrecon", "sublist3r"}
+# Tools that expect a bare hostname, domain, or IP instead of a full http(s):// URL.
+HOST_ONLY_TOOLS = {
+    "nmap",
+    "rustscan",
+    "masscan",
+    "autorecon",
+    "amass",
+    "subfinder",
+    "fierce",
+    "dnsenum",
+    "dnsrecon",
+    "sublist3r",
+    "theharvester",
+    "enum4linux-ng",
+    "subjack",
+    "waybackurls",
+    "gau",
+}
 
 
 def normalize_target_for_tool(tool: str, target: str) -> str:
-    """Strip URL scheme/path for tools like nmap/dnsrecon that expect a hostname or IP."""
+    """Strip URL scheme/path for tools like nmap/subfinder that expect a hostname or IP."""
     cleaned = target.strip()
-    if tool in HOST_ONLY_TOOLS and "://" in cleaned:
+    if tool.lower() in HOST_ONLY_TOOLS and "://" in cleaned:
         parsed = urlparse(cleaned)
         if parsed.hostname:
             return parsed.hostname
@@ -57,10 +84,24 @@ def normalize_target_for_tool(tool: str, target: str) -> str:
 
 def build_kali_command(tool: str, target: str, extra_args: str = "") -> str:
     """Build a safe command string for the selected Kali tool."""
-    normalized_target = normalize_target_for_tool(tool, target)
+    tool_key = tool.strip().lower()
+    normalized_target = normalize_target_for_tool(tool_key, target)
     safe_target = shlex.quote(normalized_target)
-    template = TOOL_COMMANDS.get(tool, f"{tool} {{extra}} {{target}}")
-    cmd = template.format(target=safe_target, extra=extra_args.strip())
+    extra = extra_args.strip()
+
+    # If user explicitly supplied subcommand/flag prefixes matching our default template,
+    # avoid duplicating them (e.g. gobuster "dir -w ...", nmap "-sV -sC", amass "enum -d").
+    if extra and tool_key == "gobuster" and extra.startswith("dir "):
+        return " ".join(f"gobuster {extra} -u {safe_target}".split())
+    if extra and tool_key == "amass" and extra.startswith("enum "):
+        return " ".join(f"amass {extra} {safe_target}".split())
+    if extra and tool_key == "nmap" and ("-sV" in extra or "-sC" in extra):
+        return " ".join(f"nmap {extra} {safe_target}".split())
+    if extra and tool_key in {"rustscan", "subfinder", "fierce", "theharvester"} and extra in {"-a", "-d", "--domain", "-b all -d"}:
+        return " ".join(f"{tool_key} {extra} {safe_target}".split())
+
+    template = TOOL_COMMANDS.get(tool_key, f"{tool.strip()} {{extra}} {{target}}")
+    cmd = template.format(target=safe_target, extra=extra)
     return " ".join(cmd.split())
 
 

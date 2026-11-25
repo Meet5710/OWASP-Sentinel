@@ -889,13 +889,20 @@ export const api = {
   // Kali Pentester
   // ---------------------------------------------------------------------------
 
-  async getKaliTools(backendBaseUrl?: string): Promise<Array<{
+  async getKaliTools(backendBaseUrl?: string): Promise<Record<string, Array<{
     name: string;
     description: string;
-    available: boolean;
     example_args: string;
-  }>> {
+  }>>> {
     return kaliRequest('/kali/tools', {}, backendBaseUrl);
+  },
+
+  async getKaliStatus(backendBaseUrl?: string): Promise<{
+    connected: boolean;
+    kali_api_url: string;
+    tools_status: Record<string, boolean>;
+  }> {
+    return kaliRequest('/kali/status', {}, backendBaseUrl);
   },
 
   async executeKaliTool(

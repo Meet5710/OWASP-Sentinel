@@ -11,6 +11,7 @@ from pydantic import BaseModel, Field
 from app.kali_bridge import (
     build_kali_command,
     check_kali_health,
+    get_kali_api_url,
     run_tool_on_kali,
 )
 
@@ -36,48 +37,113 @@ class KaliScanResult(BaseModel):
     tool_available: bool
 
 
-class KaliToolInfo(BaseModel):
-    name: str
-    description: str
-    available: bool
-    example_args: str
+TOOL_CATALOG: dict[str, list[dict[str, str]]] = {
+    "Network Reconnaissance & Scanning": [
+        {"name": "nmap", "description": "Network mapper & service scanner", "example_args": "-sV -sC"},
+        {"name": "rustscan", "description": "Ultra-fast port scanner", "example_args": "-a"},
+        {"name": "masscan", "description": "High-speed internet-scale port scanner", "example_args": "-p1-65535"},
+        {"name": "autorecon", "description": "Comprehensive automated recon", "example_args": ""},
+        {"name": "amass", "description": "Subdomain enumeration & OSINT", "example_args": "enum -d"},
+        {"name": "subfinder", "description": "Fast passive subdomain discovery", "example_args": "-d"},
+        {"name": "fierce", "description": "DNS reconnaissance", "example_args": "--domain"},
+        {"name": "dnsenum", "description": "DNS information gathering", "example_args": ""},
+        {"name": "theharvester", "description": "Email and subdomain harvesting", "example_args": "-b all -d"},
+        {"name": "responder", "description": "LLMNR, NBT-NS and MDNS poisoner", "example_args": "-I eth0"},
+        {"name": "enum4linux-ng", "description": "Advanced SMB enumeration", "example_args": "-A"},
+    ],
+    "Web Application Security": [
+        {"name": "gobuster", "description": "Directory/file brute-forcer", "example_args": "dir -w /usr/share/wordlists/dirb/common.txt"},
+        {"name": "feroxbuster", "description": "Recursive content discovery", "example_args": "-w /usr/share/wordlists/dirb/common.txt"},
+        {"name": "ffuf", "description": "Fast web fuzzer", "example_args": "-w /usr/share/wordlists/dirb/common.txt"},
+        {"name": "dirsearch", "description": "Advanced directory discovery", "example_args": "-e php,html"},
+        {"name": "nuclei", "description": "Template-based vulnerability scanner", "example_args": "-severity critical,high"},
+        {"name": "nikto", "description": "Web server vulnerability scanner", "example_args": "-C all"},
+        {"name": "sqlmap", "description": "Automated SQL injection tool", "example_args": "--batch --level=1 --risk=1"},
+        {"name": "wpscan", "description": "WordPress security scanner", "example_args": "--enumerate vp"},
+        {"name": "dalfox", "description": "Advanced XSS vulnerability scanner", "example_args": ""},
+        {"name": "commix", "description": "Command injection exploitation", "example_args": ""},
+        {"name": "whatweb", "description": "Web technology fingerprinter", "example_args": ""},
+        {"name": "wafw00f", "description": "WAF detector", "example_args": ""},
+        {"name": "arjun", "description": "HTTP parameter discovery", "example_args": ""},
+        {"name": "httpx", "description": "Fast HTTP probing", "example_args": "-tech-detect"},
+        {"name": "katana", "description": "Next-generation crawling", "example_args": "-jc"},
+        {"name": "jwt-tool", "description": "JSON Web Token testing", "example_args": "--scan"},
+        {"name": "zap-cli", "description": "OWASP ZAP automation", "example_args": "quick-scan"},
+    ],
+    "Authentication & Password Security": [
+        {"name": "hydra", "description": "Network login cracker", "example_args": "-L users.txt -P pass.txt"},
+        {"name": "john", "description": "John the Ripper password cracker", "example_args": ""},
+        {"name": "hashcat", "description": "GPU-accelerated password recovery", "example_args": "-m 0"},
+        {"name": "medusa", "description": "Parallel login brute-forcer", "example_args": ""},
+        {"name": "patator", "description": "Multi-purpose brute-forcer", "example_args": ""},
+        {"name": "crackmapexec", "description": "Network service exploitation", "example_args": ""},
+        {"name": "smbmap", "description": "SMB share enumeration", "example_args": "-H"},
+        {"name": "evil-winrm", "description": "Windows Remote Management shell", "example_args": "-i"},
+        {"name": "hash-identifier", "description": "Hash type identification", "example_args": ""},
+    ],
+    "Binary Analysis & Reverse Engineering": [
+        {"name": "gdb", "description": "GNU Debugger", "example_args": ""},
+        {"name": "radare2", "description": "Advanced reverse engineering framework", "example_args": "-A"},
+        {"name": "ghidra", "description": "NSA reverse engineering suite", "example_args": ""},
+        {"name": "binwalk", "description": "Firmware analysis and extraction", "example_args": "-e"},
+        {"name": "checksec", "description": "Binary security property checker", "example_args": ""},
+        {"name": "strings", "description": "Extract printable strings", "example_args": "-n 8"},
+        {"name": "objdump", "description": "Display object file information", "example_args": "-d"},
+        {"name": "ROPgadget", "description": "ROP/JOP gadget finder", "example_args": ""},
+        {"name": "pwntools", "description": "CTF framework and exploit library", "example_args": ""},
+    ],
+    "Cloud & Container Security": [
+        {"name": "prowler", "description": "AWS/Azure/GCP security assessment", "example_args": ""},
+        {"name": "scout-suite", "description": "Multi-cloud security auditing", "example_args": ""},
+        {"name": "trivy", "description": "Container vulnerability scanner", "example_args": "image"},
+        {"name": "kube-hunter", "description": "Kubernetes penetration testing", "example_args": "--remote"},
+        {"name": "kube-bench", "description": "CIS Kubernetes benchmark checker", "example_args": ""},
+        {"name": "docker-bench-security", "description": "Docker security assessment", "example_args": ""},
+        {"name": "checkov", "description": "Infrastructure as code security", "example_args": "-d"},
+    ],
+    "CTF & Forensics": [
+        {"name": "volatility", "description": "Memory forensics framework", "example_args": ""},
+        {"name": "foremost", "description": "File carving and data recovery", "example_args": ""},
+        {"name": "steghide", "description": "Steganography detection and extraction", "example_args": "extract"},
+        {"name": "exiftool", "description": "Metadata reader", "example_args": ""},
+        {"name": "binwalk", "description": "Firmware analysis", "example_args": ""},
+        {"name": "autopsy", "description": "Digital forensics platform", "example_args": ""},
+        {"name": "sleuthkit", "description": "Digital forensics tools", "example_args": ""},
+    ],
+    "Bug Bounty & OSINT Arsenal": [
+        {"name": "sherlock", "description": "Username investigation across social networks", "example_args": ""},
+        {"name": "spiderfoot", "description": "OSINT automation", "example_args": "-s"},
+        {"name": "shodan", "description": "Internet-connected device search", "example_args": ""},
+        {"name": "censys", "description": "Internet asset discovery", "example_args": ""},
+        {"name": "subjack", "description": "Subdomain takeover checker", "example_args": ""},
+        {"name": "trufflehog", "description": "Git repository secret scanning", "example_args": "filesystem"},
+        {"name": "waybackurls", "description": "Historical URL discovery", "example_args": ""},
+        {"name": "gau", "description": "Get All URLs from multiple sources", "example_args": ""},
+    ],
+}
 
 
-TOOL_CATALOG: list[dict] = [
-    {"name": "nmap",      "description": "Network mapper & service/version scanner",     "example_args": "-T4 -F"},
-    {"name": "nikto",     "description": "Web server vulnerability scanner",             "example_args": "-C all"},
-    {"name": "gobuster",  "description": "Directory & file brute-forcer",                "example_args": "-t 50"},
-    {"name": "sqlmap",    "description": "Automated SQL injection & DB takeover tool",   "example_args": "--threads=4"},
-    {"name": "nuclei",    "description": "Template-based vulnerability scanner",         "example_args": "-t cves/"},
-    {"name": "wpscan",    "description": "WordPress security scanner",                   "example_args": "--enumerate vp"},
-    {"name": "whatweb",   "description": "Web technology fingerprinter",                 "example_args": "-a 3"},
-    {"name": "wafw00f",   "description": "Web Application Firewall detector",            "example_args": ""},
-    {"name": "dirb",      "description": "URL brute-forcer / content discovery",         "example_args": ""},
-    {"name": "fierce",    "description": "DNS reconnaissance & subdomain scanner",       "example_args": ""},
-    {"name": "dnsrecon",  "description": "DNS enumeration & zone transfer auditor",      "example_args": "-t std"},
-    {"name": "sublist3r", "description": "Fast subdomain enumeration tool",              "example_args": ""},
-]
-
-
-@router.get("/tools", response_model=list[KaliToolInfo])
+@router.get("/tools")
 async def list_kali_tools():
-    """Return every supported tool with live availability from the Kali MCP server."""
+    """Return the categorized Kali tool catalog directly."""
+    return TOOL_CATALOG
+
+
+@router.get("/status")
+async def get_kali_bridge_status():
+    """Check live connectivity and tool status from the Kali MCP bridge."""
     connected, tools_status = check_kali_health()
-    return [
-        KaliToolInfo(
-            name=t["name"],
-            description=t["description"],
-            available=tools_status.get(t["name"], connected) if connected else False,
-            example_args=t["example_args"],
-        )
-        for t in TOOL_CATALOG
-    ]
+    return {
+        "connected": connected,
+        "kali_api_url": get_kali_api_url(),
+        "tools_status": tools_status,
+    }
 
 
 @router.post("/execute", response_model=KaliScanResult)
 async def execute_kali_tool(request: KaliScanRequest):
     target = request.target.strip()
-    tool = request.tool.strip().lower()
+    tool = request.tool.strip()
     extra = request.extra_args.strip()
 
     if not target:
