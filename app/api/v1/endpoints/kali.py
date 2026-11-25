@@ -1,44 +1,24 @@
-"""OWASP Sentinel - Kali Pentester API Endpoint.
-
-Exposes a POST endpoint that accepts a tool name, target, and optional
-arguments, executes the tool via the Kali bridge, and returns structured
-results to the frontend.
-"""
+"""OWASP Sentinel - Kali Pentester API Endpoint."""
 
 from __future__ import annotations
 
 import logging
 from datetime import datetime, timezone
-from typing import List, Optional
-
 from fastapi import APIRouter, HTTPException, status
 from pydantic import BaseModel, Field
 
-from app.kali_bridge import (
-    TOOL_COMMANDS,
-    build_kali_command,
-    run_tool_on_kali,
-    _is_tool_available,
-)
+# We only import what we actually need now
+from app.kali_bridge import build_kali_command, run_tool_on_kali
 
 logger = logging.getLogger("sentinel.kali")
-
 router = APIRouter()
 
-
-# ---------------------------------------------------------------------------
-# Schemas
-# ---------------------------------------------------------------------------
-
 class KaliScanRequest(BaseModel):
-    """Payload sent by the Kali Pentester frontend tab."""
     target: str = Field(..., description="Target URL, IP, or hostname to scan")
-    tool: str = Field(..., description="Name of the Kali tool to execute (e.g. nmap, nikto, gobuster)")
-    extra_args: str = Field("", description="Additional CLI flags to append to the tool command")
-
+    tool: str = Field(..., description="Name of the Kali tool to execute")
+    extra_args: str = Field("", description="Additional CLI flags to append")
 
 class KaliScanResult(BaseModel):
-    """Structured response returned to the frontend."""
     target: str
     tool_executed: str
     command_ran: str
@@ -49,18 +29,11 @@ class KaliScanResult(BaseModel):
     timestamp: str
     tool_available: bool
 
-
 class KaliToolInfo(BaseModel):
-    """Metadata about a single supported tool."""
     name: str
     description: str
     available: bool
     example_args: str
-
-
-# ---------------------------------------------------------------------------
-# Tool Catalog (displayed in the UI tool selector)
-# ---------------------------------------------------------------------------
 
 TOOL_CATALOG: list[dict] = [
     {"name": "nmap",      "description": "Network mapper & service/version scanner",     "example_args": "-T4 -A"},
@@ -77,42 +50,24 @@ TOOL_CATALOG: list[dict] = [
     {"name": "sublist3r", "description": "Fast subdomain enumeration tool",              "example_args": ""},
 ]
 
-
-# ---------------------------------------------------------------------------
-# Endpoints
-# ---------------------------------------------------------------------------
-
-@router.get(
-    "/tools",
-    response_model=list[KaliToolInfo],
-    summary="List available Kali penetration-testing tools",
-)
+@router.get("/tools", response_model=list[KaliToolInfo])
 async def list_kali_tools():
-    """Return every supported tool with its availability on this host."""
+    """
+    Return every supported tool. We hardcode 'available: True' because 
+    the tools are on the Kali VM, not the Windows machine running this backend.
+    """
     return [
         KaliToolInfo(
             name=t["name"],
             description=t["description"],
-            available=_is_tool_available(t["name"]),
+            available=True, # Force True so the UI enables the Execute button
             example_args=t["example_args"],
         )
         for t in TOOL_CATALOG
     ]
 
-
-@router.post(
-    "/execute",
-    response_model=KaliScanResult,
-    summary="Execute a Kali tool against an authorized target",
-)
+@router.post("/execute", response_model=KaliScanResult)
 async def execute_kali_tool(request: KaliScanRequest):
-    """
-    Run a Kali Linux penetration-testing tool and return its output.
-
-    The tool must be installed on the server.  On Render (Linux containers
-    without Kali tools) the endpoint will return a helpful error message
-    suggesting the user connect via ngrok from a local Kali machine.
-    """
     target = request.target.strip()
     tool = request.tool.strip().lower()
     extra = request.extra_args.strip()
@@ -124,22 +79,17 @@ async def execute_kali_tool(request: KaliScanRequest):
         )
 
     cmd = build_kali_command(tool, target, extra)
-    tool_avail = _is_tool_available(tool)
-
+    
+    # This calls the kali_bridge.py we updated earlier
     result = run_tool_on_kali(cmd)
 
-    output_text = result["stdout"] or ""
-    stderr_text = result["stderr"] or ""
+    output_text = result.get("stdout", "")
+    stderr_text = result.get("stderr", "")
+    returncode = result.get("returncode", 0)
 
-    # If tool is missing, provide a friendly hint
-    if result["returncode"] == 127 or (not tool_avail and not output_text):
-        output_text = (
-            f"⚠️  Tool '{tool}' is not installed on this server.\n\n"
-            f"To use real Kali tools, run OWASP Sentinel locally on a "
-            f"Kali Linux machine and connect via the ngrok tunnel, or "
-            f"SSH into your Kali box and start the backend there.\n\n"
-            f"Command that would have been executed:\n  {cmd}\n"
-        )
+    # If the bridge couldn't reach Kali (e.g. SSH tunnel is down)
+    if returncode == -1 and "Failed to connect" in stderr_text:
+        output_text = stderr_text
 
     return KaliScanResult(
         target=target,
@@ -147,9 +97,8 @@ async def execute_kali_tool(request: KaliScanRequest):
         command_ran=cmd,
         output=output_text,
         stderr=stderr_text,
-        returncode=result["returncode"],
-        elapsed_seconds=result["elapsed_seconds"],
+        returncode=returncode,
+        elapsed_seconds=result.get("elapsed_seconds", 0.0),
         timestamp=datetime.now(timezone.utc).isoformat(),
-        tool_available=tool_avail,
+        tool_available=True,
     )
-
