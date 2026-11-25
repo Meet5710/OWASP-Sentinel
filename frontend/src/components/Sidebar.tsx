@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Shield,
   Activity,
@@ -17,10 +17,7 @@ import {
   Share2,
   Route,
   Code,
-  ShieldAlert,
   Terminal,
-  ChevronDown,
-  ChevronRight,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -32,7 +29,6 @@ export type ActiveTab =
   | 'sql'
   | 'xssspect'
   | 'kali_pentester'
-  | 'owasp_scan'
   | 'findings'
   | 'taxonomy'
   | 'coverage'
@@ -51,23 +47,7 @@ export interface SidebarProps {
   onToggleTheme?: () => void;
   isOpenMobile?: boolean;
   onCloseMobile?: () => void;
-  selectedOwaspCategory?: string;
-  onSelectOwaspCategory?: (category: string) => void;
-  defaultOwaspExpanded?: boolean;
 }
-
-export const OWASP_SUBCATEGORIES = [
-  { id: 'A01', name: 'Broken Access Control' },
-  { id: 'A02', name: 'Security Misconfiguration' },
-  { id: 'A03', name: 'Software Supply Chain Failures' },
-  { id: 'A04', name: 'Cryptographic Failures' },
-  { id: 'A05', name: 'Injection' },
-  { id: 'A06', name: 'Insecure Design' },
-  { id: 'A07', name: 'Authentication Failures' },
-  { id: 'A08', name: 'Software or Data Integrity Failures' },
-  { id: 'A09', name: 'Security Logging and Alerting Failures' },
-  { id: 'A10', name: 'Mishandling of Exceptional Conditions' },
-];
 
 interface NavSection {
   title: string;
@@ -84,12 +64,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onToggleTheme,
   isOpenMobile = false,
   onCloseMobile,
-  selectedOwaspCategory = 'A01',
-  onSelectOwaspCategory,
-  defaultOwaspExpanded = false,
 }) => {
-  const [isOwaspExpanded, setIsOwaspExpanded] = useState<boolean>(defaultOwaspExpanded);
-
   const navSections: NavSection[] = [
     {
       title: 'CORE POSTURE',
@@ -101,7 +76,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
         { id: 'sql', label: 'SQL', icon: <Database className="w-4 h-4 shrink-0 text-amber-400" />, badge: 'Discovery' },
         { id: 'xssspect', label: 'XSSpect', icon: <Code className="w-4 h-4 shrink-0 text-rose-400" />, badge: 'Detection' },
         { id: 'kali_pentester', label: 'Kali Pentester', icon: <Terminal className="w-4 h-4 shrink-0 text-green-400" />, badge: 'Kali' },
-        { id: 'owasp_scan', label: 'OWASP SCAN', icon: <ShieldAlert className="w-4 h-4 shrink-0 text-violet-400" />, badge: 'Top 10' },
         { id: 'findings', label: 'OWASP Findings', icon: <Shield className="w-4 h-4 shrink-0" /> },
       ],
     },
@@ -182,7 +156,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <div className="space-y-1">
               {section.items.map((item) => {
                 const isActive = activeTab === item.id;
-                const isOwaspItem = item.id === 'owasp_scan';
 
                 return (
                   <div key={item.id} className="space-y-1">
@@ -190,9 +163,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       type="button"
                       onClick={() => {
                         setActiveTab(item.id);
-                        if (isOwaspItem) {
-                          setIsOwaspExpanded((prev) => (isActive ? !prev : true));
-                        }
                         if (onCloseMobile) onCloseMobile();
                       }}
                       className={`relative flex items-center justify-between w-full px-3 py-2 text-xs font-semibold rounded-xl cursor-pointer transition-all duration-200 ${
@@ -232,66 +202,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
                             {item.badge}
                           </span>
                         )}
-                        {isOwaspItem && (
-                          <span
-                            role="button"
-                            tabIndex={0}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setIsOwaspExpanded(!isOwaspExpanded);
-                            }}
-                            className="p-1 rounded-md hover:bg-white/10 text-slate-400 hover:text-white cursor-pointer"
-                            title={isOwaspExpanded ? 'Collapse subcategories' : 'Expand subcategories'}
-                          >
-                            {isOwaspExpanded ? (
-                              <ChevronDown className="w-3.5 h-3.5" />
-                            ) : (
-                              <ChevronRight className="w-3.5 h-3.5" />
-                            )}
-                          </span>
-                        )}
                       </div>
                     </button>
-
-                    {/* Subcategories A01 to A10 under OWASP SCAN in Side Panel */}
-                    {isOwaspItem && isOwaspExpanded && (
-                      <div className="ml-3 pl-2.5 border-l border-indigo-500/25 dark:border-indigo-400/25 space-y-0.5 my-1">
-                        {OWASP_SUBCATEGORIES.map((sub) => {
-                          const isSubActive = activeTab === 'owasp_scan' && selectedOwaspCategory === sub.id;
-                          return (
-                            <button
-                              key={sub.id}
-                              type="button"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setActiveTab('owasp_scan');
-                                if (onSelectOwaspCategory) onSelectOwaspCategory(sub.id);
-                                if (onCloseMobile) onCloseMobile();
-                              }}
-                              className={`flex items-center justify-between w-full px-2 py-1.5 rounded-lg text-[11px] font-medium transition-all duration-150 cursor-pointer ${
-                                isSubActive
-                                  ? 'bg-indigo-500/15 text-indigo-700 dark:text-indigo-200 font-bold border border-indigo-500/30 shadow-sm'
-                                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-200/50 dark:hover:bg-white/[0.04]'
-                              }`}
-                              title={`${sub.id}: ${sub.name}`}
-                            >
-                              <div className="flex items-center space-x-2 truncate">
-                                <span
-                                  className={`font-mono text-[9.5px] px-1 py-0.5 rounded font-bold shrink-0 ${
-                                    isSubActive
-                                      ? 'bg-indigo-500 text-white shadow-sm'
-                                      : 'bg-slate-200/80 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
-                                  }`}
-                                >
-                                  {sub.id}
-                                </span>
-                                <span className="truncate text-left">{sub.name}</span>
-                              </div>
-                            </button>
-                          );
-                        })}
-                      </div>
-                    )}
                   </div>
                 );
               })}

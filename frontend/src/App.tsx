@@ -9,7 +9,6 @@ import { PathFinderTab } from './components/PathFinderTab';
 import { SQLTab } from './components/SQLTab';
 import { XSSpectTab } from './components/XSSpectTab';
 import { KaliPentesterTab } from './components/KaliPentesterTab';
-import { OwaspScanTab } from './components/OwaspScanTab';
 import { FindingsTab } from './components/FindingsTab';
 import { TaxonomyTab } from './components/TaxonomyTab';
 import { CoverageMatrixTab } from './components/CoverageMatrixTab';
@@ -177,7 +176,6 @@ export function App() {
   const [systemHealth, setSystemHealth] = useState<{ status: string; version: string } | null>(null);
   const [isSimulatedMode, setIsSimulatedMode] = useState<boolean>(false);
   const [isMobileNavOpen, setIsMobileNavOpen] = useState<boolean>(false);
-  const [selectedOwaspCategory, setSelectedOwaspCategory] = useState<string>('A01');
 
   // Theme State with System Preference & LocalStorage persistence
   const [theme, setTheme] = useState<'dark' | 'light'>(() => {
@@ -451,8 +449,6 @@ export function App() {
         onToggleTheme={toggleTheme}
         isOpenMobile={isMobileNavOpen}
         onCloseMobile={() => setIsMobileNavOpen(false)}
-        selectedOwaspCategory={selectedOwaspCategory}
-        onSelectOwaspCategory={(cat) => setSelectedOwaspCategory(cat)}
       />
 
       {/* Main Content Area Container with Independent Scroll */}
@@ -625,18 +621,6 @@ export function App() {
             >
               <KaliPentesterTab
                 assets={displayAssets}
-                onNavigateToTab={(tab) => setActiveTab(tab)}
-              />
-            </div>
-
-            <div
-              className={`w-full ${activeTab === 'owasp_scan' ? 'spatial-tab-pane block' : 'hidden'}`}
-              aria-hidden={activeTab !== 'owasp_scan'}
-            >
-              <OwaspScanTab
-                assets={displayAssets}
-                selectedCategory={selectedOwaspCategory}
-                onSelectCategory={(cat) => setSelectedOwaspCategory(cat)}
                 onNavigateToTab={(tab) => setActiveTab(tab)}
               />
             </div>
