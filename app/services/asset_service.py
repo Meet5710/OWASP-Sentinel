@@ -82,6 +82,11 @@ def register_asset(db: Session, request: AssetRegisterRequest) -> AuthorizedAsse
     )
     existing = db.scalars(stmt).first()
     if existing:
+        if existing.approval_status == "BASELINE":
+            existing.approval_status = "APPROVED"
+            existing.approved_at = datetime.now(timezone.utc)
+            existing.approved_by = "Security Administrator"
+            db.commit()
         return existing
 
     # 8. Create Authorized Asset Record

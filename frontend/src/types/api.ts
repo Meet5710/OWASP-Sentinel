@@ -9,7 +9,7 @@ export type ValidationStatus = 'POTENTIAL' | 'CONFIRMED' | 'FALSE_POSITIVE' | 'M
 
 export type ScanStatus = 'PENDING' | 'RUNNING' | 'COMPLETED' | 'FAILED' | 'CANCELLED';
 
-export type ApprovalStatus = 'APPROVED' | 'PENDING' | 'REJECTED';
+export type ApprovalStatus = 'APPROVED' | 'PENDING' | 'REJECTED' | 'BASELINE';
 
 export type PatchVerificationStatus = 'STILL_VULNERABLE' | 'REMEDIATED' | 'REGRESSED';
 

@@ -438,6 +438,9 @@ export function App() {
       <Sidebar
         activeTab={activeTab}
         setActiveTab={(tab) => {
+          if (tab === 'findings') {
+            setSelectedTargetId('');
+          }
           setActiveTab(tab);
         }}
         systemHealth={systemHealth}

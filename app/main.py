@@ -43,6 +43,8 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
 
     with SessionLocal() as db:
         TaxonomyIngestionService.run_ingestion(db)
+        from app.services.seed_service import BaselineSeedService
+        BaselineSeedService.seed_baseline_findings(db)
 
         # Reconcile orphaned Path Finder scans from prior server sessions
         stale_scans = db.scalars(

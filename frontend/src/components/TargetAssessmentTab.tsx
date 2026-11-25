@@ -140,6 +140,11 @@ export const TargetAssessmentTab: React.FC<TargetAssessmentTabProps> = ({
   const [newScopeCode, setNewScopeCode] = useState('');
   const [newAuthorizedBy, setNewAuthorizedBy] = useState('secops@sentinel.internal');
 
+  // Filter out baseline preloaded assets so user's Authorized Target Inventory stays clean
+  const inventoryAssets = useMemo(() => {
+    return assets.filter((a) => a.approval_status !== 'BASELINE');
+  }, [assets]);
+
   // 1. Live Target Validation
   const handleValidateTarget = async () => {
     if (!targetInput.trim()) return;
@@ -518,7 +523,7 @@ export const TargetAssessmentTab: React.FC<TargetAssessmentTabProps> = ({
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-200/60 dark:divide-white/5">
-              {assets.map((asset) => {
+              {inventoryAssets.map((asset) => {
                 const isScanning = scanningAssetId === asset.id;
                 return (
                   <tr key={asset.id} className="hover:bg-slate-500/[0.04] dark:hover:bg-white/[0.04] transition-colors">
@@ -601,10 +606,10 @@ export const TargetAssessmentTab: React.FC<TargetAssessmentTabProps> = ({
                   </tr>
                 );
               })}
-              {assets.length === 0 && (
+              {inventoryAssets.length === 0 && (
                 <tr>
                   <td colSpan={6} className="py-10 text-center text-slate-400">
-                    No authorized targets registered. Use the form above to add an authorized domain or IP.
+                    No authorized targets registered in scope yet. Add a target URL above to begin evaluation.
                   </td>
                 </tr>
               )}

@@ -55,98 +55,6 @@ export const FindingsTab: React.FC<FindingsTabProps> = ({
   latestScanRunInfo: externalScanRunInfo,
   onTriggerScan,
 }) => {
-  // Filter States
-  const [filterTarget, setFilterTarget] = useState<string>(selectedTargetId || '');
-  const [filterSeverity, setFilterSeverity] = useState<string>('');
-  const [filterStatus, setFilterStatus] = useState<string>('');
-  const [filterCategory, setFilterCategory] = useState<string>('');
-  const [searchQuery, setSearchQuery] = useState<string>('');
-
-  // Sorting and Pagination States
-  type SortField = 'severity' | 'title' | 'target' | 'category' | 'status' | 'date';
-  type SortOrder = 'asc' | 'desc';
-  const [sortField, setSortField] = useState<SortField>('severity');
-  const [sortOrder, setSortOrder] = useState<SortOrder>('desc');
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const [pageSize, setPageSize] = useState<number>(20);
-
-  // Selected Finding for Modal
-  const [activeFinding, setActiveFinding] = useState<Finding | null>(null);
-
-  // Terminal Modal State
-  const [showTerminalModal, setShowTerminalModal] = useState(false);
-  const [terminalScanId, setTerminalScanId] = useState<string | undefined>(undefined);
-
-  // Local Live Scan Execution State for Scratch Scanning (Fallback)
-  const [localIsScanning, setLocalIsScanning] = useState(false);
-  const [localScanStatusMsg, setLocalScanStatusMsg] = useState<string | null>(null);
-  const [localScanRunInfo, setLocalScanRunInfo] = useState<{ scanId: string; time: string; count: number } | null>(null);
-
-  // Computed Scan State: True if either global App scan is active on this asset or local scan is active
-  const isScanningTarget = (activeScanningTargetId !== undefined && activeScanningTargetId !== null)
-    ? (activeScanningTargetId === filterTarget || (!filterTarget && Boolean(activeScanningTargetId)))
-    : localIsScanning;
-
-  const scanStatusMessage = externalScanStatusMsg || localScanStatusMsg;
-  const latestScanRunInfo = (externalScanRunInfo && (!filterTarget || externalScanRunInfo.targetId === filterTarget))
-    ? externalScanRunInfo
-    : localScanRunInfo;
-
-  // Synchronize when selectedTargetId changes from parent
-  useEffect(() => {
-    setFilterTarget(selectedTargetId || '');
-  }, [selectedTargetId]);
-
-  // Ensure scroll is at the top when FindingsTab is displayed
-  useEffect(() => {
-    window.scrollTo({ top: 0, left: 0 });
-    const scrollContainer = document.querySelector('.md\\:overflow-y-auto');
-    if (scrollContainer) {
-      scrollContainer.scrollTop = 0;
-    }
-  }, [selectedTargetId]);
-
-  const activeTargetAsset = assets.find((a) => a.id === filterTarget);
-
-  const handleTargetChange = (val: string) => {
-    setFilterTarget(val);
-    if (onSelectTarget) {
-      onSelectTarget(val);
-    }
-  };
-
-  const executeFreshTargetScan = async (assetId: string) => {
-    if (!assetId || assetId === '__ALL__') return;
-    if (onTriggerScan) {
-      await onTriggerScan(assetId);
-    } else {
-      const targetAsset = assets.find((a) => a.id === assetId);
-      setLocalIsScanning(true);
-      setLocalScanStatusMsg(`Running natural live scan from scratch against ${targetAsset?.canonical_url || 'target'} across all 19 OWASP detection rules...`);
-      try {
-        const scanJob = await api.triggerScan(assetId);
-        await onRefreshData();
-        setLocalScanRunInfo({
-          scanId: scanJob.id,
-          time: new Date().toLocaleTimeString(),
-          count: scanJob.failed_checks ?? 0,
-        });
-      } catch (err: any) {
-        console.error('Scan execution error:', err);
-      } finally {
-        setLocalIsScanning(false);
-        setLocalScanStatusMsg(null);
-      }
-    }
-  };
-
-  const handleSelectTarget = async (assetId: string, autoScan = false) => {
-    handleTargetChange(assetId);
-    if (autoScan && assetId && assetId !== '__ALL__' && activeScanningTargetId !== assetId) {
-      await executeFreshTargetScan(assetId);
-    }
-  };
-
   // Group and merge duplicate findings on the same target sharing technical_issue_type
   const consolidatedFindings = useMemo(() => {
     const grouped = new Map<string, Finding>();
@@ -233,6 +141,108 @@ export const FindingsTab: React.FC<FindingsTabProps> = ({
 
     return Array.from(grouped.values());
   }, [findings]);
+
+  // Filter States
+  const [filterTarget, setFilterTarget] = useState<string>(selectedTargetId || '');
+  const [filterSeverity, setFilterSeverity] = useState<string>('');
+  const [filterStatus, setFilterStatus] = useState<string>('');
+  const [filterCategory, setFilterCategory] = useState<string>('');
+  const [searchQuery, setSearchQuery] = useState<string>('');
+
+  // Sorting and Pagination States
+  type SortField = 'severity' | 'title' | 'target' | 'category' | 'status' | 'date';
+  type SortOrder = 'asc' | 'desc';
+  const [sortField, setSortField] = useState<SortField>('severity');
+  const [sortOrder, setSortOrder] = useState<SortOrder>('desc');
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [pageSize, setPageSize] = useState<number>(20);
+
+  // Selected Finding for Modal
+  const [activeFinding, setActiveFinding] = useState<Finding | null>(null);
+
+  // Terminal Modal State
+  const [showTerminalModal, setShowTerminalModal] = useState(false);
+  const [terminalScanId, setTerminalScanId] = useState<string | undefined>(undefined);
+
+  // Local Live Scan Execution State for Scratch Scanning (Fallback)
+  const [localIsScanning, setLocalIsScanning] = useState(false);
+  const [localScanStatusMsg, setLocalScanStatusMsg] = useState<string | null>(null);
+  const [localScanRunInfo, setLocalScanRunInfo] = useState<{ scanId: string; time: string; count: number } | null>(null);
+
+  // Computed Scan State: True if either global App scan is active on this asset or local scan is active
+  const isScanningTarget = (activeScanningTargetId !== undefined && activeScanningTargetId !== null)
+    ? (activeScanningTargetId === filterTarget || (!filterTarget && Boolean(activeScanningTargetId)))
+    : localIsScanning;
+
+  const scanStatusMessage = externalScanStatusMsg || localScanStatusMsg;
+  const latestScanRunInfo = (externalScanRunInfo && (!filterTarget || externalScanRunInfo.targetId === filterTarget))
+    ? externalScanRunInfo
+    : localScanRunInfo;
+
+  // Synchronize when selectedTargetId changes from parent
+  useEffect(() => {
+    if (selectedTargetId) {
+      const hasFindings = consolidatedFindings.some((f) => f.target_id === selectedTargetId);
+      if (hasFindings) {
+        setFilterTarget(selectedTargetId);
+      } else {
+        // Fallback to all targets if selected target has 0 findings so findings are visible
+        setFilterTarget('');
+      }
+    } else {
+      setFilterTarget('');
+    }
+  }, [selectedTargetId, consolidatedFindings]);
+
+  // Ensure scroll is at the top when FindingsTab is displayed
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0 });
+    const scrollContainer = document.querySelector('.md\\:overflow-y-auto');
+    if (scrollContainer) {
+      scrollContainer.scrollTop = 0;
+    }
+  }, [selectedTargetId]);
+
+  const activeTargetAsset = assets.find((a) => a.id === filterTarget);
+
+  const handleTargetChange = (val: string) => {
+    setFilterTarget(val);
+    if (onSelectTarget) {
+      onSelectTarget(val);
+    }
+  };
+
+  const executeFreshTargetScan = async (assetId: string) => {
+    if (!assetId || assetId === '__ALL__') return;
+    if (onTriggerScan) {
+      await onTriggerScan(assetId);
+    } else {
+      const targetAsset = assets.find((a) => a.id === assetId);
+      setLocalIsScanning(true);
+      setLocalScanStatusMsg(`Running natural live scan from scratch against ${targetAsset?.canonical_url || 'target'} across all 19 OWASP detection rules...`);
+      try {
+        const scanJob = await api.triggerScan(assetId);
+        await onRefreshData();
+        setLocalScanRunInfo({
+          scanId: scanJob.id,
+          time: new Date().toLocaleTimeString(),
+          count: scanJob.failed_checks ?? 0,
+        });
+      } catch (err: any) {
+        console.error('Scan execution error:', err);
+      } finally {
+        setLocalIsScanning(false);
+        setLocalScanStatusMsg(null);
+      }
+    }
+  };
+
+  const handleSelectTarget = async (assetId: string, autoScan = false) => {
+    handleTargetChange(assetId);
+    if (autoScan && assetId && assetId !== '__ALL__' && activeScanningTargetId !== assetId) {
+      await executeFreshTargetScan(assetId);
+    }
+  };
 
   // Filter Logic: Filter from consolidated findings
   const filteredFindings = consolidatedFindings.filter((f) => {
@@ -503,14 +513,21 @@ export const FindingsTab: React.FC<FindingsTabProps> = ({
               <option value="" className="bg-white dark:bg-slate-900 text-cyan-800 dark:text-cyan-300 font-semibold">
                 -- All Authorized Targets ({consolidatedFindings.length} findings) --
               </option>
-              {assets.map((a) => {
-                const count = consolidatedFindings.filter((f) => f.target_id === a.id).length;
-                return (
-                  <option key={a.id} value={a.id} className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">
-                    {a.canonical_url} {count > 0 ? `(${count} findings)` : '(0 findings)'}
-                  </option>
-                );
-              })}
+              {assets
+                .slice()
+                .sort((a, b) => {
+                  const countA = consolidatedFindings.filter((f) => f.target_id === a.id).length;
+                  const countB = consolidatedFindings.filter((f) => f.target_id === b.id).length;
+                  return countB - countA;
+                })
+                .map((a) => {
+                  const count = consolidatedFindings.filter((f) => f.target_id === a.id).length;
+                  return (
+                    <option key={a.id} value={a.id} className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">
+                      {a.canonical_url} {count > 0 ? `(${count} findings)` : '(0 findings)'}
+                    </option>
+                  );
+                })}
             </select>
           </div>
 
