@@ -18,6 +18,7 @@ import {
   Route,
   Code,
   ShieldAlert,
+  Terminal,
   ChevronDown,
   ChevronRight,
 } from 'lucide-react';
@@ -30,6 +31,7 @@ export type ActiveTab =
   | 'pathfinder'
   | 'sql'
   | 'xssspect'
+  | 'kali_pentester'
   | 'owasp_scan'
   | 'findings'
   | 'taxonomy'
@@ -98,6 +100,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         { id: 'pathfinder', label: 'Path Finder', icon: <Route className="w-4 h-4 shrink-0 text-emerald-400" />, badge: 'Endpoints' },
         { id: 'sql', label: 'SQL', icon: <Database className="w-4 h-4 shrink-0 text-amber-400" />, badge: 'Discovery' },
         { id: 'xssspect', label: 'XSSpect', icon: <Code className="w-4 h-4 shrink-0 text-rose-400" />, badge: 'Detection' },
+        { id: 'kali_pentester', label: 'Kali Pentester', icon: <Terminal className="w-4 h-4 shrink-0 text-green-400" />, badge: 'Kali' },
         { id: 'owasp_scan', label: 'OWASP SCAN', icon: <ShieldAlert className="w-4 h-4 shrink-0 text-violet-400" />, badge: 'Top 10' },
         { id: 'findings', label: 'OWASP Findings', icon: <Shield className="w-4 h-4 shrink-0" /> },
       ],

@@ -8,6 +8,7 @@ import { SubdomainFinderTab } from './components/SubdomainFinderTab';
 import { PathFinderTab } from './components/PathFinderTab';
 import { SQLTab } from './components/SQLTab';
 import { XSSpectTab } from './components/XSSpectTab';
+import { KaliPentesterTab } from './components/KaliPentesterTab';
 import { OwaspScanTab } from './components/OwaspScanTab';
 import { FindingsTab } from './components/FindingsTab';
 import { TaxonomyTab } from './components/TaxonomyTab';
@@ -615,6 +616,16 @@ export function App() {
                 assets={displayAssets}
                 onNavigateToTab={(tab) => setActiveTab(tab)}
                 onRefreshData={loadAllData}
+              />
+            </div>
+
+            <div
+              className={`w-full ${activeTab === 'kali_pentester' ? 'spatial-tab-pane block' : 'hidden'}`}
+              aria-hidden={activeTab !== 'kali_pentester'}
+            >
+              <KaliPentesterTab
+                assets={displayAssets}
+                onNavigateToTab={(tab) => setActiveTab(tab)}
               />
             </div>
 

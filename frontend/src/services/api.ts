@@ -884,5 +884,39 @@ export const api = {
       body: JSON.stringify(data),
     });
   },
+
+  // ---------------------------------------------------------------------------
+  // Kali Pentester
+  // ---------------------------------------------------------------------------
+
+  async getKaliTools(): Promise<Array<{
+    name: string;
+    description: string;
+    available: boolean;
+    example_args: string;
+  }>> {
+    return request('/kali/tools');
+  },
+
+  async executeKaliTool(data: {
+    target: string;
+    tool: string;
+    extra_args?: string;
+  }): Promise<{
+    target: string;
+    tool_executed: string;
+    command_ran: string;
+    output: string;
+    stderr: string;
+    returncode: number;
+    elapsed_seconds: number;
+    timestamp: string;
+    tool_available: boolean;
+  }> {
+    return request('/kali/execute', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
 };
 

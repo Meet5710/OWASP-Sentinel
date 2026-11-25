@@ -11,6 +11,7 @@ from app.api.v1.endpoints import (
     findings,
     health,
     history,
+    kali,
     rules,
     scans,
     schedules,
@@ -42,4 +43,5 @@ api_router.include_router(history.router, prefix="/history", tags=["Posture Hist
 api_router.include_router(rules.router, prefix="/rules", tags=["Detection Rules & OWASP Coverage"])
 api_router.include_router(taxonomy.router, prefix="/taxonomy", tags=["OWASP Intelligence & Taxonomy"])
 api_router.include_router(audit.router, prefix="/audit", tags=["Audit Log"])
+api_router.include_router(kali.router, prefix="/kali", tags=["Kali Pentester"])
 api_router.include_router(sql.router, prefix="/sql", tags=["SQL Target Discovery & Dork Engine"])
