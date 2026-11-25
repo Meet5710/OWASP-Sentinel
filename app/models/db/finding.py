@@ -101,8 +101,8 @@ class FindingCategoryMapping(Base):
     finding_id: Mapped[str] = mapped_column(
         String(36), ForeignKey("findings.id", ondelete="CASCADE"), nullable=False, index=True
     )
-    owasp_edition: Mapped[str] = mapped_column(String(50), nullable=False, index=True)
-    owasp_category_code: Mapped[str] = mapped_column(String(50), nullable=False, index=True)
+    owasp_edition: Mapped[str] = mapped_column(String(100), nullable=False, index=True)
+    owasp_category_code: Mapped[str] = mapped_column(String(255), nullable=False, index=True)
     owasp_category_title: Mapped[str] = mapped_column(String(255), default="", nullable=False)
     justification: Mapped[str] = mapped_column(Text, nullable=False)
     created_at: Mapped[datetime] = mapped_column(

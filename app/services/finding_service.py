@@ -216,8 +216,19 @@ def process_observations_into_findings(
             for edition, raw_cat_str in lineage_analysis["multi_edition_mappings"].items():
                 category_entries = [c.strip() for c in raw_cat_str.split(",") if c.strip()]
                 for entry in category_entries:
-                    code = entry.split("-")[0].strip() if "-" in entry else entry
-                    title = entry.split("-", 1)[1].strip() if "-" in entry else entry
+                    if "-" in entry:
+                        code = entry.split("-")[0].strip()
+                        title = entry.split("-", 1)[1].strip()
+                    elif " " in entry:
+                        parts = entry.split(" ", 1)
+                        code = parts[0].strip()
+                        title = parts[1].strip()
+                    else:
+                        code = entry.strip()
+                        title = entry.strip()
+
+                    code = code[:50]
+                    title = title[:255]
 
                     if edition in existing_mapping_by_edition and edition == "2025":
                         m_2025 = existing_mapping_by_edition["2025"]
@@ -278,8 +289,19 @@ def process_observations_into_findings(
             for edition, raw_cat_str in lineage_analysis["multi_edition_mappings"].items():
                 category_entries = [c.strip() for c in raw_cat_str.split(",") if c.strip()]
                 for entry in category_entries:
-                    code = entry.split("-")[0].strip() if "-" in entry else entry
-                    title = entry.split("-", 1)[1].strip() if "-" in entry else entry
+                    if "-" in entry:
+                        code = entry.split("-")[0].strip()
+                        title = entry.split("-", 1)[1].strip()
+                    elif " " in entry:
+                        parts = entry.split(" ", 1)
+                        code = parts[0].strip()
+                        title = parts[1].strip()
+                    else:
+                        code = entry.strip()
+                        title = entry.strip()
+
+                    code = code[:50]
+                    title = title[:255]
 
                     justification = (
                         f"Mapped to {code} ({title}) under OWASP {edition}. "

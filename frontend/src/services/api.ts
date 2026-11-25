@@ -544,6 +544,7 @@ export const api = {
 
         const decoder = new TextDecoder();
         let buffer = '';
+        let isDoneCalled = false;
 
         while (true) {
           const { done, value } = await reader.read();
@@ -563,6 +564,7 @@ export const api = {
               } else if (parsed.event === 'error') {
                 onLine(`[-] ${parsed.data}`);
               } else if (parsed.event === 'complete') {
+                isDoneCalled = true;
                 onDone(parsed);
               }
             } catch {
@@ -575,10 +577,18 @@ export const api = {
           try {
             const parsed = JSON.parse(buffer.trim());
             if (parsed.event === 'line') onLine(parsed.data);
-            else if (parsed.event === 'complete') onDone(parsed);
+            else if (parsed.event === 'complete') {
+              isDoneCalled = true;
+              onDone(parsed);
+            }
           } catch {
             onLine(buffer.trim());
           }
+        }
+
+        if (!isDoneCalled) {
+          isDoneCalled = true;
+          onDone({ returncode: 0 });
         }
       } catch (err: any) {
         if (err.name !== 'AbortError') {

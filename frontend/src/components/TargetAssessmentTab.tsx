@@ -254,18 +254,7 @@ export const TargetAssessmentTab: React.FC<TargetAssessmentTabProps> = ({
     setScanStatusMessage(null);
 
     const asset = practiceScanTarget || selectedTerminalAsset;
-    if (!asset) {
-      if (onNavigateToTab) onNavigateToTab('findings');
-      return;
-    }
-
-    try {
-      // Refresh findings data immediately from DB (scan_practice_scripts already stored all findings in DB)
-      await onRefreshData();
-    } catch {}
-
-    // Select scanned target in findings filter
-    if (onSelectTarget) {
+    if (asset && onSelectTarget) {
       onSelectTarget(asset.id);
     }
 
@@ -273,6 +262,11 @@ export const TargetAssessmentTab: React.FC<TargetAssessmentTabProps> = ({
     if (onNavigateToTab) {
       onNavigateToTab('findings');
     }
+
+    try {
+      // Refresh findings data immediately from DB
+      await onRefreshData();
+    } catch {}
   };
 
   // Called after live terminal scan output finishes streaming

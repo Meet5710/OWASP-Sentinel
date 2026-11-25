@@ -54,5 +54,14 @@ def get_db() -> Generator[Session, None, None]:
 
 
 def init_db() -> None:
-    """Create all database tables defined in the metadata (convenient for dev/testing)."""
+    """Create all database tables defined in the metadata and ensure PostgreSQL column definitions."""
     Base.metadata.create_all(bind=engine)
+    if "postgres" in db_url:
+        try:
+            with engine.connect() as conn:
+                from sqlalchemy import text
+                conn.execute(text("ALTER TABLE finding_category_mappings ALTER COLUMN owasp_category_code TYPE VARCHAR(255);"))
+                conn.execute(text("ALTER TABLE finding_category_mappings ALTER COLUMN owasp_edition TYPE VARCHAR(100);"))
+                conn.commit()
+        except Exception:
+            pass

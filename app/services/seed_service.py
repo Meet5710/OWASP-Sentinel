@@ -154,8 +154,16 @@ class BaselineSeedService:
                 fallback_scope_id = any_scope.id if any_scope else None
 
             # 3. Authorized Assets (Seed with approval_status="BASELINE" to keep user Target Inventory clean)
+            asset_id_map = {}
             for row in data.get("authorized_assets", []):
-                if not db.query(AuthorizedAsset).filter(AuthorizedAsset.id == row["id"]).first():
+                existing_asset = db.query(AuthorizedAsset).filter(
+                    (AuthorizedAsset.id == row["id"]) |
+                    (AuthorizedAsset.canonical_url == row["canonical_url"]) |
+                    (AuthorizedAsset.host == row["host"])
+                ).first()
+                if existing_asset:
+                    asset_id_map[row["id"]] = existing_asset.id
+                else:
                     target_org_id = org_id_map.get(row["organization_id"], fallback_org_id)
                     target_scope_id = scope_id_map.get(row["scope_grant_id"], fallback_scope_id)
                     asset = AuthorizedAsset(
@@ -179,15 +187,24 @@ class BaselineSeedService:
                         updated_at=parse_dt(row.get("updated_at")),
                     )
                     db.add(asset)
+                    asset_id_map[row["id"]] = asset.id
             db.flush()
 
             # 4. Scan Jobs
+            scan_id_map = {}
             for row in data.get("scan_jobs", []):
-                if not db.query(ScanJob).filter(ScanJob.id == row["id"]).first():
+                mapped_target_id = asset_id_map.get(row["target_id"], row["target_id"])
+                if not db.query(AuthorizedAsset).filter(AuthorizedAsset.id == mapped_target_id).first():
+                    continue
+
+                existing_scan = db.query(ScanJob).filter(ScanJob.id == row["id"]).first()
+                if existing_scan:
+                    scan_id_map[row["id"]] = existing_scan.id
+                else:
                     target_scope_id = scope_id_map.get(row["scope_grant_id"], fallback_scope_id)
                     scan = ScanJob(
                         id=row["id"],
-                        target_id=row["target_id"],
+                        target_id=mapped_target_id,
                         scope_grant_id=target_scope_id,
                         status=row.get("status", "COMPLETED"),
                         started_at=parse_dt(row.get("started_at")),
@@ -195,71 +212,114 @@ class BaselineSeedService:
                         total_checks=row.get("total_checks", 0),
                         passed_checks=row.get("passed_checks", 0),
                         failed_checks=row.get("failed_checks", 0),
-                        error_message=row.get("error_message"),
+                        error_message=(row.get("error_message") or "")[:1000] if row.get("error_message") else None,
                         scan_metadata=parse_json(row.get("scan_metadata"), {}),
                         created_at=parse_dt(row.get("created_at")),
                         updated_at=parse_dt(row.get("updated_at")),
                     )
                     db.add(scan)
+                    scan_id_map[row["id"]] = scan.id
             db.flush()
 
             # 5. Technical Observations
+            obs_id_map = {}
             for row in data.get("technical_observations", []):
-                if not db.query(TechnicalObservation).filter(TechnicalObservation.id == row["id"]).first():
+                mapped_target_id = asset_id_map.get(row["target_id"], row["target_id"])
+                mapped_scan_id = scan_id_map.get(row["scan_id"], row["scan_id"])
+                if not db.query(ScanJob).filter(ScanJob.id == mapped_scan_id).first():
+                    continue
+                if not db.query(AuthorizedAsset).filter(AuthorizedAsset.id == mapped_target_id).first():
+                    continue
+
+                existing_obs = db.query(TechnicalObservation).filter(TechnicalObservation.id == row["id"]).first()
+                if existing_obs:
+                    obs_id_map[row["id"]] = existing_obs.id
+                else:
                     obs = TechnicalObservation(
                         id=row["id"],
-                        scan_id=row["scan_id"],
-                        target_id=row["target_id"],
-                        rule_id=row["rule_id"],
-                        technical_issue_type=row["technical_issue_type"],
-                        title=row["title"],
-                        severity=row["severity"],
-                        confidence=row.get("confidence", "CERTAIN"),
+                        scan_id=mapped_scan_id,
+                        target_id=mapped_target_id,
+                        rule_id=str(row["rule_id"])[:100],
+                        technical_issue_type=str(row["technical_issue_type"])[:100],
+                        title=str(row["title"])[:255],
+                        severity=str(row["severity"])[:50],
+                        confidence=str(row.get("confidence", "CERTAIN"))[:50],
                         evidence=parse_json(row.get("evidence"), {}),
-                        remediation=row.get("remediation", ""),
+                        remediation=str(row.get("remediation", ""))[:2000],
                         references=parse_json(row.get("references"), []),
                         created_at=parse_dt(row.get("created_at")),
                         updated_at=parse_dt(row.get("updated_at")),
                     )
                     db.add(obs)
+                    obs_id_map[row["id"]] = obs.id
             db.flush()
 
             # 6. Findings
+            finding_id_map = {}
             for row in data.get("findings", []):
-                if not db.query(Finding).filter(Finding.id == row["id"]).first():
+                mapped_target_id = asset_id_map.get(row["target_id"], row["target_id"])
+                mapped_scan_id = scan_id_map.get(row["scan_id"], row["scan_id"])
+                mapped_obs_id = obs_id_map.get(row.get("observation_id"))
+
+                if not db.query(AuthorizedAsset).filter(AuthorizedAsset.id == mapped_target_id).first():
+                    continue
+                if not db.query(ScanJob).filter(ScanJob.id == mapped_scan_id).first():
+                    continue
+
+                existing_fnd = db.query(Finding).filter(Finding.id == row["id"]).first()
+                if existing_fnd:
+                    finding_id_map[row["id"]] = existing_fnd.id
+                else:
                     fnd = Finding(
                         id=row["id"],
-                        target_id=row["target_id"],
-                        scan_id=row["scan_id"],
-                        observation_id=row.get("observation_id"),
-                        detection_rule_id=row["detection_rule_id"],
-                        technical_issue_type=row["technical_issue_type"],
-                        title=row["title"],
-                        severity=row["severity"],
-                        confidence=row.get("confidence", "CERTAIN"),
-                        validation_status=row.get("validation_status", "CONFIRMED"),
+                        target_id=mapped_target_id,
+                        scan_id=mapped_scan_id,
+                        observation_id=mapped_obs_id,
+                        detection_rule_id=str(row["detection_rule_id"])[:100],
+                        technical_issue_type=str(row["technical_issue_type"])[:100],
+                        title=str(row["title"])[:255],
+                        severity=str(row["severity"])[:50],
+                        confidence=str(row.get("confidence", "CERTAIN"))[:50],
+                        validation_status=str(row.get("validation_status", "CONFIRMED"))[:50],
                         first_seen_at=parse_dt(row.get("first_seen_at")),
                         last_seen_at=parse_dt(row.get("last_seen_at")),
                         evidence=parse_json(row.get("evidence"), {}),
-                        remediation_recommendations=row.get("remediation_recommendations", ""),
+                        remediation_recommendations=str(row.get("remediation_recommendations", "")),
                         references=parse_json(row.get("references"), []),
                         status_history=parse_json(row.get("status_history"), []),
                         created_at=parse_dt(row.get("created_at")),
                         updated_at=parse_dt(row.get("updated_at")),
                     )
                     db.add(fnd)
+                    finding_id_map[row["id"]] = fnd.id
             db.flush()
 
             # 7. Finding Category Mappings
             for row in data.get("finding_category_mappings", []):
+                mapped_fnd_id = finding_id_map.get(row["finding_id"], row["finding_id"])
+                if not db.query(Finding).filter(Finding.id == mapped_fnd_id).first():
+                    continue
+
                 if not db.query(FindingCategoryMapping).filter(FindingCategoryMapping.id == row["id"]).first():
+                    raw_code = str(row.get("owasp_category_code", "")).strip()
+                    raw_title = str(row.get("owasp_category_title", "")).strip()
+                    if "-" in raw_code:
+                        clean_code = raw_code.split("-")[0].strip()
+                        clean_title = raw_title or raw_code.split("-", 1)[1].strip()
+                    elif " " in raw_code:
+                        clean_code = raw_code.split(" ", 1)[0].strip()
+                        clean_title = raw_title or raw_code.split(" ", 1)[1].strip()
+                    else:
+                        clean_code = raw_code
+                        clean_title = raw_title or raw_code
+
                     mapping = FindingCategoryMapping(
                         id=row["id"],
-                        finding_id=row["finding_id"],
-                        owasp_edition=row["owasp_edition"],
-                        owasp_category_code=row["owasp_category_code"],
-                        owasp_category_title=row.get("owasp_category_title", ""),
-                        justification=row.get("justification", ""),
+                        finding_id=mapped_fnd_id,
+                        owasp_edition=str(row["owasp_edition"])[:50],
+                        owasp_category_code=clean_code[:50],
+                        owasp_category_title=clean_title[:255],
+                        justification=str(row.get("justification", "")),
                         created_at=parse_dt(row.get("created_at")),
                     )
                     db.add(mapping)
