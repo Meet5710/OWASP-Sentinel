@@ -260,10 +260,11 @@ def get_kali_mcp_logs_and_processes(lines: int = 40, known_tools: list[str] | No
         cmd_lower = cmd.lower()
         if "tail -n " in cmd_lower or "ps -u lucy" in cmd_lower:
             continue
-        if "kali-server-mcp" in cmd_lower:
+        is_mcp = "kali-server-mcp" in cmd_lower or ("server.py" in cmd_lower and "5000" in cmd_lower)
+        if is_mcp:
             mcp_running = True
-        first_bin = os.path.basename(cmd.split()[0]).lower()
-        if "kali-server-mcp" in cmd_lower or first_bin in tool_tokens:
+        cmd_words = {os.path.basename(w).lower() for w in cmd.split()[:3]}
+        if is_mcp or any(w in tool_tokens for w in cmd_words):
             active_processes.append(
                 {
                     "pid": pid,
