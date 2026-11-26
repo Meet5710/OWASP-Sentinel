@@ -488,6 +488,9 @@ def build_kali_command(tool: str, target: str, extra_args: str = "") -> str:
         flags = extra if extra else "--threads 4"
         return " ".join(f"gau {flags} {safe_target}".split())
 
+    if tool_key == "searchsploit":
+        return " ".join(f"searchsploit --disable-colour {extra} {safe_target}".split())
+
     return " ".join(f"{tool.strip()} {extra} {safe_target}".split())
 
 
