@@ -68,6 +68,11 @@ TOOL_COMMANDS: dict[str, str] = {
     "httpx": "httpx -u {target} {extra}",
     "katana": "katana -u {target} {extra}",
     "dalfox": "dalfox url {target} {extra}",
+    "gospider": "gospider -s {target} {extra}",
+    "testssl.sh": "testssl.sh {extra} {target}",
+    "whois": "whois {extra} {target}",
+    "showmount": "showmount -e {target} {extra}",
+    "hash-identifier": "hashid {extra} {target}",
 }
 
 # Map catalog names to actual executable names on Kali Linux when they differ.
@@ -80,6 +85,8 @@ TOOL_BINARY_ALIASES: dict[str, list[str]] = {
     "scout-suite": ["scout", "scout-suite"],
     "volatility": ["volatility", "volatility3", "vol"],
     "zap-cli": ["zap-cli", "zaproxy"],
+    "testssl.sh": ["testssl.sh", "testssl"],
+    "hash-identifier": ["hash-identifier", "hashid"],
 }
 
 # Tools that expect a bare hostname, domain, or IP instead of a full http(s):// URL.
@@ -96,6 +103,8 @@ HOST_ONLY_TOOLS = {
     "sublist3r",
     "theharvester",
     "enum4linux-ng",
+    "whois",
+    "showmount",
     "subjack",
     "waybackurls",
     "gau",
@@ -138,6 +147,8 @@ def build_kali_command(tool: str, target: str, extra_args: str = "") -> str:
         return " ".join(f"amass {extra} {safe_target}".split())
     if extra and tool_key == "nmap" and any(f in extra for f in ("-sV", "-sC", "-sS", "-sT", "-A")):
         return " ".join(f"nmap {extra} {safe_target}".split())
+    if extra and tool_key == "showmount" and extra.startswith("-e"):
+        return " ".join(f"showmount {extra} {safe_target}".split())
     if extra and tool_key in {"rustscan", "subfinder", "fierce", "theharvester"} and extra in {"-a", "-d", "--domain", "-b all -d"}:
         bin_name = "theHarvester" if tool_key == "theharvester" else tool_key
         return " ".join(f"{bin_name} {extra} {safe_target}".split())

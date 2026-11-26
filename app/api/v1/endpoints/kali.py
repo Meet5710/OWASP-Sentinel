@@ -52,6 +52,8 @@ TOOL_CATALOG: dict[str, list[dict[str, str]]] = {
         {"name": "theharvester", "description": "Email and subdomain harvesting", "example_args": "-b all -d"},
         {"name": "responder", "description": "LLMNR, NBT-NS and MDNS poisoner", "example_args": "-I eth0"},
         {"name": "enum4linux-ng", "description": "Advanced SMB enumeration", "example_args": "-A"},
+        {"name": "whois", "description": "Domain & IP WHOIS ownership lookup", "example_args": ""},
+        {"name": "showmount", "description": "NFS mount & share enumeration", "example_args": "-e"},
     ],
     "Web Application Security": [
         {"name": "gobuster", "description": "Directory/file brute-forcer", "example_args": "dir -w /usr/share/wordlists/dirb/common.txt"},
@@ -69,6 +71,8 @@ TOOL_CATALOG: dict[str, list[dict[str, str]]] = {
         {"name": "arjun", "description": "HTTP parameter discovery", "example_args": ""},
         {"name": "httpx", "description": "Fast HTTP probing & tech detection", "example_args": "-tech-detect"},
         {"name": "katana", "description": "Next-generation crawling", "example_args": "-jc"},
+        {"name": "gospider", "description": "Fast web spidering & link discovery", "example_args": "-d 2"},
+        {"name": "testssl.sh", "description": "SSL/TLS cipher, protocol & vulnerability auditor", "example_args": "--fast"},
         {"name": "jwt-tool", "description": "JSON Web Token testing", "example_args": "--scan"},
         {"name": "zap-cli", "description": "OWASP ZAP automation", "example_args": "quick-scan"},
     ],
