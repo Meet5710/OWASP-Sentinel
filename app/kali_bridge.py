@@ -184,7 +184,7 @@ def check_catalog_tools_on_kali(tool_names: list[str], force: bool = False) -> d
                 candidates_to_check.append(alias)
 
     quoted_list = " ".join(shlex.quote(c) for c in candidates_to_check)
-    probe_cmd = f'sh -c "for t in {quoted_list}; do command -v \\"$t\\" >/dev/null 2>&1 && echo \\"$t\\"; done"'
+    probe_cmd = f"sh -c 'for t in {quoted_list}; do command -v \"$t\" >/dev/null 2>&1 && echo \"$t\"; done'"
     res = run_tool_on_kali(probe_cmd, timeout=8)
     if res.get("returncode") != 0:
         return {}
