@@ -184,12 +184,13 @@ def check_catalog_tools_on_kali(tool_names: list[str], force: bool = False) -> d
                 candidates_to_check.append(alias)
 
     quoted_list = " ".join(shlex.quote(c) for c in candidates_to_check)
-    probe_cmd = f"sh -c 'for t in {quoted_list}; do command -v \"$t\" >/dev/null 2>&1 && echo \"$t\"; done'"
+    probe_cmd = f"which {quoted_list}"
     res = run_tool_on_kali(probe_cmd, timeout=8)
-    if res.get("returncode") != 0:
+    stdout = res.get("stdout") or ""
+    if res.get("returncode") == -1 or not stdout.strip():
         return {}
 
-    found_bins = {line.strip() for line in (res.get("stdout") or "").splitlines() if line.strip()}
+    found_bins = {os.path.basename(line.strip()) for line in stdout.splitlines() if line.strip()}
     result_map: dict[str, bool] = {}
     for name in tool_names:
         key = name.lower()
