@@ -1,15 +1,17 @@
 """OWASP Sentinel - Kali Linux MCP Bridge.
 
 Forwards penetration-testing tool commands to the Kali Linux Tools API / MCP
-server running behind the local SSH tunnel (``127.0.0.1:5001`` or ``5000``)
-or via the ngrok bridge URL when running in production on Render.
+server running behind the local SSH tunnel or unified Docker container
+(``127.0.0.1:5001`` / ``kali:5000``) or via the ngrok bridge URL on Render.
 """
 
 from __future__ import annotations
 
+import ipaddress
 import logging
 import os
 import shlex
+import socket
 import time
 from urllib.parse import urlparse
 
@@ -17,7 +19,7 @@ import requests
 
 logger = logging.getLogger("sentinel.kali_bridge")
 
-# Local SSH tunnel ports on the host running the Kali VM connection.
+# Local container/tunnel ports on the host running the Kali MCP service.
 DEFAULT_LOCAL_KALI_URLS = ("http://127.0.0.1:5001", "http://127.0.0.1:5000")
 # Public ngrok bridge URL used automatically by production (Render) when KALI_API_URL is unset.
 DEFAULT_REMOTE_KALI_URL = "https://paltry-graded-landslide.ngrok-free.dev"
@@ -44,53 +46,6 @@ def get_kali_api_url() -> str:
     return _candidate_kali_urls()[0]
 
 
-TOOL_COMMANDS: dict[str, str] = {
-    "nmap": "nmap -sT -sV -T4 -F {extra} {target}",
-    "rustscan": "rustscan -a {target} {extra}",
-    "masscan": "masscan {target} {extra}",
-    "amass": "amass enum -d {target} {extra}",
-    "subfinder": "subfinder -d {target} {extra}",
-    "fierce": "fierce --domain {target} {extra}",
-    "dnsrecon": "dnsrecon -d {target} {extra}",
-    "sublist3r": "sublist3r -d {target} {extra}",
-    "theharvester": "theHarvester -d {target} -b all {extra}",
-    "nikto": "nikto -h {target} {extra}",
-    "gobuster": "gobuster dir -u {target} -w /usr/share/wordlists/dirb/common.txt {extra}",
-    "feroxbuster": "feroxbuster -u {target} {extra}",
-    "ffuf": "ffuf -u {fuzz_target} -w /usr/share/wordlists/dirb/common.txt {extra}",
-    "dirsearch": "dirsearch -u {target} {extra}",
-    "sqlmap": "sqlmap -u {target} --batch --level=1 --risk=1 {extra}",
-    "nuclei": "nuclei -u {target} {extra}",
-    "wpscan": "wpscan --url {target} {extra}",
-    "whatweb": "whatweb {extra} {target}",
-    "wafw00f": "wafw00f {extra} {target}",
-    "dirb": "dirb {target} {extra}",
-    "httpx": "httpx -u {target} {extra}",
-    "katana": "katana -u {target} {extra}",
-    "dalfox": "dalfox url {target} {extra}",
-    "gospider": "gospider -s {target} {extra}",
-    "testssl.sh": "testssl.sh {extra} {target}",
-    "whois": "whois {extra} {target}",
-    "showmount": "showmount -e {target} {extra}",
-    "hash-identifier": "hashid {extra} {target}",
-}
-
-# Map catalog names to actual executable names on Kali Linux when they differ.
-TOOL_BINARY_ALIASES: dict[str, list[str]] = {
-    "theharvester": ["theHarvester", "theharvester"],
-    "crackmapexec": ["crackmapexec", "netexec", "nxc"],
-    "radare2": ["radare2", "r2"],
-    "jwt-tool": ["jwt_tool", "jwt-tool"],
-    "pwntools": ["pwn", "pwntools"],
-    "scout-suite": ["scout", "scout-suite"],
-    "volatility": ["volatility", "volatility3", "vol"],
-    "zap-cli": ["zap-cli", "zaproxy"],
-    "testssl.sh": ["testssl.sh", "testssl"],
-    "hash-identifier": ["hash-identifier", "hashid"],
-    "sleuthkit": ["sleuthkit", "fls", "mmls"],
-    "ghidra": ["ghidra", "analyzeHeadless"],
-}
-
 # Tools that expect a bare hostname, domain, or IP instead of a full http(s):// URL.
 HOST_ONLY_TOOLS = {
     "nmap",
@@ -101,63 +56,437 @@ HOST_ONLY_TOOLS = {
     "subfinder",
     "fierce",
     "dnsenum",
-    "dnsrecon",
-    "sublist3r",
     "theharvester",
     "enum4linux-ng",
     "whois",
     "showmount",
+    "crackmapexec",
+    "smbmap",
+    "evil-winrm",
+    "kube-hunter",
+    "spiderfoot",
+    "shodan",
+    "censys",
     "subjack",
     "waybackurls",
     "gau",
+    "sherlock",
+}
+
+# Tools that expect a full http(s):// URL (if omitted, https:// is prepended automatically).
+URL_TOOLS = {
+    "gobuster",
+    "feroxbuster",
+    "ffuf",
+    "dirsearch",
+    "nuclei",
+    "nikto",
+    "sqlmap",
+    "wpscan",
+    "dalfox",
+    "commix",
+    "whatweb",
+    "wafw00f",
+    "arjun",
+    "httpx",
+    "katana",
+    "gospider",
+    "testssl.sh",
+    "zap-cli",
+    "jwt-tool",
+}
+
+# Map catalog names to actual executable names inside the Kali environment.
+TOOL_BINARY_ALIASES: dict[str, list[str]] = {
+    "theharvester": ["theHarvester", "theharvester"],
+    "crackmapexec": ["crackmapexec", "netexec", "nxc"],
+    "radare2": ["radare2", "r2"],
+    "jwt-tool": ["jwt_tool", "jwt-tool"],
+    "pwntools": ["pwn", "pwntools"],
+    "scout-suite": ["scout", "scout-suite"],
+    "volatility": ["vol", "volatility", "volatility3"],
+    "zap-cli": ["zaproxy", "zap.sh", "zap-cli"],
+    "testssl.sh": ["testssl.sh", "testssl"],
+    "hash-identifier": ["hashid", "hash-identifier"],
+    "sleuthkit": ["fls", "mmls", "sleuthkit"],
+    "ghidra": ["analyzeHeadless", "ghidra"],
 }
 
 
+def _is_ip_or_cidr(value: str) -> bool:
+    """Return True if value is a valid IPv4/IPv6 address or CIDR range."""
+    try:
+        ipaddress.ip_network(value, strict=False)
+        return True
+    except ValueError:
+        return False
+
+
+def _resolve_ipv4_if_hostname(target: str) -> str:
+    """Resolve a domain name to IPv4 for tools like masscan that reject hostnames."""
+    if _is_ip_or_cidr(target):
+        return target
+    try:
+        return socket.gethostbyname(target)
+    except OSError:
+        return target
+
+
 def normalize_target_for_tool(tool: str, target: str) -> str:
-    """Strip URL scheme/path for tools like nmap/subfinder that expect a hostname or IP."""
+    """Normalize any user-entered target (URL, domain, IP, path, token) for the chosen tool."""
     cleaned = target.strip()
-    if tool.lower() in HOST_ONLY_TOOLS and "://" in cleaned:
-        parsed = urlparse(cleaned)
-        if parsed.hostname:
-            return parsed.hostname
+    tool_key = tool.strip().lower()
+
+    if tool_key in HOST_ONLY_TOOLS:
+        if "://" in cleaned:
+            parsed = urlparse(cleaned)
+            if parsed.hostname:
+                return parsed.hostname
+        # Strip trailing path/slashes on bare domain inputs like example.com/login
+        return cleaned.split("/")[0].split(":")[0] if "/" in cleaned else cleaned
+
+    if tool_key in URL_TOOLS:
+        # Preserve raw JWT tokens when passed directly to jwt-tool
+        if tool_key == "jwt-tool" and cleaned.startswith("eyJ") and cleaned.count(".") >= 2:
+            return cleaned
+        if "://" not in cleaned:
+            return f"https://{cleaned}"
+        return cleaned
+
     return cleaned
 
 
 def build_kali_command(tool: str, target: str, extra_args: str = "") -> str:
-    """Build a safe command string for the selected Kali tool."""
+    """Build a reliable, non-interactive command string for any of the 72 Kali tools."""
     tool_key = tool.strip().lower()
-    normalized_target = normalize_target_for_tool(tool_key, target)
-    safe_target = shlex.quote(normalized_target)
-    fuzz_url = normalized_target.rstrip("/") + "/FUZZ"
-    safe_fuzz_target = shlex.quote(fuzz_url)
+    norm_target = normalize_target_for_tool(tool_key, target)
+    safe_target = shlex.quote(norm_target)
+    fuzz_target = shlex.quote(norm_target.rstrip("/") + "/FUZZ")
     extra = extra_args.strip()
 
-    # Avoid duplicating flags/subcommands when user/example_args supply them directly.
-    if extra and tool_key == "gobuster" and extra.startswith("dir "):
-        return " ".join(f"gobuster {extra} -u {safe_target}".split())
-    if extra and tool_key == "ffuf":
-        base = f"ffuf -u {safe_fuzz_target}"
+    # ------------------------------------------------------------------
+    # Network Reconnaissance & Scanning
+    # ------------------------------------------------------------------
+    if tool_key == "nmap":
+        if any(f in extra for f in ("-sV", "-sC", "-sS", "-sT", "-A", "-sn")):
+            return " ".join(f"nmap {extra} {safe_target}".split())
+        return " ".join(f"nmap -sT -sV -T4 -F {extra} {safe_target}".split())
+
+    if tool_key == "rustscan":
+        flags = extra if extra else "--ulimit 5000"
+        if flags == "-a":
+            flags = "--ulimit 5000"
+        return " ".join(f"rustscan -a {safe_target} {flags}".split())
+
+    if tool_key == "masscan":
+        ip_target = shlex.quote(_resolve_ipv4_if_hostname(norm_target))
+        flags = extra if extra else "-p80,443 --rate=1000"
+        if "--rate" not in flags:
+            flags = f"{flags} --rate=1000"
+        return " ".join(f"masscan {ip_target} {flags}".split())
+
+    if tool_key == "autorecon":
+        base = "autorecon --disable-keyboard-control --disable-sanity-checks -o /tmp/autorecon_out --only-scans-dir"
+        return " ".join(f"{base} {extra} {safe_target}".split())
+
+    if tool_key == "amass":
+        if extra.startswith("enum "):
+            return " ".join(f"amass {extra} {safe_target}".split())
+        if "-d" in extra:
+            return " ".join(f"amass enum {extra} {safe_target}".split())
+        return " ".join(f"amass enum -d {safe_target} {extra}".split())
+
+    if tool_key == "subfinder":
+        if extra == "-d":
+            extra = "-silent"
+        return " ".join(f"subfinder -d {safe_target} {extra or '-silent'}".split())
+
+    if tool_key == "fierce":
+        if extra == "--domain":
+            extra = ""
+        return " ".join(f"fierce --domain {safe_target} {extra}".split())
+
+    if tool_key == "dnsenum":
+        flags = extra if extra else "--noreverse"
+        return " ".join(f"dnsenum {flags} {safe_target}".split())
+
+    if tool_key == "theharvester":
+        if extra in {"-b all -d", "-d"}:
+            extra = "-b crtsh,duckduckgo,hackertarget"
+        elif "-b" not in extra:
+            extra = f"-b crtsh,duckduckgo,hackertarget {extra}".strip()
+        return " ".join(f"theHarvester -d {safe_target} {extra}".split())
+
+    if tool_key == "responder":
+        flags = extra if extra else "-I eth0 -A"
+        return " ".join(f"responder {flags}".split())
+
+    if tool_key == "enum4linux-ng":
+        return " ".join(f"enum4linux-ng {extra or '-A'} {safe_target}".split())
+
+    if tool_key == "whois":
+        return " ".join(f"whois {extra} {safe_target}".split())
+
+    if tool_key == "showmount":
+        if "-e" in extra:
+            return " ".join(f"showmount {extra} {safe_target}".split())
+        return " ".join(f"showmount -e {safe_target} {extra}".split())
+
+    # ------------------------------------------------------------------
+    # Web Application Security
+    # ------------------------------------------------------------------
+    if tool_key == "gobuster":
+        if extra.startswith(("dir ", "dns ", "vhost ", "fuzz ")):
+            if "-u " in extra:
+                return " ".join(f"gobuster {extra}".split())
+            return " ".join(f"gobuster {extra} -u {safe_target}".split())
+        return " ".join(
+            f"gobuster dir -u {safe_target} -w /usr/share/wordlists/dirb/common.txt -k --no-error {extra}".split()
+        )
+
+    if tool_key == "feroxbuster":
+        base = f"feroxbuster -u {safe_target} -k --no-state"
         if "-w " not in extra and "--wordlist" not in extra:
             base += " -w /usr/share/wordlists/dirb/common.txt"
+        if "--depth" not in extra and "-d " not in extra:
+            base += " --depth 1"
         return " ".join(f"{base} {extra}".split())
-    if extra and tool_key == "feroxbuster" and ("-w " in extra or "--wordlist" in extra):
-        return " ".join(f"feroxbuster -u {safe_target} {extra}".split())
-    if extra and tool_key == "sqlmap" and ("--batch" in extra or "--level" in extra or "--risk" in extra):
-        batch_flag = "" if "--batch" in extra else "--batch"
-        return " ".join(f"sqlmap -u {safe_target} {batch_flag} {extra}".split())
-    if extra and tool_key == "amass" and extra.startswith("enum "):
-        return " ".join(f"amass {extra} {safe_target}".split())
-    if extra and tool_key == "nmap" and any(f in extra for f in ("-sV", "-sC", "-sS", "-sT", "-A")):
-        return " ".join(f"nmap {extra} {safe_target}".split())
-    if extra and tool_key == "showmount" and extra.startswith("-e"):
-        return " ".join(f"showmount {extra} {safe_target}".split())
-    if extra and tool_key in {"rustscan", "subfinder", "fierce", "theharvester"} and extra in {"-a", "-d", "--domain", "-b all -d"}:
-        bin_name = "theHarvester" if tool_key == "theharvester" else tool_key
-        return " ".join(f"{bin_name} {extra} {safe_target}".split())
 
-    template = TOOL_COMMANDS.get(tool_key, f"{tool.strip()} {{extra}} {{target}}")
-    cmd = template.format(target=safe_target, fuzz_target=safe_fuzz_target, extra=extra)
-    return " ".join(cmd.split())
+    if tool_key == "ffuf":
+        base = f"ffuf -u {fuzz_target}"
+        if "-w " not in extra and "--wordlist" not in extra:
+            base += " -w /usr/share/wordlists/dirb/common.txt"
+        if "-mc" not in extra:
+            base += " -mc 200,301,302"
+        return " ".join(f"{base} {extra}".split())
+
+    if tool_key == "dirsearch":
+        flags = extra if extra else "-e php,html,js"
+        return " ".join(f"dirsearch -u {safe_target} {flags}".split())
+
+    if tool_key == "nuclei":
+        flags = extra if extra else "-severity critical,high,medium"
+        return " ".join(f"nuclei -u {safe_target} {flags}".split())
+
+    if tool_key == "nikto":
+        flags = extra if extra else "-maxtime 60s"
+        return " ".join(f"nikto -h {safe_target} {flags}".split())
+
+    if tool_key == "sqlmap":
+        parts = [f"sqlmap -u {safe_target}"]
+        if "--batch" not in extra:
+            parts.append("--batch")
+        if "?" not in norm_target and "--forms" not in extra and "--crawl" not in extra:
+            parts.append("--forms --crawl=1")
+        if "--level" not in extra and "--risk" not in extra:
+            parts.append(extra or "--level=1 --risk=1")
+        elif extra:
+            parts.append(extra)
+        return " ".join(" ".join(parts).split())
+
+    if tool_key == "wpscan":
+        flags = extra if extra else "--enumerate vp"
+        return " ".join(f"wpscan --url {safe_target} --no-banner {flags}".split())
+
+    if tool_key == "dalfox":
+        return " ".join(f"dalfox url {safe_target} --silence {extra}".split())
+
+    if tool_key == "commix":
+        batch_flag = "" if "--batch" in extra else "--batch"
+        return " ".join(f"commix -u {safe_target} {batch_flag} {extra}".split())
+
+    if tool_key == "whatweb":
+        return " ".join(f"whatweb {extra} {safe_target}".split())
+
+    if tool_key == "wafw00f":
+        return " ".join(f"wafw00f {extra} {safe_target}".split())
+
+    if tool_key == "arjun":
+        return " ".join(f"arjun -u {safe_target} {extra}".split())
+
+    if tool_key == "httpx":
+        flags = extra if extra else "-tech-detect -status-code -title -silent"
+        return " ".join(f"httpx -u {safe_target} {flags}".split())
+
+    if tool_key == "katana":
+        flags = extra if extra else "-jc -d 2 -silent"
+        return " ".join(f"katana -u {safe_target} {flags}".split())
+
+    if tool_key == "gospider":
+        flags = extra if extra else "-d 2 -c 5"
+        return " ".join(f"gospider -s {safe_target} {flags}".split())
+
+    if tool_key == "testssl.sh":
+        flags = extra if extra else "--fast"
+        return " ".join(f"testssl.sh --color 0 {flags} {safe_target}".split())
+
+    if tool_key == "jwt-tool":
+        if norm_target.startswith("eyJ") and norm_target.count(".") >= 2:
+            return " ".join(f"jwt_tool {safe_target} {extra}".split())
+        return " ".join(f"jwt_tool -t {safe_target} {extra}".split())
+
+    if tool_key == "zap-cli":
+        return " ".join(f"zaproxy -cmd -quickurl {safe_target} -quickout /tmp/zap_report.html {extra}".split())
+
+    # ------------------------------------------------------------------
+    # Authentication & Password Security
+    # ------------------------------------------------------------------
+    if tool_key == "hydra":
+        return " ".join(f"hydra {extra} {safe_target}".split())
+
+    if tool_key == "john":
+        return " ".join(f"john {extra} {safe_target}".split())
+
+    if tool_key == "hashcat":
+        return " ".join(f"hashcat {extra} {safe_target}".split())
+
+    if tool_key == "medusa":
+        return " ".join(f"medusa -h {safe_target} {extra}".split())
+
+    if tool_key == "patator":
+        return " ".join(f"patator {extra}".split()) if extra else "patator --help"
+
+    if tool_key == "crackmapexec":
+        if extra.startswith(("smb ", "winrm ", "ssh ", "ldap ", "ftp ", "mssql ", "rdp ")):
+            return " ".join(f"crackmapexec {extra} {safe_target}".split())
+        return " ".join(f"crackmapexec smb {safe_target} {extra}".split())
+
+    if tool_key == "smbmap":
+        if "-H" in extra:
+            return " ".join(f"smbmap {extra}".split())
+        return " ".join(f"smbmap -H {safe_target} {extra}".split())
+
+    if tool_key == "evil-winrm":
+        if "-i" in extra:
+            return " ".join(f"evil-winrm {extra}".split())
+        return " ".join(f"evil-winrm -i {safe_target} {extra}".split())
+
+    if tool_key == "hash-identifier":
+        return " ".join(f"hashid {extra} {safe_target}".split())
+
+    # ------------------------------------------------------------------
+    # Binary Analysis & Reverse Engineering
+    # ------------------------------------------------------------------
+    if tool_key == "gdb":
+        return " ".join(f'gdb -batch -ex "info functions" {extra} {safe_target}'.split())
+
+    if tool_key == "radare2":
+        return " ".join(f'r2 -q -c "aaa;afl" {extra} {safe_target}'.split())
+
+    if tool_key == "ghidra":
+        return " ".join(f"analyzeHeadless /tmp ghidra_proj -import {safe_target} -deleteProject {extra}".split())
+
+    if tool_key == "binwalk":
+        return " ".join(f"binwalk {extra} {safe_target}".split())
+
+    if tool_key in {"checksec", "pwntools"}:
+        return " ".join(f"pwn checksec {extra} {safe_target}".split())
+
+    if tool_key == "strings":
+        return " ".join(f"strings {extra or '-n 8'} {safe_target}".split())
+
+    if tool_key == "objdump":
+        return " ".join(f"objdump {extra or '-d'} {safe_target}".split())
+
+    if tool_key == "ropgadget":
+        return " ".join(f"ROPgadget --binary {safe_target} {extra}".split())
+
+    # ------------------------------------------------------------------
+    # Cloud & Container Security
+    # ------------------------------------------------------------------
+    if tool_key == "prowler":
+        providers = ("aws", "azure", "gcp", "kubernetes", "m365", "github", "iac", "image", "llm")
+        if extra.startswith(providers):
+            return " ".join(f"prowler {extra}".split())
+        if norm_target.lower() in providers:
+            return " ".join(f"prowler {safe_target} {extra}".split())
+        return " ".join(f"prowler {extra} {safe_target}".split())
+
+    if tool_key == "scout-suite":
+        return " ".join(f"scout {extra} {safe_target}".split())
+
+    if tool_key == "trivy":
+        if extra.startswith(("image ", "fs ", "repo ", "config ", "k8s ")):
+            return " ".join(f"trivy {extra} {safe_target}".split())
+        subcmd = "repo" if norm_target.startswith(("http://", "https://")) else ("fs" if norm_target.startswith("/") else "image")
+        return " ".join(f"trivy {subcmd} {extra} {safe_target}".split())
+
+    if tool_key == "kube-hunter":
+        if "--remote" in extra:
+            return " ".join(f"kube-hunter {extra} {safe_target}".split())
+        return " ".join(f"kube-hunter --remote {safe_target} {extra}".split())
+
+    if tool_key == "kube-bench":
+        return " ".join(f"kube-bench {extra}".split())
+
+    if tool_key == "docker-bench-security":
+        return f"sh -c {shlex.quote(f'cd /opt/docker-bench-security && sh docker-bench-security.sh {extra}'.strip())}"
+
+    if tool_key == "checkov":
+        if "-d " in extra or "-f " in extra:
+            return " ".join(f"checkov {extra}".split())
+        return " ".join(f"checkov -d {safe_target} {extra}".split())
+
+    # ------------------------------------------------------------------
+    # CTF & Forensics
+    # ------------------------------------------------------------------
+    if tool_key == "volatility":
+        return " ".join(f"vol -f {safe_target} {extra or 'windows.info'}".split())
+
+    if tool_key == "foremost":
+        return " ".join(f"foremost -i {safe_target} -o /tmp/foremost_out {extra}".split())
+
+    if tool_key == "steghide":
+        return " ".join(f"steghide {extra or 'info'} -sf {safe_target}".split())
+
+    if tool_key == "exiftool":
+        return " ".join(f"exiftool {extra} {safe_target}".split())
+
+    if tool_key == "autopsy":
+        return " ".join(f"autopsy {extra}".split()) if extra else "autopsy -h"
+
+    if tool_key == "sleuthkit":
+        return " ".join(f"fls {extra} {safe_target}".split())
+
+    # ------------------------------------------------------------------
+    # Bug Bounty & OSINT Arsenal
+    # ------------------------------------------------------------------
+    if tool_key == "sherlock":
+        return " ".join(f"sherlock --timeout 5 --print-found {extra} {safe_target}".split())
+
+    if tool_key == "spiderfoot":
+        flags = extra if extra else "-u passive -o tab -q"
+        return " ".join(f"spiderfoot -s {safe_target} {flags}".split())
+
+    if tool_key == "shodan":
+        if extra.startswith(("host ", "domain ", "search ", "count ", "stats ")):
+            return " ".join(f"shodan {extra} {safe_target}".split())
+        subcmd = "host" if _is_ip_or_cidr(norm_target) else "domain"
+        return " ".join(f"shodan {subcmd} {safe_target} {extra}".split())
+
+    if tool_key == "censys":
+        if extra.startswith(("search ", "view ", "subdomains ", "asm ")):
+            return " ".join(f"censys {extra} {safe_target}".split())
+        return " ".join(f"censys search {safe_target} {extra}".split())
+
+    if tool_key == "subjack":
+        return " ".join(f"subjack -d {safe_target} -a {extra}".split())
+
+    if tool_key == "trufflehog":
+        if extra.startswith(("git ", "github ", "filesystem ", "s3 ")):
+            return " ".join(f"trufflehog {extra} {safe_target}".split())
+        subcmd = "git" if norm_target.startswith(("http://", "https://", "git@")) else "filesystem"
+        return " ".join(f"trufflehog {subcmd} {safe_target} {extra}".split())
+
+    if tool_key == "waybackurls":
+        inner = f"printf '%s\\n' {safe_target} | waybackurls {extra}".strip()
+        return f"sh -c {shlex.quote(inner)}"
+
+    if tool_key == "gau":
+        flags = extra if extra else "--threads 4"
+        return " ".join(f"gau {flags} {safe_target}".split())
+
+    return " ".join(f"{tool.strip()} {extra} {safe_target}".split())
 
 
 def check_kali_health(timeout: float = 2.0) -> tuple[bool, dict[str, bool]]:
@@ -190,7 +519,6 @@ def check_catalog_tools_on_kali(tool_names: list[str], force: bool = False) -> d
     if not force and isinstance(cached_status, dict) and cached_status and (now - cached_ts) < _CACHE_TTL_SECONDS:
         return dict(cached_status)
 
-    # Expand catalog names into all candidate binary names
     candidates_to_check: list[str] = []
     for name in tool_names:
         key = name.lower()
@@ -199,7 +527,7 @@ def check_catalog_tools_on_kali(tool_names: list[str], force: bool = False) -> d
                 candidates_to_check.append(alias)
 
     quoted_list = " ".join(shlex.quote(c) for c in candidates_to_check)
-    probe_cmd = f"PATH=\"$PATH:/root/go/bin:/root/.local/bin\" which {quoted_list}"
+    probe_cmd = f'PATH="$PATH:/usr/local/bin:/root/go/bin:/root/.local/bin" which {quoted_list}'
     res = run_tool_on_kali(probe_cmd, timeout=8)
     stdout = res.get("stdout") or ""
     if res.get("returncode") == -1 or not stdout.strip():
@@ -276,7 +604,7 @@ def get_kali_mcp_logs_and_processes(lines: int = 40, known_tools: list[str] | No
     except Exception:
         pass
 
-    # 2. Fallback to `ps -eo` if /api/ps is unavailable (e.g. VMware mcp-kali-server)
+    # 2. Fallback to `ps -eo` if /api/ps is unavailable
     if not active_processes:
         ps_res = run_tool_on_kali("ps -eo pid,pcpu,etime,args", timeout=5)
         if ps_res.get("returncode") != -1:
@@ -395,7 +723,7 @@ def run_tool_on_kali(command: str, timeout: int = 600) -> dict:
         "stdout": "",
         "stderr": (
             f"[!] Failed to connect to Kali MCP Server at {last_url}. "
-            f"Is the SSH tunnel running?\nError: {last_exc}"
+            f"Is the container running?\nError: {last_exc}"
         ),
         "returncode": -1,
         "elapsed_seconds": elapsed,
