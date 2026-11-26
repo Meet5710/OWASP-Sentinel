@@ -187,6 +187,8 @@ def build_kali_command(tool: str, target: str, extra_args: str = "") -> str:
 
     if tool_key == "autorecon":
         base = "autorecon --disable-keyboard-control --disable-sanity-checks -o /tmp/autorecon_out --only-scans-dir"
+        if "--target-timeout" not in extra:
+            base += " --target-timeout 3"
         return " ".join(f"{base} {extra} {safe_target}".split())
 
     if tool_key == "amass":

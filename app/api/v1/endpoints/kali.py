@@ -130,13 +130,13 @@ TOOL_CATALOG: dict[str, list[dict[str, str]]] = {
 
 
 @router.get("/tools")
-async def list_kali_tools():
+def list_kali_tools():
     """Return the categorized Kali tool catalog directly."""
     return TOOL_CATALOG
 
 
 @router.get("/status")
-async def get_kali_bridge_status():
+def get_kali_bridge_status():
     """Check live connectivity and full per-tool availability on the Kali VM."""
     connected, tools_status = check_kali_health()
     if connected:
@@ -152,14 +152,14 @@ async def get_kali_bridge_status():
 
 
 @router.get("/logs")
-async def get_kali_logs(lines: int = 40):
+def get_kali_logs(lines: int = 40):
     """Fetch recent Kali MCP server logs and active tool processes running on Kali."""
     all_names = [t["name"] for tools in TOOL_CATALOG.values() for t in tools]
     return get_kali_mcp_logs_and_processes(lines=lines, known_tools=all_names)
 
 
 @router.post("/execute", response_model=KaliScanResult)
-async def execute_kali_tool(request: KaliScanRequest):
+def execute_kali_tool(request: KaliScanRequest):
     target = request.target.strip()
     tool = request.tool.strip()
     extra = request.extra_args.strip()
