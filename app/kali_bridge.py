@@ -20,7 +20,7 @@ logger = logging.getLogger("sentinel.kali_bridge")
 # Local SSH tunnel ports on the host running the Kali VM connection.
 DEFAULT_LOCAL_KALI_URLS = ("http://127.0.0.1:5001", "http://127.0.0.1:5000")
 # Public ngrok bridge URL used automatically by production (Render) when KALI_API_URL is unset.
-DEFAULT_REMOTE_KALI_URL = "https://paltry-graded-landslide.ngrok-free.dev"
+DEFAULT_REMOTE_KALI_URL = "http://127.0.0.1:5001"
 
 
 def _candidate_kali_urls() -> list[str]:
