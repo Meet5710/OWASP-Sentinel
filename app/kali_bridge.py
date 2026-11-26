@@ -20,7 +20,10 @@ logger = logging.getLogger("sentinel.kali_bridge")
 # Local SSH tunnel ports on the host running the Kali VM connection.
 DEFAULT_LOCAL_KALI_URLS = ("http://127.0.0.1:5001", "http://127.0.0.1:5000")
 # Public ngrok bridge URL used automatically by production (Render) when KALI_API_URL is unset.
-DEFAULT_REMOTE_KALI_URL = "http://127.0.0.1:5001"
+DEFAULT_REMOTE_KALI_URL = "https://paltry-graded-landslide.ngrok-free.dev"
+
+_TOOL_AVAILABILITY_CACHE: dict[str, object] = {"ts": 0.0, "status": {}}
+_CACHE_TTL_SECONDS = 60.0
 
 
 def _candidate_kali_urls() -> list[str]:
@@ -42,7 +45,7 @@ def get_kali_api_url() -> str:
 
 
 TOOL_COMMANDS: dict[str, str] = {
-    "nmap": "nmap -sV -sC {extra} {target}",
+    "nmap": "nmap -sT -sV -T4 -F {extra} {target}",
     "rustscan": "rustscan -a {target} {extra}",
     "masscan": "masscan {target} {extra}",
     "amass": "amass enum -d {target} {extra}",
@@ -54,7 +57,7 @@ TOOL_COMMANDS: dict[str, str] = {
     "nikto": "nikto -h {target} {extra}",
     "gobuster": "gobuster dir -u {target} -w /usr/share/wordlists/dirb/common.txt {extra}",
     "feroxbuster": "feroxbuster -u {target} {extra}",
-    "ffuf": "ffuf -u {target}/FUZZ -w /usr/share/wordlists/dirb/common.txt {extra}",
+    "ffuf": "ffuf -u {fuzz_target} -w /usr/share/wordlists/dirb/common.txt {extra}",
     "dirsearch": "dirsearch -u {target} {extra}",
     "sqlmap": "sqlmap -u {target} --batch --level=1 --risk=1 {extra}",
     "nuclei": "nuclei -u {target} {extra}",
@@ -62,9 +65,19 @@ TOOL_COMMANDS: dict[str, str] = {
     "whatweb": "whatweb {extra} {target}",
     "wafw00f": "wafw00f {extra} {target}",
     "dirb": "dirb {target} {extra}",
-    "httpx": "httpx -u {target} {extra}",
+    "httpx": "httpx {extra} {target}",
     "katana": "katana -u {target} {extra}",
     "dalfox": "dalfox url {target} {extra}",
+}
+
+# Map catalog names to actual executable names on Kali Linux when they differ.
+TOOL_BINARY_ALIASES: dict[str, list[str]] = {
+    "theharvester": ["theHarvester", "theharvester"],
+    "crackmapexec": ["crackmapexec", "netexec", "nxc"],
+    "radare2": ["radare2", "r2"],
+    "jwt-tool": ["jwt_tool", "jwt-tool"],
+    "pwntools": ["pwn", "pwntools"],
+    "scout-suite": ["scout", "scout-suite"],
 }
 
 # Tools that expect a bare hostname, domain, or IP instead of a full http(s):// URL.
@@ -102,20 +115,33 @@ def build_kali_command(tool: str, target: str, extra_args: str = "") -> str:
     tool_key = tool.strip().lower()
     normalized_target = normalize_target_for_tool(tool_key, target)
     safe_target = shlex.quote(normalized_target)
+    fuzz_url = normalized_target.rstrip("/") + "/FUZZ"
+    safe_fuzz_target = shlex.quote(fuzz_url)
     extra = extra_args.strip()
 
-    # Avoid duplicating subcommand/flag prefixes when example_args match template defaults.
+    # Avoid duplicating flags/subcommands when user/example_args supply them directly.
     if extra and tool_key == "gobuster" and extra.startswith("dir "):
         return " ".join(f"gobuster {extra} -u {safe_target}".split())
+    if extra and tool_key == "ffuf":
+        base = f"ffuf -u {safe_fuzz_target}"
+        if "-w " not in extra and "--wordlist" not in extra:
+            base += " -w /usr/share/wordlists/dirb/common.txt"
+        return " ".join(f"{base} {extra}".split())
+    if extra and tool_key == "feroxbuster" and ("-w " in extra or "--wordlist" in extra):
+        return " ".join(f"feroxbuster -u {safe_target} {extra}".split())
+    if extra and tool_key == "sqlmap" and ("--batch" in extra or "--level" in extra or "--risk" in extra):
+        batch_flag = "" if "--batch" in extra else "--batch"
+        return " ".join(f"sqlmap -u {safe_target} {batch_flag} {extra}".split())
     if extra and tool_key == "amass" and extra.startswith("enum "):
         return " ".join(f"amass {extra} {safe_target}".split())
-    if extra and tool_key == "nmap" and ("-sV" in extra or "-sC" in extra):
+    if extra and tool_key == "nmap" and any(f in extra for f in ("-sV", "-sC", "-sS", "-sT", "-A")):
         return " ".join(f"nmap {extra} {safe_target}".split())
     if extra and tool_key in {"rustscan", "subfinder", "fierce", "theharvester"} and extra in {"-a", "-d", "--domain", "-b all -d"}:
-        return " ".join(f"{tool_key} {extra} {safe_target}".split())
+        bin_name = "theHarvester" if tool_key == "theharvester" else tool_key
+        return " ".join(f"{bin_name} {extra} {safe_target}".split())
 
     template = TOOL_COMMANDS.get(tool_key, f"{tool.strip()} {{extra}} {{target}}")
-    cmd = template.format(target=safe_target, extra=extra)
+    cmd = template.format(target=safe_target, fuzz_target=safe_fuzz_target, extra=extra)
     return " ".join(cmd.split())
 
 
@@ -139,6 +165,40 @@ def check_kali_health(timeout: float = 2.0) -> tuple[bool, dict[str, bool]]:
         except Exception as exc:
             logger.debug("Kali MCP health check failed (%s): %s", base_url, exc)
     return False, {}
+
+
+def check_catalog_tools_on_kali(tool_names: list[str], force: bool = False) -> dict[str, bool]:
+    """Check which catalog tools are actually installed on the remote Kali VM (cached 60s)."""
+    now = time.monotonic()
+    cached_ts = float(_TOOL_AVAILABILITY_CACHE.get("ts") or 0.0)
+    cached_status = _TOOL_AVAILABILITY_CACHE.get("status")
+    if not force and isinstance(cached_status, dict) and cached_status and (now - cached_ts) < _CACHE_TTL_SECONDS:
+        return dict(cached_status)
+
+    # Expand catalog names into all candidate binary names
+    candidates_to_check: list[str] = []
+    for name in tool_names:
+        key = name.lower()
+        for alias in TOOL_BINARY_ALIASES.get(key, [name]):
+            if alias not in candidates_to_check:
+                candidates_to_check.append(alias)
+
+    quoted_list = " ".join(shlex.quote(c) for c in candidates_to_check)
+    probe_cmd = f'sh -c "for t in {quoted_list}; do command -v \\"$t\\" >/dev/null 2>&1 && echo \\"$t\\"; done"'
+    res = run_tool_on_kali(probe_cmd, timeout=8)
+    if res.get("returncode") != 0:
+        return {}
+
+    found_bins = {line.strip() for line in (res.get("stdout") or "").splitlines() if line.strip()}
+    result_map: dict[str, bool] = {}
+    for name in tool_names:
+        key = name.lower()
+        aliases = TOOL_BINARY_ALIASES.get(key, [name])
+        result_map[key] = any(a in found_bins for a in aliases)
+
+    _TOOL_AVAILABILITY_CACHE["ts"] = now
+    _TOOL_AVAILABILITY_CACHE["status"] = result_map
+    return dict(result_map)
 
 
 def run_tool_on_kali(command: str, timeout: int = 600) -> dict:
@@ -166,7 +226,7 @@ def run_tool_on_kali(command: str, timeout: int = 600) -> dict:
             )
 
             output = data.get("output") or data.get("stdout") or ""
-            stderr = data.get("stderr") or ""
+            stderr = data.get("stderr") or data.get("error") or ""
             returncode = data.get("return_code")
             if returncode is None:
                 returncode = data.get("returncode", 0)

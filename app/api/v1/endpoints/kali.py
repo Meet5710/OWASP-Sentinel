@@ -10,6 +10,7 @@ from pydantic import BaseModel, Field
 
 from app.kali_bridge import (
     build_kali_command,
+    check_catalog_tools_on_kali,
     check_kali_health,
     get_kali_api_url,
     run_tool_on_kali,
@@ -39,9 +40,9 @@ class KaliScanResult(BaseModel):
 
 TOOL_CATALOG: dict[str, list[dict[str, str]]] = {
     "Network Reconnaissance & Scanning": [
-        {"name": "nmap", "description": "Network mapper & service scanner", "example_args": "-sV -sC"},
+        {"name": "nmap", "description": "Network mapper & service scanner", "example_args": "-sT -sV -T4 -F"},
         {"name": "rustscan", "description": "Ultra-fast port scanner", "example_args": "-a"},
-        {"name": "masscan", "description": "High-speed internet-scale port scanner", "example_args": "-p1-65535"},
+        {"name": "masscan", "description": "High-speed internet-scale port scanner", "example_args": "-p80,443"},
         {"name": "autorecon", "description": "Comprehensive automated recon", "example_args": ""},
         {"name": "amass", "description": "Subdomain enumeration & OSINT", "example_args": "enum -d"},
         {"name": "subfinder", "description": "Fast passive subdomain discovery", "example_args": "-d"},
@@ -53,19 +54,19 @@ TOOL_CATALOG: dict[str, list[dict[str, str]]] = {
     ],
     "Web Application Security": [
         {"name": "gobuster", "description": "Directory/file brute-forcer", "example_args": "dir -w /usr/share/wordlists/dirb/common.txt"},
-        {"name": "feroxbuster", "description": "Recursive content discovery", "example_args": "-w /usr/share/wordlists/dirb/common.txt"},
-        {"name": "ffuf", "description": "Fast web fuzzer", "example_args": "-w /usr/share/wordlists/dirb/common.txt"},
+        {"name": "feroxbuster", "description": "Recursive content discovery", "example_args": "-w /usr/share/wordlists/dirb/common.txt --depth 1"},
+        {"name": "ffuf", "description": "Fast web fuzzer", "example_args": "-w /usr/share/wordlists/dirb/common.txt -mc 200,301,302"},
         {"name": "dirsearch", "description": "Advanced directory discovery", "example_args": "-e php,html"},
         {"name": "nuclei", "description": "Template-based vulnerability scanner", "example_args": "-severity critical,high"},
-        {"name": "nikto", "description": "Web server vulnerability scanner", "example_args": "-C all"},
+        {"name": "nikto", "description": "Web server vulnerability scanner", "example_args": "-maxtime 60s"},
         {"name": "sqlmap", "description": "Automated SQL injection tool", "example_args": "--batch --level=1 --risk=1"},
         {"name": "wpscan", "description": "WordPress security scanner", "example_args": "--enumerate vp"},
         {"name": "dalfox", "description": "Advanced XSS vulnerability scanner", "example_args": ""},
-        {"name": "commix", "description": "Command injection exploitation", "example_args": ""},
+        {"name": "commix", "description": "Command injection exploitation", "example_args": "--batch"},
         {"name": "whatweb", "description": "Web technology fingerprinter", "example_args": ""},
         {"name": "wafw00f", "description": "WAF detector", "example_args": ""},
         {"name": "arjun", "description": "HTTP parameter discovery", "example_args": ""},
-        {"name": "httpx", "description": "Fast HTTP probing", "example_args": "-tech-detect"},
+        {"name": "httpx", "description": "Fast HTTP probing client", "example_args": ""},
         {"name": "katana", "description": "Next-generation crawling", "example_args": "-jc"},
         {"name": "jwt-tool", "description": "JSON Web Token testing", "example_args": "--scan"},
         {"name": "zap-cli", "description": "OWASP ZAP automation", "example_args": "quick-scan"},
@@ -76,7 +77,7 @@ TOOL_CATALOG: dict[str, list[dict[str, str]]] = {
         {"name": "hashcat", "description": "GPU-accelerated password recovery", "example_args": "-m 0"},
         {"name": "medusa", "description": "Parallel login brute-forcer", "example_args": ""},
         {"name": "patator", "description": "Multi-purpose brute-forcer", "example_args": ""},
-        {"name": "crackmapexec", "description": "Network service exploitation", "example_args": ""},
+        {"name": "crackmapexec", "description": "Network service exploitation (NetExec)", "example_args": ""},
         {"name": "smbmap", "description": "SMB share enumeration", "example_args": "-H"},
         {"name": "evil-winrm", "description": "Windows Remote Management shell", "example_args": "-i"},
         {"name": "hash-identifier", "description": "Hash type identification", "example_args": ""},
@@ -131,8 +132,13 @@ async def list_kali_tools():
 
 @router.get("/status")
 async def get_kali_bridge_status():
-    """Check live connectivity and tool status from the Kali MCP bridge."""
+    """Check live connectivity and full per-tool availability on the Kali VM."""
     connected, tools_status = check_kali_health()
+    if connected:
+        all_names = [t["name"] for tools in TOOL_CATALOG.values() for t in tools]
+        catalog_status = check_catalog_tools_on_kali(all_names)
+        if catalog_status:
+            tools_status = {**tools_status, **catalog_status}
     return {
         "connected": connected,
         "kali_api_url": get_kali_api_url(),
@@ -159,14 +165,21 @@ async def execute_kali_tool(request: KaliScanRequest):
     stderr_text = result.get("stderr", "")
     returncode = result.get("returncode", 0)
     bridge_failed = returncode == -1 and "Failed to connect" in stderr_text
+    missing_binary = "No such file or directory" in stderr_text
 
     if bridge_failed and not output_text:
         output_text = (
             f"{stderr_text}\n\n"
             "If you are viewing the hosted Render UI (owasp-sentinel.onrender.com), "
             "Render cannot access your laptop's 127.0.0.1 SSH tunnel directly.\n"
-            "Connect your local backend (port 8001) via ngrok and paste the ngrok URL "
-            "into the Local Kali Bridge URL field above."
+            "Connect your local backend (port 8001) via ngrok or ensure your SSH tunnel is open."
+        )
+    elif missing_binary and not output_text:
+        output_text = (
+            f"⚠️ Tool '{tool}' is not installed on the connected Kali VM.\n\n"
+            f"Install it on Kali (lucy@192.168.253.133) with:\n"
+            f"  sudo apt update && sudo apt install -y {tool}\n\n"
+            f"Or switch to an 'Installed' tool in the dropdown (e.g. nmap, whatweb, wafw00f, gobuster, ffuf, nuclei, nikto, sqlmap, wpscan)."
         )
 
     return KaliScanResult(
@@ -178,5 +191,5 @@ async def execute_kali_tool(request: KaliScanRequest):
         returncode=returncode,
         elapsed_seconds=result.get("elapsed_seconds", 0.0),
         timestamp=datetime.now(timezone.utc).isoformat(),
-        tool_available=not bridge_failed,
+        tool_available=not bridge_failed and not missing_binary,
     )
