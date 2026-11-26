@@ -23,5 +23,58 @@ RUN apt-get update && \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
+# ------------------------------------------------------------------------------
+# Full 72/72 Arsenal Completion: Network, Web, Auth, RE, Cloud, Forensics, OSINT
+# ------------------------------------------------------------------------------
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    rustscan \
+    autorecon \
+    dnsenum \
+    theharvester \
+    enum4linux-ng \
+    feroxbuster \
+    dirsearch \
+    whatweb \
+    wafw00f \
+    medusa \
+    patator \
+    smbmap \
+    ghidra \
+    sleuthkit \
+    autopsy \
+    spiderfoot \
+    sherlock \
+    trivy \
+    python3-shodan \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Go-based OSINT/Bug Bounty tools + symlink existing Go/pipx binaries into /usr/local/bin
+RUN go install github.com/haccer/subjack@latest && \
+    go install github.com/lc/gau/v2/cmd/gau@latest && \
+    go clean -cache -modcache && \
+    for b in /root/go/bin/* /root/.local/bin/*; do \
+        [ -e "$b" ] && ln -sf "$b" "/usr/local/bin/$(basename "$b")"; \
+    done
+
+# Cloud, Container & Censys tools installed cleanly into isolated Python 3.12 envs via uv
+RUN curl -LsSf https://astral.sh/uv/install.sh | env UV_INSTALL_DIR=/usr/local/bin sh && \
+    UV_TOOL_BIN_DIR=/usr/local/bin uv tool install --python 3.12 prowler && \
+    UV_TOOL_BIN_DIR=/usr/local/bin uv tool install --python 3.12 scoutsuite && \
+    UV_TOOL_BIN_DIR=/usr/local/bin uv tool install --python 3.12 checkov && \
+    UV_TOOL_BIN_DIR=/usr/local/bin uv tool install --python 3.12 kube-hunter && \
+    UV_TOOL_BIN_DIR=/usr/local/bin uv tool install --python 3.12 censys && \
+    uv cache clean
+
+# kube-bench & docker-bench-security
+RUN curl -fsSL -o /tmp/kube-bench.deb \
+        https://github.com/aquasecurity/kube-bench/releases/download/v0.16.0/kube-bench_0.16.0_linux_amd64.deb && \
+    dpkg -i /tmp/kube-bench.deb && \
+    rm -f /tmp/kube-bench.deb && \
+    git clone --depth 1 https://github.com/docker/docker-bench-security.git /opt/docker-bench-security && \
+    chmod +x /opt/docker-bench-security/docker-bench-security.sh && \
+    ln -sf /opt/docker-bench-security/docker-bench-security.sh /usr/local/bin/docker-bench-security
+
 # Ensure standard Go & pipx tool directories are always on PATH
-ENV PATH="/root/go/bin:/root/.local/bin:${PATH}"
+ENV PATH="/usr/local/bin:/root/go/bin:/root/.local/bin:${PATH}"

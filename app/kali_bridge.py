@@ -87,6 +87,8 @@ TOOL_BINARY_ALIASES: dict[str, list[str]] = {
     "zap-cli": ["zap-cli", "zaproxy"],
     "testssl.sh": ["testssl.sh", "testssl"],
     "hash-identifier": ["hash-identifier", "hashid"],
+    "sleuthkit": ["sleuthkit", "fls", "mmls"],
+    "ghidra": ["ghidra", "analyzeHeadless"],
 }
 
 # Tools that expect a bare hostname, domain, or IP instead of a full http(s):// URL.
