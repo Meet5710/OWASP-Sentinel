@@ -11,7 +11,7 @@ REM Terminal 2: Vite React Frontend (5173)
 start "2. OWASP Sentinel - Frontend (5173)" cmd /k "cd /d %~dp0frontend && npm.cmd run dev"
 
 REM Terminal 3: Unified Kali Docker Container (127.0.0.1:5001 -> kali:5000) + Live Logs
-start "3. OWASP Sentinel - Kali Docker Container + Logs" cmd /k "cd /d %~dp0 && docker compose up -d --build kali && docker compose logs -f --tail 40 kali"
+start "3. OWASP Sentinel - Kali Docker Container + Logs" cmd /k "cd /d %~dp0 && set DOCKER_BUILDKIT=0 && set COMPOSE_DOCKER_CLI_BUILD=0 && docker compose up -d kali && docker compose logs -f --tail 40 kali"
 
 echo Three terminals launched:
 echo   1. FastAPI Backend   (http://127.0.0.1:8001) + Ngrok Tunnel

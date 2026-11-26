@@ -177,21 +177,24 @@ async def execute_kali_tool(request: KaliScanRequest):
     stderr_text = result.get("stderr", "")
     returncode = result.get("returncode", 0)
     bridge_failed = returncode == -1 and "Failed to connect" in stderr_text
-    missing_binary = "No such file or directory" in stderr_text
+    missing_binary = (
+        returncode == 127
+        or "No such file or directory" in stderr_text
+        or ": not found" in stderr_text
+    )
 
     if bridge_failed and not output_text:
         output_text = (
             f"{stderr_text}\n\n"
             "If you are viewing the hosted Render UI (owasp-sentinel.onrender.com), "
             "Render cannot access your laptop's 127.0.0.1 SSH tunnel directly.\n"
-            "Connect your local backend (port 8001) via ngrok or ensure your SSH tunnel is open."
+            "Connect your local backend (port 8001) via ngrok or ensure the sentinel_kali Docker container is running."
         )
     elif missing_binary and not output_text:
         output_text = (
-            f"⚠️ Tool '{tool}' is not installed on the connected Kali VM.\n\n"
-            f"Install it on Kali (lucy@192.168.253.133) with:\n"
-            f"  sudo apt update && sudo apt install -y {tool}\n\n"
-            f"Or switch to an 'Installed' tool in the dropdown (e.g. nmap, whatweb, wafw00f, gobuster, ffuf, nuclei, nikto, sqlmap, wpscan)."
+            f"⚠️ Tool '{tool}' is not installed in the active Kali container/host.\n\n"
+            f"Add it to docker/kali/Dockerfile (e.g. apt-get install -y {tool}) and rebuild, "
+            f"or switch to an 'Installed' tool in the dropdown (check 'Installed only')."
         )
 
     return KaliScanResult(

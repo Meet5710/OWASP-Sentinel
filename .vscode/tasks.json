@@ -42,7 +42,7 @@
     {
       "label": "3. Kali Docker Container + Logs",
       "type": "shell",
-      "command": "docker compose up -d --build kali; if ($?) { docker compose logs -f --tail 40 kali }",
+      "command": "$env:DOCKER_BUILDKIT='0'; $env:COMPOSE_DOCKER_CLI_BUILD='0'; docker compose up -d kali; if ($?) { docker compose logs -f --tail 40 kali }",
       "isBackground": true,
       "problemMatcher": [],
       "options": {
