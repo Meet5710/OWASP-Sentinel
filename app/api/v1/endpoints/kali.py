@@ -67,7 +67,7 @@ TOOL_CATALOG: dict[str, list[dict[str, str]]] = {
         {"name": "whatweb", "description": "Web technology fingerprinter", "example_args": ""},
         {"name": "wafw00f", "description": "WAF detector", "example_args": ""},
         {"name": "arjun", "description": "HTTP parameter discovery", "example_args": ""},
-        {"name": "httpx", "description": "Fast HTTP probing client", "example_args": ""},
+        {"name": "httpx", "description": "Fast HTTP probing & tech detection", "example_args": "-tech-detect"},
         {"name": "katana", "description": "Next-generation crawling", "example_args": "-jc"},
         {"name": "jwt-tool", "description": "JSON Web Token testing", "example_args": "--scan"},
         {"name": "zap-cli", "description": "OWASP ZAP automation", "example_args": "quick-scan"},

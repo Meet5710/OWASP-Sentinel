@@ -40,15 +40,18 @@
       }
     },
     {
-      "label": "3. Kali SSH Tunnel (lucy)",
+      "label": "3. Kali Docker Container + Logs",
       "type": "shell",
-      "command": "ssh -tt -o BatchMode=yes -o ServerAliveInterval=30 -o ServerAliveCountMax=3 -L 5001:127.0.0.1:5000 lucy@192.168.253.133 'ss -tln | grep -q \":5000 \" || (nohup /usr/bin/kali-server-mcp --ip 127.0.0.1 --port 5000 >/tmp/kali-server-mcp.log 2>&1 </dev/null &); sleep 1; touch /tmp/kali-server-mcp.log; echo \"[+] Kali SSH Tunnel active (127.0.0.1:5001 -> Kali:5000) - Streaming MCP logs:\"; tail -n 30 -F /tmp/kali-server-mcp.log'",
+      "command": "docker compose up -d --build kali; if ($?) { docker compose logs -f --tail 40 kali }",
       "isBackground": true,
       "problemMatcher": [],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
       "presentation": {
         "reveal": "always",
         "panel": "dedicated",
-        "group": "sentinel-kali-ssh",
+        "group": "sentinel-kali-docker",
         "showReuseMessage": false
       },
       "runOptions": {
@@ -60,7 +63,7 @@
       "dependsOn": [
         "1. Backend (8001) + Ngrok",
         "2. Frontend (5173)",
-        "3. Kali SSH Tunnel (lucy)"
+        "3. Kali Docker Container + Logs"
       ],
       "problemMatcher": [],
       "runOptions": {

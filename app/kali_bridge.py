@@ -65,7 +65,7 @@ TOOL_COMMANDS: dict[str, str] = {
     "whatweb": "whatweb {extra} {target}",
     "wafw00f": "wafw00f {extra} {target}",
     "dirb": "dirb {target} {extra}",
-    "httpx": "httpx {extra} {target}",
+    "httpx": "httpx -u {target} {extra}",
     "katana": "katana -u {target} {extra}",
     "dalfox": "dalfox url {target} {extra}",
 }
@@ -78,6 +78,8 @@ TOOL_BINARY_ALIASES: dict[str, list[str]] = {
     "jwt-tool": ["jwt_tool", "jwt-tool"],
     "pwntools": ["pwn", "pwntools"],
     "scout-suite": ["scout", "scout-suite"],
+    "volatility": ["volatility", "volatility3", "vol"],
+    "zap-cli": ["zap-cli", "zaproxy"],
 }
 
 # Tools that expect a bare hostname, domain, or IP instead of a full http(s):// URL.
@@ -168,7 +170,7 @@ def check_kali_health(timeout: float = 2.0) -> tuple[bool, dict[str, bool]]:
 
 
 def check_catalog_tools_on_kali(tool_names: list[str], force: bool = False) -> dict[str, bool]:
-    """Check which catalog tools are actually installed on the remote Kali VM (cached 60s)."""
+    """Check which catalog tools are actually installed on the remote Kali host (cached 60s)."""
     now = time.monotonic()
     cached_ts = float(_TOOL_AVAILABILITY_CACHE.get("ts") or 0.0)
     cached_status = _TOOL_AVAILABILITY_CACHE.get("status")
@@ -184,7 +186,7 @@ def check_catalog_tools_on_kali(tool_names: list[str], force: bool = False) -> d
                 candidates_to_check.append(alias)
 
     quoted_list = " ".join(shlex.quote(c) for c in candidates_to_check)
-    probe_cmd = f"which {quoted_list}"
+    probe_cmd = f"PATH=\"$PATH:/root/go/bin:/root/.local/bin\" which {quoted_list}"
     res = run_tool_on_kali(probe_cmd, timeout=8)
     stdout = res.get("stdout") or ""
     if res.get("returncode") == -1 or not stdout.strip():
@@ -203,36 +205,11 @@ def check_catalog_tools_on_kali(tool_names: list[str], force: bool = False) -> d
 
 
 def get_kali_mcp_logs_and_processes(lines: int = 40, known_tools: list[str] | None = None) -> dict:
-    """Fetch recent Kali MCP server logs and active tool/server processes from the Kali VM."""
-    log_res = run_tool_on_kali(f"tail -n {max(lines * 2, 60)} /tmp/kali-server-mcp.log", timeout=5)
-    ps_res = run_tool_on_kali("ps -u lucy -o pid,pcpu,etime,args", timeout=5)
-
-    connected = log_res.get("returncode") != -1 or ps_res.get("returncode") != -1
-    if not connected:
-        return {
-            "connected": False,
-            "mcp_running": False,
-            "active_processes": [],
-            "logs": [],
-            "error": log_res.get("stderr") or "Kali MCP Server unreachable",
-        }
-
-    # Filter repetitive health-check / self-poll log lines so real tool runs stand out
-    noise_markers = (
-        "GET /health HTTP",
-        "Executing command: ['which',",
-        "Executing command: which ",
-        "Executing command: tail -n ",
-        "Executing command: ps -u lucy",
-    )
-    filtered_logs: list[str] = []
-    for raw_line in (log_res.get("stdout") or "").splitlines():
-        if any(m in raw_line for m in noise_markers):
-            continue
-        filtered_logs.append(raw_line)
-
+    """Fetch recent Kali MCP server logs and active tool/server processes from Docker or VM."""
+    base_url = get_kali_api_url()
     tool_tokens = {t.lower() for t in (known_tools or [])} | {
         "kali-server-mcp",
+        "kali_server.py",
         "nmap",
         "gobuster",
         "feroxbuster",
@@ -244,35 +221,108 @@ def get_kali_mcp_logs_and_processes(lines: int = 40, known_tools: list[str] | No
         "whatweb",
         "wafw00f",
         "amass",
+        "subfinder",
+        "katana",
+        "httpx",
         "masscan",
         "fierce",
         "hydra",
         "theharvester",
+        "msfconsole",
     }
 
     active_processes: list[dict[str, str]] = []
     mcp_running = False
-    for raw_line in (ps_res.get("stdout") or "").splitlines()[1:]:
-        parts = raw_line.strip().split(None, 3)
-        if len(parts) < 4:
+    connected = False
+
+    # 1. Prefer structured /api/ps endpoint (provided by zebbern-kali Docker container)
+    try:
+        ps_api = requests.get(
+            f"{base_url}/api/ps",
+            headers={"ngrok-skip-browser-warning": "true"},
+            timeout=3,
+        )
+        if ps_api.status_code == 200:
+            connected = True
+            for proc in ps_api.json().get("processes", []):
+                cmd = str(proc.get("command") or "")
+                cmd_lower = cmd.lower()
+                is_mcp = "kali_server.py" in cmd_lower or "kali-server-mcp" in cmd_lower or ("server.py" in cmd_lower and "5000" in cmd_lower)
+                if is_mcp:
+                    mcp_running = True
+                cmd_words = {os.path.basename(w).lower() for w in cmd.split()[:3]}
+                if is_mcp or any(w in tool_tokens for w in cmd_words):
+                    active_processes.append(
+                        {
+                            "pid": str(proc.get("pid", "")),
+                            "cpu": f"{round(float(proc.get('rss_kb', 0)) / 1024, 1)}M",
+                            "elapsed": str(proc.get("elapsed", "")),
+                            "command": cmd,
+                        }
+                    )
+    except Exception:
+        pass
+
+    # 2. Fallback to `ps -eo` if /api/ps is unavailable (e.g. VMware mcp-kali-server)
+    if not active_processes:
+        ps_res = run_tool_on_kali("ps -eo pid,pcpu,etime,args", timeout=5)
+        if ps_res.get("returncode") != -1:
+            connected = True
+            for raw_line in (ps_res.get("stdout") or "").splitlines()[1:]:
+                parts = raw_line.strip().split(None, 3)
+                if len(parts) < 4:
+                    continue
+                pid, cpu, elapsed, cmd = parts
+                cmd_lower = cmd.lower()
+                if "tail -n " in cmd_lower or "ps -eo" in cmd_lower:
+                    continue
+                is_mcp = "kali_server.py" in cmd_lower or "kali-server-mcp" in cmd_lower or ("server.py" in cmd_lower and "5000" in cmd_lower)
+                if is_mcp:
+                    mcp_running = True
+                cmd_words = {os.path.basename(w).lower() for w in cmd.split()[:3]}
+                if is_mcp or any(w in tool_tokens for w in cmd_words):
+                    active_processes.append(
+                        {
+                            "pid": pid,
+                            "cpu": cpu,
+                            "elapsed": elapsed,
+                            "command": cmd,
+                        }
+                    )
+
+    if not connected:
+        return {
+            "connected": False,
+            "mcp_running": False,
+            "active_processes": [],
+            "logs": [],
+            "error": "Kali MCP Server unreachable",
+        }
+
+    # 3. Fetch logs from Docker /app/tmp/jobs or VMware /tmp/kali-server-mcp.log
+    log_res = run_tool_on_kali(
+        f"sh -c 'if [ -f /tmp/kali-server-mcp.log ]; then tail -n {max(lines * 2, 60)} /tmp/kali-server-mcp.log; "
+        f"elif [ -d /app/tmp/jobs ]; then ls -lt /app/tmp/jobs 2>/dev/null | head -n 20; fi'",
+        timeout=5,
+    )
+
+    noise_markers = (
+        "GET /health HTTP",
+        "GET /live HTTP",
+        "Executing command: ['which',",
+        "Executing command: which ",
+        "which ",
+        "tail -n ",
+        "ps -eo",
+    )
+    filtered_logs: list[str] = []
+    for raw_line in (log_res.get("stdout") or "").splitlines():
+        if any(m in raw_line for m in noise_markers):
             continue
-        pid, cpu, elapsed, cmd = parts
-        cmd_lower = cmd.lower()
-        if "tail -n " in cmd_lower or "ps -u lucy" in cmd_lower:
-            continue
-        is_mcp = "kali-server-mcp" in cmd_lower or ("server.py" in cmd_lower and "5000" in cmd_lower)
-        if is_mcp:
-            mcp_running = True
-        cmd_words = {os.path.basename(w).lower() for w in cmd.split()[:3]}
-        if is_mcp or any(w in tool_tokens for w in cmd_words):
-            active_processes.append(
-                {
-                    "pid": pid,
-                    "cpu": cpu,
-                    "elapsed": elapsed,
-                    "command": cmd,
-                }
-            )
+        filtered_logs.append(raw_line)
+
+    if not filtered_logs and active_processes:
+        filtered_logs = [f"[active] PID {p['pid']} ({p['elapsed']}): {p['command']}" for p in active_processes]
 
     return {
         "connected": True,
