@@ -13,6 +13,7 @@ from app.kali_bridge import (
     check_catalog_tools_on_kali,
     check_kali_health,
     get_kali_api_url,
+    get_kali_mcp_logs_and_processes,
     run_tool_on_kali,
 )
 
@@ -144,6 +145,13 @@ async def get_kali_bridge_status():
         "kali_api_url": get_kali_api_url(),
         "tools_status": tools_status,
     }
+
+
+@router.get("/logs")
+async def get_kali_logs(lines: int = 40):
+    """Fetch recent Kali MCP server logs and active tool processes running on Kali."""
+    all_names = [t["name"] for tools in TOOL_CATALOG.values() for t in tools]
+    return get_kali_mcp_logs_and_processes(lines=lines, known_tools=all_names)
 
 
 @router.post("/execute", response_model=KaliScanResult)

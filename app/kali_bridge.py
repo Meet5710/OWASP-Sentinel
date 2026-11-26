@@ -202,6 +202,86 @@ def check_catalog_tools_on_kali(tool_names: list[str], force: bool = False) -> d
     return dict(result_map)
 
 
+def get_kali_mcp_logs_and_processes(lines: int = 40, known_tools: list[str] | None = None) -> dict:
+    """Fetch recent Kali MCP server logs and active tool/server processes from the Kali VM."""
+    log_res = run_tool_on_kali(f"tail -n {max(lines * 2, 60)} /tmp/kali-server-mcp.log", timeout=5)
+    ps_res = run_tool_on_kali("ps -u lucy -o pid,pcpu,etime,args", timeout=5)
+
+    connected = log_res.get("returncode") != -1 or ps_res.get("returncode") != -1
+    if not connected:
+        return {
+            "connected": False,
+            "mcp_running": False,
+            "active_processes": [],
+            "logs": [],
+            "error": log_res.get("stderr") or "Kali MCP Server unreachable",
+        }
+
+    # Filter repetitive health-check / self-poll log lines so real tool runs stand out
+    noise_markers = (
+        "GET /health HTTP",
+        "Executing command: ['which',",
+        "Executing command: which ",
+        "Executing command: tail -n ",
+        "Executing command: ps -u lucy",
+    )
+    filtered_logs: list[str] = []
+    for raw_line in (log_res.get("stdout") or "").splitlines():
+        if any(m in raw_line for m in noise_markers):
+            continue
+        filtered_logs.append(raw_line)
+
+    tool_tokens = {t.lower() for t in (known_tools or [])} | {
+        "kali-server-mcp",
+        "nmap",
+        "gobuster",
+        "feroxbuster",
+        "ffuf",
+        "nikto",
+        "sqlmap",
+        "nuclei",
+        "wpscan",
+        "whatweb",
+        "wafw00f",
+        "amass",
+        "masscan",
+        "fierce",
+        "hydra",
+        "theharvester",
+    }
+
+    active_processes: list[dict[str, str]] = []
+    mcp_running = False
+    for raw_line in (ps_res.get("stdout") or "").splitlines()[1:]:
+        parts = raw_line.strip().split(None, 3)
+        if len(parts) < 4:
+            continue
+        pid, cpu, elapsed, cmd = parts
+        cmd_lower = cmd.lower()
+        if "tail -n " in cmd_lower or "ps -u lucy" in cmd_lower:
+            continue
+        if "kali-server-mcp" in cmd_lower:
+            mcp_running = True
+        first_bin = os.path.basename(cmd.split()[0]).lower()
+        if "kali-server-mcp" in cmd_lower or first_bin in tool_tokens:
+            active_processes.append(
+                {
+                    "pid": pid,
+                    "cpu": cpu,
+                    "elapsed": elapsed,
+                    "command": cmd,
+                }
+            )
+
+    return {
+        "connected": True,
+        "mcp_running": mcp_running,
+        "active_processes": active_processes,
+        "logs": filtered_logs[-lines:],
+        "error": None,
+    }
+
+
 def run_tool_on_kali(command: str, timeout: int = 600) -> dict:
     """Execute a command via the Kali MCP server."""
     candidates = _candidate_kali_urls()

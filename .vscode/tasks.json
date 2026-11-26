@@ -42,7 +42,7 @@
     {
       "label": "3. Kali SSH Tunnel (lucy)",
       "type": "shell",
-      "command": "ssh -o BatchMode=yes -o ConnectTimeout=8 lucy@192.168.253.133 'ss -tln | grep -q \":5000 \" || (nohup /usr/bin/kali-server-mcp --ip 127.0.0.1 --port 5000 >/tmp/kali-server-mcp.log 2>&1 </dev/null &)'; ssh -o ServerAliveInterval=30 -o ServerAliveCountMax=3 -N -L 5001:127.0.0.1:5000 lucy@192.168.253.133",
+      "command": "ssh -tt -o BatchMode=yes -o ServerAliveInterval=30 -o ServerAliveCountMax=3 -L 5001:127.0.0.1:5000 lucy@192.168.253.133 'ss -tln | grep -q \":5000 \" || (nohup /usr/bin/kali-server-mcp --ip 127.0.0.1 --port 5000 >/tmp/kali-server-mcp.log 2>&1 </dev/null &); sleep 1; touch /tmp/kali-server-mcp.log; echo \"[+] Kali SSH Tunnel active (127.0.0.1:5001 -> Kali:5000) - Streaming MCP logs:\"; tail -n 30 -F /tmp/kali-server-mcp.log'",
       "isBackground": true,
       "problemMatcher": [],
       "presentation": {

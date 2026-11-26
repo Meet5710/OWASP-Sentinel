@@ -905,6 +905,21 @@ export const api = {
     return kaliRequest('/kali/status', {}, backendBaseUrl);
   },
 
+  async getKaliLogs(backendBaseUrl?: string, lines = 40): Promise<{
+    connected: boolean;
+    mcp_running: boolean;
+    active_processes: Array<{
+      pid: string;
+      cpu: string;
+      elapsed: string;
+      command: string;
+    }>;
+    logs: string[];
+    error: string | null;
+  }> {
+    return kaliRequest(`/kali/logs?lines=${lines}`, {}, backendBaseUrl);
+  },
+
   async executeKaliTool(
     data: {
       target: string;
