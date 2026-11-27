@@ -187,10 +187,29 @@ def build_kali_command(tool: str, target: str, extra_args: str = "") -> str:
         return " ".join(f"masscan {ip_target} {flags}".split())
 
     if tool_key == "autorecon":
-        base = "autorecon --disable-keyboard-control --disable-sanity-checks -o /tmp/autorecon_out --only-scans-dir"
-        if "--target-timeout" not in extra:
+        extra_tokens = extra.split()
+        base = (
+            "autorecon --disable-keyboard-control --disable-sanity-checks "
+            "-o /tmp/autorecon_out --only-scans-dir --heartbeat 15"
+        )
+        if "--port-scans" not in extra_tokens and "-p" not in extra_tokens:
+            base += " --port-scans top-tcp-ports"
+        if "--timeout" not in extra_tokens:
+            base += " --timeout 3"
+        if "--target-timeout" not in extra_tokens:
             base += " --target-timeout 3"
-        return " ".join(f"{base} {extra} {safe_target}".split())
+        run_cmd = " ".join(f"{base} {extra} {safe_target}".split())
+        out_dir = shlex.quote(f"/tmp/autorecon_out/{norm_target}")
+        scan_dir = shlex.quote(f"/tmp/autorecon_out/{norm_target}/scans")
+        inner = (
+            f"rm -rf {out_dir}; {run_cmd}; rc=$?; "
+            f"if [ -d {scan_dir} ]; then "
+            f"echo ''; echo '=== AutoRecon Scan Results ==='; "
+            f"for f in $(find {scan_dir} -maxdepth 2 -type f -name '*.txt' ! -name '_manual_commands.txt' ! -name '_commands.log' | sort); do "
+            f"[ -s \"$f\" ] && echo \"\\n--- $f ---\" && head -n 80 \"$f\"; "
+            f"done; fi; exit $rc"
+        )
+        return f"sh -c {shlex.quote(inner)}"
 
     if tool_key == "amass":
         extra_tokens = extra.split()
