@@ -297,9 +297,9 @@ def build_kali_command(tool: str, target: str, extra_args: str = "") -> str:
         extra_tokens = extra.split()
         parts = [f"gobuster dir -u {safe_target}"]
         if "-w " not in extra and "-w" not in extra_tokens and "--wordlist" not in extra:
-            parts.append("-w /usr/share/wordlists/dirb/big.txt")
+            parts.append("-w /usr/share/seclists/Discovery/Web-Content/raft-large-directories.txt")
         if "-x " not in extra and "-x" not in extra_tokens and "--extensions" not in extra:
-            parts.append("-x php,html,txt,js,json,bak")
+            parts.append("-x php,html,js")
         if "-t " not in extra and "-t" not in extra_tokens and "--threads" not in extra:
             parts.append("-t 50")
         if "-k" not in extra_tokens and "--no-tls-validation" not in extra:
@@ -316,11 +316,13 @@ def build_kali_command(tool: str, target: str, extra_args: str = "") -> str:
         extra_tokens = extra.split()
         base = f"feroxbuster -u {safe_target}"
         if "-w " not in extra and "-w" not in extra_tokens and "--wordlist" not in extra:
-            base += " -w /usr/share/wordlists/dirb/big.txt"
+            base += " -w /usr/share/seclists/Discovery/Web-Content/raft-large-directories.txt"
         if "-x " not in extra and "-x" not in extra_tokens and "--extensions" not in extra:
-            base += " -x php,html,js"
+            base += " -x php,html,txt,js,json"
         if "-t " not in extra and "-t" not in extra_tokens and "--threads" not in extra:
             base += " -t 50"
+        if "-d " not in extra and "-d" not in extra_tokens and "--depth" not in extra:
+            base += " -d 4"
         if "-k" not in extra_tokens and "--insecure" not in extra:
             base += " -k"
         if "--smart" not in extra_tokens:
@@ -334,22 +336,24 @@ def build_kali_command(tool: str, target: str, extra_args: str = "") -> str:
         ffuf_url = shlex.quote(norm_target if "FUZZ" in norm_target else norm_target.rstrip("/") + "/FUZZ")
         base = f"ffuf -u {ffuf_url}"
         if "-w " not in extra and "--wordlist" not in extra:
-            base += " -w /usr/share/wordlists/dirb/big.txt"
+            base += " -w /usr/share/seclists/Discovery/Web-Content/raft-large-directories.txt"
         if "-mc" not in extra:
             base += " -mc 200,204,301,302,307,401,403"
         if "-t " not in extra and "-t" not in extra_tokens:
             base += " -t 50"
+        if "-recursion" not in extra_tokens:
+            base += " -recursion -recursion-depth 2"
         return " ".join(f"{base} {extra}".split())
 
     if tool_key == "dirsearch":
         extra_tokens = extra.split()
-        flags = extra if extra else "-e '*' -r -R 3 -t 50 --random-agent"
+        flags = extra if extra else "-e '*' -r -R 4 -t 50 --crawl --random-agent"
         if "-q" not in extra_tokens and "--quiet-mode" not in extra_tokens:
             flags = f"-q {flags}"
         if "--no-color" not in extra_tokens:
             flags = f"--no-color {flags}"
         if "--max-time" not in extra:
-            flags = f"--max-time=180 {flags}"
+            flags = f"--max-time=480 {flags}"
         return " ".join(f"dirsearch -u {safe_target} {flags}".split())
 
     if tool_key == "nuclei":

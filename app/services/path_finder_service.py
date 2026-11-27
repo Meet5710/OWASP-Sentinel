@@ -46,260 +46,163 @@ logger = logging.getLogger(__name__)
 # Comprehensive curated candidate endpoints for high-speed endpoint discovery
 DEFAULT_QUICK_PATHS: List[str] = [
     "/",
-    "/api",
-    "/api/v1",
-    "/api/v2",
-    "/api/health",
-    "/api/status",
-    "/api/docs",
-    "/api/openapi.json",
-    "/api/swagger.json",
-    "/swagger",
-    "/swagger-ui.html",
-    "/swagger/index.html",
-    "/docs",
-    "/redoc",
-    "/openapi.json",
-    "/health",
-    "/healthz",
-    "/livez",
-    "/readyz",
-    "/status",
-    "/admin",
-    "/admin/login",
-    "/admin/login.jsp",
-    "/admin/admin.jsp",
-    "/admin/dashboard",
-    "/administrator",
-    "/login",
-    "/login.jsp",
-    "/login.html",
-    "/logout",
-    "/auth",
-    "/auth/login",
-    "/oauth/token",
-    "/register",
-    "/signup",
-    "/dashboard",
-    "/console",
-    "/portal",
-    "/robots.txt",
-    "/sitemap.xml",
-    "/crossdomain.xml",
-    "/.well-known/security.txt",
-    "/metrics",
-    "/actuator",
-    "/actuator/health",
-    "/actuator/info",
-    "/version",
-    "/info",
-    "/graphql",
-    "/graphiql",
-    "/server-status",
-    "/.env",
-    "/.git/HEAD",
-    "/config.json",
-    "/web.config",
-    "/feedback.jsp",
-    "/search.jsp",
-    "/default.jsp",
-    "/index.jsp",
-    "/bank/login.aspx",
-    "/bank/customize.aspx",
-    "/bank/querylog.aspx",
-    "/bank/transfer.aspx",
-    "/bank/transaction.aspx",
-    "/bank/member/login.aspx",
-    "/static",
-    "/images",
+    # Core Application & SaaS Directories
+    "/about", "/about-us", "/account", "/accounts", "/activity", "/admin", "/admin/dashboard",
+    "/admin/login", "/admin/settings", "/admin/users", "/admin-panel", "/administration",
+    "/administrator", "/alerts", "/analytics", "/app", "/apply", "/apps", "/archive",
+    "/assets", "/audit", "/audit-logs", "/auth", "/auth/login", "/auth/register",
+    "/auth/callback", "/auth/logout", "/auth/forgot-password", "/auth/reset-password",
+    "/billing", "/blog", "/booking", "/calendar", "/campaigns", "/careers", "/cart",
+    "/case-studies", "/catalog", "/categories", "/changelog", "/chat", "/checkout",
+    "/clients", "/cloud", "/cms", "/company", "/compliance", "/config", "/console",
+    "/contact", "/contact-us", "/content", "/controlpanel", "/courses", "/cp",
+    "/customers", "/dashboard", "/data", "/demo", "/developer", "/developers",
+    "/disclaimer.html", "/docs", "/documentation", "/download", "/downloads",
+    "/enterprise", "/events", "/explore", "/export", "/faq", "/features", "/feed",
+    "/feedback", "/files", "/forum", "/gallery", "/getting-started", "/guides",
+    "/help", "/helpdesk", "/home", "/images", "/import", "/inbox", "/integrations",
+    "/internal", "/inventory", "/investors", "/invoices", "/jobs", "/kb",
+    "/knowledge-base", "/legal", "/library", "/live", "/login", "/logout",
+    "/manage", "/management", "/marketplace", "/media", "/member", "/members",
+    "/messages", "/metrics", "/mobile", "/monitoring", "/news", "/newsletter",
+    "/notices", "/notifications", "/onboarding", "/orders", "/organizations",
+    "/overview", "/panel", "/partners", "/payments", "/permissions", "/plans",
+    "/platform", "/portal", "/portfolio", "/press", "/pricing", "/privacy",
+    "/privacy-policy", "/private", "/products", "/profile", "/projects", "/public",
+    "/releases", "/reports", "/resources", "/roadmap", "/roles", "/rss", "/sales",
+    "/sandbox", "/scan", "/scans", "/schedule", "/search", "/security", "/services",
+    "/sessions", "/settings", "/shop", "/signin", "/sign-in", "/signup", "/sign-up",
+    "/solutions", "/staff", "/staging", "/static", "/stats", "/status", "/store",
+    "/subscriptions", "/support", "/system", "/tags", "/team", "/teams", "/templates",
+    "/tenants", "/terms", "/testimonials", "/tickets", "/tools", "/training",
+    "/transactions", "/transfer", "/trial", "/trust", "/tutorials", "/updates",
+    "/upload", "/uploads", "/user", "/users", "/vendor", "/vendors", "/verify",
+    "/videos", "/views", "/webhooks", "/webinars", "/wiki", "/workspace",
+    # APIs, Docs & Specifications
+    "/api", "/api/v1", "/api/v2", "/api/v3", "/api/health", "/api/status",
+    "/api/docs", "/api/auth", "/api/login", "/api/users", "/api/admin",
+    "/api/config", "/api/settings", "/api/search", "/api/graphql",
+    "/api/openapi.json", "/api/swagger.json", "/swagger", "/swagger-ui",
+    "/swagger-ui.html", "/swagger/index.html", "/redoc", "/openapi.json",
+    "/swagger.json", "/api-docs", "/graphql", "/graphiql",
+    # Infrastructure, Health, Well-Known & Legacy
+    "/health", "/healthz", "/livez", "/readyz", "/version", "/info",
+    "/actuator", "/actuator/health", "/actuator/info", "/server-status",
+    "/robots.txt", "/sitemap.xml", "/sitemap_index.xml", "/sitemap-0.xml",
+    "/wp-sitemap.xml", "/crossdomain.xml", "/humans.txt", "/manifest.json",
+    "/.well-known/security.txt", "/.well-known/openid-configuration",
+    "/.well-known/jwks.json", "/.well-known/assetlinks.json",
+    "/.well-known/apple-app-site-association", "/.env", "/.git/HEAD",
+    "/config.json", "/web.config", "/wp-login.php", "/wp-admin", "/wp-json",
+    "/admin/login.jsp", "/admin/admin.jsp", "/feedback.jsp", "/search.jsp",
+    "/default.jsp", "/index.jsp", "/login.jsp", "/login.html", "/notices.html",
+    "/privacy.html", "/survey_questions.jsp", "/subscribe.jsp",
+    "/bank/login.aspx", "/bank/customize.aspx", "/bank/querylog.aspx",
+    "/bank/transfer.aspx", "/bank/transaction.aspx", "/bank/member/login.aspx",
     "/style.css",
-    "/notices.html",
-    "/privacy.html",
-    "/disclaimer.html",
-    "/survey_questions.jsp",
-    "/subscribe.jsp",
 ]
 
 AGGRESSIVE_ADDITIONAL_PATHS: List[str] = [
-    # API endpoints
-    "/api/v1/users",
-    "/api/v1/auth",
-    "/api/v1/admin",
-    "/api/v1/config",
-    "/api/v1/settings",
-    "/api/v1/keys",
-    "/api/v1/tokens",
-    "/api/v1/upload",
-    "/api/v1/download",
-    "/api/v1/search",
-    "/api/v1/login",
-    "/api/v1/logout",
-    "/api/v1/register",
-    "/api/v1/profile",
-    "/api/v1/accounts",
-    "/api/v2/users",
-    "/api/v2/auth",
-    "/api/v2/admin",
-    "/api/v2/config",
-    "/api/v3",
-    "/api-docs",
-    "/v1/api-docs",
-    "/v2/api-docs",
-    "/v3/api-docs",
-    "/swagger/v1/swagger.json",
-    "/swagger/v2/swagger.json",
-    "/actuator/env",
-    "/actuator/mappings",
-    "/actuator/beans",
-    "/actuator/prometheus",
-    "/actuator/configprops",
-    "/actuator/loggers",
-    "/actuator/threaddump",
-    "/actuator/heapdump",
-    "/actuator/auditevents",
-    # Enterprise & Banking routes
-    "/bank",
-    "/bank/main.jsp",
-    "/bank/balance.jsp",
-    "/bank/apply.jsp",
-    "/bank/account.jsp",
-    "/bank/statement.jsp",
-    "/bank/admin",
-    "/bank/portal",
-    "/bank/services",
-    "/bank/feedback",
-    "/account",
-    "/accounts",
-    "/transfer",
-    "/transaction",
-    "/transactions",
-    "/statement",
-    "/profile",
-    "/settings",
-    "/user",
-    "/users",
-    "/members",
-    "/member/login",
-    "/client/login",
-    "/customer/login",
-    # Directories & Static assets
-    "/app",
-    "/assets",
-    "/static",
-    "/public",
-    "/dist",
-    "/build",
-    "/uploads",
-    "/files",
-    "/media",
-    "/images",
-    "/css",
-    "/js",
-    "/fonts",
-    "/scripts",
-    "/includes",
-    "/content",
-    "/resources",
-    "/views",
-    "/templates",
-    # Backups, Database & Sensitive dumps
-    "/backup",
-    "/backups",
-    "/backup.sql",
-    "/backup.zip",
-    "/backup.tar.gz",
-    "/backup.bak",
-    "/dump",
-    "/dump.sql",
-    "/db",
-    "/database",
-    "/database.sql",
-    "/database.sqlite",
-    "/database.sqlite3",
-    "/sql",
-    "/data.sql",
-    "/schema.sql",
-    "/db_backup.sql",
-    "/test",
-    "/tests",
-    "/testing",
-    "/debug",
-    "/debug/pprof",
-    "/temp",
-    "/tmp",
-    "/staging",
-    "/dev",
-    "/development",
-    "/internal",
-    "/private",
-    "/secret",
-    "/conf",
-    "/config",
-    "/configurations",
-    "/appsettings.json",
-    "/appsettings.Development.json",
-    "/package.json",
-    "/composer.json",
-    "/.gitignore",
-    "/.htaccess",
-    "/.dockerenv",
-    "/Dockerfile",
-    "/docker-compose.yml",
-    "/id_rsa",
-    "/id_rsa.pub",
-    "/.bash_history",
-    # Admin panels & Management
-    "/manager/html",
-    "/manager/status",
-    "/manager/text",
-    "/phpmyadmin",
-    "/pma",
-    "/adminer",
-    "/adminer.php",
-    "/webmail",
-    "/cpanel",
-    "/whm",
-    "/server-info",
-    "/trace",
-    "/env",
-    "/cgi-bin",
-    "/sysadmin",
-    "/system",
-    "/root",
-    "/controlpanel",
-    "/superadmin",
+    # API endpoints & versions
+    "/api/v1/users", "/api/v1/auth", "/api/v1/admin", "/api/v1/config",
+    "/api/v1/settings", "/api/v1/keys", "/api/v1/tokens", "/api/v1/upload",
+    "/api/v1/download", "/api/v1/search", "/api/v1/login", "/api/v1/logout",
+    "/api/v1/register", "/api/v1/profile", "/api/v1/accounts", "/api/v1/billing",
+    "/api/v1/orders", "/api/v1/payments", "/api/v1/products", "/api/v1/reports",
+    "/api/v1/roles", "/api/v1/sessions", "/api/v1/webhooks", "/api/v1/audit",
+    "/api/v2/users", "/api/v2/auth", "/api/v2/admin", "/api/v2/config",
+    "/api/v2/health", "/api/v2/status", "/api/v2/graphql", "/api/v2/search",
+    "/api/v3/users", "/api/v3/health", "/api/v4", "/v1", "/v2", "/v3",
+    "/v1/api-docs", "/v2/api-docs", "/v3/api-docs", "/rest", "/rest/v1",
+    "/swagger/v1/swagger.json", "/swagger/v2/swagger.json", "/swagger/resources",
+    "/actuator/env", "/actuator/mappings", "/actuator/beans", "/actuator/prometheus",
+    "/actuator/configprops", "/actuator/loggers", "/actuator/threaddump",
+    "/actuator/heapdump", "/actuator/auditevents", "/actuator/metrics",
+    # Enterprise, SaaS & Admin directories
+    "/bank", "/bank/main.jsp", "/bank/balance.jsp", "/bank/apply.jsp",
+    "/bank/account.jsp", "/bank/statement.jsp", "/bank/admin", "/bank/portal",
+    "/bank/services", "/bank/feedback", "/accounts", "/transfer", "/transaction",
+    "/statement", "/member/login", "/client/login", "/customer/login",
+    "/partner/login", "/vendor/login", "/admin_login", "/adminlogin",
+    "/adminlogon", "/admin_portal", "/ops", "/operations", "/devops", "/infra",
+    "/ci", "/cd", "/jenkins", "/gitlab", "/grafana", "/kibana", "/prometheus",
+    "/sonarqube", "/portainer", "/traefik", "/minio", "/nexus", "/artifactory",
+    "/phpmyadmin", "/pma", "/adminer", "/adminer.php", "/webmail", "/cpanel",
+    "/whm", "/server-info", "/trace", "/env", "/cgi-bin", "/sysadmin", "/root",
+    "/superadmin", "/manager", "/manager/html", "/manager/status", "/manager/text",
+    "/host-manager", "/web-console", "/jmx-console", "/invoker",
+    # CMS / Framework / Next.js / Static Directories
+    "/wp-content", "/wp-content/uploads", "/wp-content/plugins", "/wp-content/themes",
+    "/wp-includes", "/wp-json/wp/v2/users", "/wp-json/wp/v2/posts", "/xmlrpc.php",
+    "/sites/default", "/modules", "/themes", "/plugins", "/core", "/vendor",
+    "/node_modules", "/dist", "/build", "/out", "/_next", "/_next/static",
+    "/next", "/static/js", "/static/css", "/assets/js", "/assets/css", "/js",
+    "/css", "/fonts", "/scripts", "/includes", "/lib", "/libs", "/src",
+    "/storage", "/storage/logs", "/var", "/var/log", "/logs", "/log",
+    # Backups, DB dumps, Debug & Config Files
+    "/backup", "/backups", "/backup.sql", "/backup.zip", "/backup.tar.gz",
+    "/backup.bak", "/backups.zip", "/site.zip", "/www.zip", "/dump", "/dump.sql",
+    "/db", "/database", "/database.sql", "/database.sqlite", "/database.sqlite3",
+    "/sql", "/data.sql", "/schema.sql", "/db_backup.sql", "/db.sql", "/test",
+    "/tests", "/testing", "/qa", "/uat", "/sandbox", "/debug", "/debug/pprof",
+    "/debug/vars", "/temp", "/tmp", "/dev", "/development", "/local", "/beta",
+    "/preview", "/alpha", "/conf", "/configurations", "/appsettings.json",
+    "/appsettings.Development.json", "/appsettings.Production.json", "/package.json",
+    "/package-lock.json", "/yarn.lock", "/composer.json", "/composer.lock",
+    "/pom.xml", "/requirements.txt", "/pyproject.toml", "/Gemfile", "/.gitignore",
+    "/.git/config", "/.git/index", "/.svn/entries", "/.hg/store", "/.htaccess",
+    "/.htpasswd", "/.DS_Store", "/.dockerenv", "/Dockerfile", "/docker-compose.yml",
+    "/id_rsa", "/id_rsa.pub", "/.bash_history", "/phpinfo.php", "/info.php",
+    "/test.php", "/robots.txt", "/sitemap-1.xml", "/post-sitemap.xml",
+    "/page-sitemap.xml", "/category-sitemap.xml",
+    # Additional real-world SaaS/Org Paths
+    "/about/team", "/about/company", "/legal/privacy", "/legal/terms",
+    "/legal/cookies", "/security/advisories", "/security/bounty", "/bug-bounty",
+    "/trust-center", "/status-page", "/docs/api", "/docs/getting-started",
+    "/help/faq", "/support/tickets", "/contact/sales", "/pricing/enterprise",
+    "/blog/categories", "/blog/tags", "/assets/images", "/media/uploads",
 ]
 
 # Sectoral wordlists by category
 CATEGORY_WORDLISTS: Dict[str, List[str]] = {
     "api": [
-        "/api", "/api/v1", "/api/v2", "/api/v3", "/api/v1/users", "/api/v1/auth",
-        "/api/v1/login", "/api/v1/tokens", "/api/v1/keys", "/api/v1/search",
-        "/api/v1/health", "/api/v1/status", "/api/v1/metrics", "/api/docs",
-        "/swagger", "/swagger-ui.html", "/swagger/index.html", "/openapi.json",
-        "/graphql", "/graphiql", "/altair", "/v1/api-docs", "/v2/api-docs",
-        "/actuator", "/actuator/health", "/actuator/info", "/actuator/env",
-        "/actuator/prometheus", "/api/openapi.json", "/api/swagger.json",
-        "/json/version", "/rest/v1", "/rest/api", "/oas.json",
+        "/api", "/api/v1", "/api/v2", "/api/v3", "/api/v4",
+        "/api/v1/users", "/api/v1/auth", "/api/v1/login", "/api/v1/logout",
+        "/api/v1/register", "/api/v1/tokens", "/api/v1/keys", "/api/v1/search",
+        "/api/v1/health", "/api/v1/status", "/api/v1/metrics", "/api/v1/admin",
+        "/api/v1/config", "/api/v1/settings", "/api/v1/billing", "/api/v1/invoices",
+        "/api/v1/orders", "/api/v1/payments", "/api/v1/products", "/api/v1/reports",
+        "/api/v1/roles", "/api/v1/permissions", "/api/v1/sessions", "/api/v1/webhooks",
+        "/api/v2/users", "/api/v2/auth", "/api/v2/admin", "/api/v2/health",
+        "/api/docs", "/swagger", "/swagger-ui.html", "/swagger/index.html",
+        "/openapi.json", "/graphql", "/graphiql", "/altair", "/playground",
+        "/v1/api-docs", "/v2/api-docs", "/v3/api-docs", "/actuator",
+        "/actuator/health", "/actuator/info", "/actuator/env", "/actuator/prometheus",
+        "/api/openapi.json", "/api/swagger.json", "/json/version",
+        "/rest/v1", "/rest/api", "/oas.json", "/.well-known/openid-configuration",
+        "/.well-known/jwks.json", "/oauth/token", "/oauth/authorize", "/oauth2/token",
     ],
     "sensitive": [
-        "/.env", "/.env.local", "/.env.production", "/.env.backup",
-        "/.git/HEAD", "/.git/config", "/.gitignore", "/.svn/entries",
-        "/backup.sql", "/backup.zip", "/backup.tar.gz", "/dump.sql",
-        "/database.sqlite", "/database.sql", "/db.sql", "/data.sql",
-        "/web.config", "/appsettings.json", "/config.json", "/settings.py",
-        "/package.json", "/composer.json", "/composer.lock", "/yarn.lock",
-        "/.dockerenv", "/Dockerfile", "/docker-compose.yml",
-        "/id_rsa", "/id_rsa.pub", "/server.key", "/cert.pem",
+        "/.env", "/.env.local", "/.env.production", "/.env.staging", "/.env.dev", "/.env.backup",
+        "/.git/HEAD", "/.git/config", "/.git/index", "/.gitignore", "/.svn/entries",
+        "/backup.sql", "/backup.zip", "/backup.tar.gz", "/backup.tgz", "/dump.sql",
+        "/database.sqlite", "/database.sqlite3", "/database.sql", "/db.sql", "/data.sql",
+        "/web.config", "/appsettings.json", "/appsettings.Production.json", "/config.json",
+        "/settings.py", "/config.php", "/wp-config.php", "/wp-config.php.bak",
+        "/package.json", "/composer.json", "/composer.lock", "/yarn.lock", "/.npmrc",
+        "/.dockerenv", "/Dockerfile", "/docker-compose.yml", "/.htaccess", "/.htpasswd",
+        "/id_rsa", "/id_rsa.pub", "/server.key", "/cert.pem", "/.DS_Store",
         "/access.log", "/error.log", "/debug.log", "/test.php", "/phpinfo.php",
+        "/server-status", "/server-info", "/actuator/env", "/actuator/heapdump",
     ],
     "enterprise": [
         "/bank", "/bank/login.aspx", "/bank/main.jsp", "/bank/transfer.aspx",
         "/bank/transaction.aspx", "/bank/querylog.aspx", "/bank/customize.aspx",
         "/bank/member/login.aspx", "/admin/login.jsp", "/admin/admin.jsp",
         "/login.jsp", "/index.jsp", "/default.jsp", "/feedback.jsp", "/search.jsp",
-        "/manager/html", "/phpmyadmin", "/cpanel", "/whm", "/portal",
-        "/dashboard", "/console", "/account", "/accounts", "/profile",
+        "/manager/html", "/phpmyadmin", "/cpanel", "/whm", "/portal", "/enterprise",
+        "/dashboard", "/console", "/account", "/accounts", "/profile", "/billing",
+        "/solutions", "/resources", "/support", "/compliance", "/trust",
         "/notices.html", "/privacy.html", "/disclaimer.html", "/subscribe.jsp",
     ],
 }
@@ -812,7 +715,7 @@ def build_candidate_paths(mode: str, config: Dict[str, Any]) -> List[str]:
             if isinstance(p, str) and p.strip():
                 paths_set.add(normalize_path(p))
 
-    # Core base names across web platforms (Java/JSP, ASP.NET, PHP, HTML)
+    # Core base names across web platforms (Java/JSP, ASP.NET, PHP, HTML, Node/SaaS)
     base_names = [
         "index", "login", "default", "feedback", "search", "admin", "portal",
         "home", "main", "account", "user", "dashboard", "bank", "register",
@@ -820,7 +723,10 @@ def build_candidate_paths(mode: str, config: Dict[str, Any]) -> List[str]:
         "profile", "api", "test", "status", "health", "app", "view", "edit",
         "details", "logout", "reset", "forgot", "download", "upload", "manage",
         "survey_questions", "subscribe", "notices", "privacy", "disclaimer",
-        "console", "auth",
+        "console", "auth", "billing", "blog", "support", "solutions", "resources",
+        "enterprise", "settings", "pricing", "features", "docs", "help", "reports",
+        "analytics", "users", "orders", "payments", "invoices", "webhooks",
+        "partners", "careers", "team", "security", "terms", "faq", "config",
     ]
 
     # Valid web application extensions
@@ -841,19 +747,45 @@ def build_candidate_paths(mode: str, config: Dict[str, Any]) -> List[str]:
             paths_set.add(normalize_path(f"/{b}{ext}"))
 
     # Sensitive files and backups specifically targeted
-    sensitive_roots = ["config", "backup", "db", "database", "dump", "settings", "appsettings", "web"]
+    sensitive_roots = ["config", "backup", "db", "database", "dump", "settings", "appsettings", "web", "secrets", "credentials", "env"]
     for s_root in sensitive_roots:
-        for ext in [".json", ".xml", ".sql", ".bak", ".old", ".config", ".yml", ".yaml"]:
+        for ext in [".json", ".xml", ".sql", ".bak", ".old", ".config", ".yml", ".yaml", ".txt"]:
             paths_set.add(normalize_path(f"/{s_root}{ext}"))
 
-    # Also combine with common enterprise subpaths
-    sub_prefixes = ["/bank", "/bank/member", "/admin", "/portal", "/api", "/api/v1"]
-    sub_names = ["login", "main", "index", "default", "querylog", "customize", "transfer", "transaction", "balance", "apply", "admin"]
+    # Expanded multi-segment enterprise & application directory matrix
+    sub_prefixes = [
+        "/bank", "/bank/member", "/admin", "/portal", "/api", "/api/v1", "/api/v2",
+        "/dashboard", "/app", "/auth", "/account", "/user", "/users", "/billing",
+        "/settings", "/reports", "/internal", "/dev", "/staging",
+    ]
+    sub_names = [
+        "login", "main", "index", "default", "querylog", "customize", "transfer",
+        "transaction", "balance", "apply", "admin", "users", "settings", "config",
+        "dashboard", "profile", "status", "health", "docs", "search", "export",
+        "upload", "download", "logs", "audit", "tokens", "keys", "webhooks",
+    ]
     for sub in sub_prefixes:
         paths_set.add(normalize_path(sub))
         for sn in sub_names:
-            for ext in [".aspx", ".jsp", ".do", ".action", ".php", ".html", ""]:
-                paths_set.add(normalize_path(f"{sub}/{sn}{ext}"))
+            paths_set.add(normalize_path(f"{sub}/{sn}"))
+            if mode_upper in (PathFinderMode.AGGRESSIVE.value, PathFinderMode.EXHAUSTIVE.value, PathFinderMode.RECURSIVE.value) or wordlist_type == "exhaustive":
+                for ext in [".aspx", ".jsp", ".do", ".action", ".php", ".html", ".json"]:
+                    paths_set.add(normalize_path(f"{sub}/{sn}{ext}"))
+
+    if mode_upper in (PathFinderMode.AGGRESSIVE.value, PathFinderMode.EXHAUSTIVE.value, PathFinderMode.RECURSIVE.value) or wordlist_type == "exhaustive":
+        deep_dirs = [
+            "v1", "v2", "v3", "rest", "graphql", "public", "private", "uploads",
+            "assets", "media", "static", "files", "backup", "backups", "storage",
+            "docs", "help", "support", "blog", "news", "shop", "store", "orders",
+            "payments", "invoices", "clients", "customers", "partners", "vendors",
+            "projects", "tasks", "tickets", "metrics", "monitoring", "telemetry",
+            "ops", "infra", "ci", "deployments", "releases", "versions", "schemas",
+            "migrations", "fixtures", "scripts", "tools", "utilities", "sandbox",
+        ]
+        for d in deep_dirs:
+            paths_set.add(f"/{d}")
+            for sn in ("index", "login", "admin", "config", "status", "health", "list", "create", "export", "search", "settings", "docs", "v1"):
+                paths_set.add(f"/{d}/{sn}")
 
     ordered_paths = sorted(
         paths_set,
@@ -881,7 +813,8 @@ async def run_path_finder_scan_task(
     3. Rate-limited, controlled asynchronous probing with concurrency semaphores.
     4. Fast Redis state checks (PAUSED/CANCELLED) and batched DB insertion with live streaming.
     """
-    cfg = config or {}
+    cfg = dict(config or {})
+    cfg.setdefault("mode", mode)
     logger.info("Starting background Path Finder worker for scan '%s' against target '%s' (mode: %s)", scan_id, base_url, mode)
 
     # 1. Clean base_url and target_host
@@ -893,11 +826,13 @@ async def run_path_finder_scan_task(
     target_host = urlsplit(target_root).hostname or ""
 
     # 2. Concurrency and Rate Limiting
-    concurrency = int(cfg.get("threads") or cfg.get("concurrency") or 15)
-    concurrency = max(1, min(concurrency, 40))
+    default_conc = 30 if str(mode).upper() in ("EXHAUSTIVE", "AGGRESSIVE", "RECURSIVE") else 20
+    default_rps = 60.0 if str(mode).upper() in ("EXHAUSTIVE", "AGGRESSIVE", "RECURSIVE") else 35.0
+    concurrency = int(cfg.get("threads") or cfg.get("concurrency") or default_conc)
+    concurrency = max(1, min(concurrency, 50))
     sem = asyncio.Semaphore(concurrency)
 
-    rps_limit = float(cfg.get("rps") or cfg.get("rate_limit") or 30.0)
+    rps_limit = float(cfg.get("rps") or cfg.get("rate_limit") or default_rps)
     rate_limiter = AsyncRateLimiter(rate_limit=rps_limit)
 
     # 3. Request Headers & Timeouts

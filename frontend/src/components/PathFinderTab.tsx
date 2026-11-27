@@ -109,7 +109,7 @@ export const PathFinderTab: React.FC<PathFinderTabProps> = ({
   }, []);
 
   // Scan Mode & Configuration Controls
-  const [scanMode, setScanMode] = useState<'QUICK' | 'EXHAUSTIVE' | 'AGGRESSIVE' | 'PASSIVE'>('QUICK');
+  const [scanMode, setScanMode] = useState<'QUICK' | 'EXHAUSTIVE' | 'RECURSIVE' | 'AGGRESSIVE' | 'PASSIVE'>('QUICK');
   const [wordlistType, setWordlistType] = useState<'common' | 'api' | 'sensitive' | 'exhaustive' | 'custom'>('common');
   const [customWordlistText, setCustomWordlistText] = useState<string>('');
   const [concurrency, setConcurrency] = useState<number>(15);
@@ -895,38 +895,56 @@ export const PathFinderTab: React.FC<PathFinderTabProps> = ({
                 <label className="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase font-mono mb-1.5">
                   Discovery Depth &amp; Mode
                 </label>
-                <div className="grid grid-cols-2 gap-2 bg-slate-100 dark:bg-black/50 p-1 rounded-2xl border border-slate-300 dark:border-white/10">
+                <div className="grid grid-cols-3 gap-1.5 bg-slate-100 dark:bg-black/50 p-1 rounded-2xl border border-slate-300 dark:border-white/10">
                   <button
                     type="button"
                     onClick={() => {
                       setScanMode('QUICK');
-                      setConcurrency(15);
-                      setRateLimitRps(30);
+                      setConcurrency(20);
+                      setRateLimitRps(35);
                     }}
-                    className={`py-2 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center space-x-1.5 cursor-pointer ${
+                    className={`py-2 px-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center space-x-1 cursor-pointer ${
                       scanMode === 'QUICK'
                         ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 shadow-sm'
                         : 'text-slate-600 dark:text-slate-400 hover:text-white'
                     }`}
                   >
                     <Zap className="w-3.5 h-3.5" />
-                    <span>Quick Scan</span>
+                    <span>Quick</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setScanMode('RECURSIVE');
+                      setWordlistType('exhaustive');
+                      setConcurrency(35);
+                      setRateLimitRps(65);
+                    }}
+                    className={`py-2 px-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center space-x-1 cursor-pointer ${
+                      scanMode === 'RECURSIVE'
+                        ? 'bg-violet-500/20 text-violet-400 border border-violet-500/40 shadow-sm'
+                        : 'text-slate-600 dark:text-slate-400 hover:text-white'
+                    }`}
+                  >
+                    <Route className="w-3.5 h-3.5" />
+                    <span>Recursive</span>
                   </button>
                   <button
                     type="button"
                     onClick={() => {
                       setScanMode('EXHAUSTIVE');
-                      setConcurrency(30);
-                      setRateLimitRps(60);
+                      setWordlistType('exhaustive');
+                      setConcurrency(45);
+                      setRateLimitRps(85);
                     }}
-                    className={`py-2 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center space-x-1.5 cursor-pointer ${
+                    className={`py-2 px-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center space-x-1 cursor-pointer ${
                       scanMode === 'EXHAUSTIVE'
                         ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/40 shadow-sm'
                         : 'text-slate-600 dark:text-slate-400 hover:text-white'
                     }`}
                   >
                     <Layers className="w-3.5 h-3.5" />
-                    <span>Deep Probing</span>
+                    <span>Exhaustive</span>
                   </button>
                 </div>
               </div>

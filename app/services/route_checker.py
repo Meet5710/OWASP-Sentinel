@@ -171,6 +171,43 @@ class SitemapRobotsParser:
         return discovered_paths, sitemap_urls
 
     @classmethod
+    def _hosts_match(cls, found_host: str, target_host: str) -> bool:
+        """Return True if hostnames match directly or as www./apex aliases."""
+        a = (found_host or "").lower().strip().removeprefix("www.")
+        b = (target_host or "").lower().strip().removeprefix("www.")
+        return bool(a and b and a == b)
+
+    @classmethod
+    def _extract_embedded_routes_from_text(cls, text: str) -> Set[str]:
+        """Extract intra-app relative routes embedded in HTML or JS bundles (Next.js/React/SPA)."""
+        discovered: Set[str] = set()
+        if not text:
+            return discovered
+        MEDIA_EXTS = {
+            ".jpg", ".jpeg", ".png", ".gif", ".webp", ".svg", ".ico", ".bmp",
+            ".css", ".woff", ".woff2", ".ttf", ".eot", ".otf", ".mp4", ".mp3",
+            ".avi", ".mov", ".map", ".js", ".mjs", ".wasm",
+        }
+        # Match quoted relative route paths like "/about", "/api/v1/users", "/admin/login"
+        for match in re.finditer(r'["\'](\/[a-zA-Z0-9][a-zA-Z0-9._~:/?#\[\]@!$&()*+,;=%-]*)["\']', text):
+            raw = match.group(1).strip()
+            if len(raw) > 120 or raw.startswith("//"):
+                continue
+            if any(ign in raw for ign in ("/_next/static/", "/node_modules/", "/wp-content/themes/", "/wp-content/uploads/")):
+                continue
+            norm = normalize_route_path(raw)
+            if norm == "/" or norm.startswith("/_next/"):
+                continue
+            ext = f".{norm.rsplit('.', 1)[-1].lower()}" if "." in norm.rsplit("/", 1)[-1] else ""
+            if ext and ext in MEDIA_EXTS:
+                continue
+            # Filter out regex/template noise or non-route strings
+            if any(ch in norm for ch in ("*", "$", "\\", "{", "}", " ", "\n", "\t")):
+                continue
+            discovered.add(norm)
+        return discovered
+
+    @classmethod
     async def fetch_sitemap_paths(
         cls,
         client: httpx.AsyncClient,
@@ -193,7 +230,8 @@ class SitemapRobotsParser:
                 # 1. Sitemap Index (nested sitemaps)
                 for sitemap_elem in root.findall(".//sitemap/loc"):
                     child_url = (sitemap_elem.text or "").strip()
-                    if child_url and urlsplit(child_url).hostname == target_host:
+                    child_host = urlsplit(child_url).hostname or ""
+                    if child_url and (not child_host or cls._hosts_match(child_host, target_host)):
                         sub_paths = await cls.fetch_sitemap_paths(
                             client, child_url, target_host, max_depth=max_depth - 1
                         )
@@ -204,7 +242,7 @@ class SitemapRobotsParser:
                     loc_url = (url_elem.text or "").strip()
                     if loc_url:
                         parts = urlsplit(loc_url)
-                        if not parts.hostname or parts.hostname == target_host:
+                        if not parts.hostname or cls._hosts_match(parts.hostname, target_host):
                             if parts.path:
                                 discovered.add(normalize_route_path(parts.path))
         except Exception as exc:
@@ -218,25 +256,26 @@ class SitemapRobotsParser:
         client: httpx.AsyncClient,
         base_url: str,
         target_host: str,
+        scan_scripts: bool = False,
     ) -> Set[str]:
-        """Parses target root HTML to discover embedded relative and intra-host links, excluding static media assets."""
+        """Parses target HTML (and linked JS bundles when scan_scripts=True) for relative and intra-host links."""
         discovered: Set[str] = set()
-        clean_target_host = target_host.lower().strip()
         MEDIA_EXTS = {
             ".jpg", ".jpeg", ".png", ".gif", ".webp", ".svg", ".ico", ".bmp",
             ".css", ".woff", ".woff2", ".ttf", ".eot", ".otf", ".mp4", ".mp3",
             ".avi", ".mov", ".map", ".js"
         }
+        script_urls: List[str] = []
         try:
             resp = await client.get(base_url)
             if resp.status_code == 200 and resp.text:
-                for match in re.finditer(r'(?:href|action)=["\']([^"\']+)["\']', resp.text, re.IGNORECASE):
+                for match in re.finditer(r'(?:href|action|data-href)=["\']([^"\']+)["\']', resp.text, re.IGNORECASE):
                     raw_val = match.group(1).strip()
                     if not raw_val or raw_val.startswith(("javascript:", "mailto:", "tel:", "#", "data:")):
                         continue
                     if "://" in raw_val:
                         parts = urlsplit(raw_val)
-                        if parts.hostname and (clean_target_host in parts.hostname.lower() or parts.hostname.lower() in clean_target_host):
+                        if parts.hostname and cls._hosts_match(parts.hostname, target_host):
                             if parts.path:
                                 norm = normalize_route_path(parts.path)
                                 ext = norm.split(".")[-1].lower() if "." in norm else ""
@@ -248,6 +287,30 @@ class SitemapRobotsParser:
                             ext = norm.split(".")[-1].lower() if "." in norm else ""
                             if f".{ext}" not in MEDIA_EXTS and not any(ign in norm for ign in ("/wp-content/themes/", "/wp-content/uploads/")):
                                 discovered.add(norm)
+
+                if scan_scripts:
+                    discovered.update(cls._extract_embedded_routes_from_text(resp.text))
+                    for s_match in re.finditer(r'<script[^>]+src=["\']([^"\']+)["\']', resp.text, re.IGNORECASE):
+                        src_val = s_match.group(1).strip()
+                        if not src_val or src_val.startswith("data:"):
+                            continue
+                        if "://" in src_val:
+                            s_host = urlsplit(src_val).hostname or ""
+                            if not cls._hosts_match(s_host, target_host):
+                                continue
+                            abs_src = src_val
+                        else:
+                            abs_src = urljoin(f"{base_url.rstrip('/')}/", src_val)
+                        if abs_src not in script_urls:
+                            script_urls.append(abs_src)
+
+                    for js_url in script_urls[:12]:
+                        try:
+                            js_resp = await client.get(js_url)
+                            if js_resp.status_code == 200 and js_resp.text and len(js_resp.text) <= 1_500_000:
+                                discovered.update(cls._extract_embedded_routes_from_text(js_resp.text))
+                        except Exception:
+                            pass
         except Exception as exc:
             logger.debug("Failed fetching HTML links from '%s': %s", base_url, exc)
         return discovered
@@ -259,25 +322,31 @@ class SitemapRobotsParser:
         base_url: str,
         target_host: str,
     ) -> Set[str]:
-        """Executes full passive route collection across robots.txt, sitemaps, and root HTML links."""
+        """Executes full passive route collection across robots.txt, sitemaps, HTML links, and JS manifests."""
         routes: Set[str] = set()
 
         # 1. robots.txt
         robots_routes, sitemap_urls = await cls.fetch_robots_paths(client, base_url)
         routes.update(robots_routes)
 
-        # 2. Default sitemap + sitemaps discovered in robots.txt
-        sitemaps_to_probe = [urljoin(f"{base_url.rstrip('/')}/", "sitemap.xml")]
+        # 2. Common sitemaps + sitemaps discovered in robots.txt
+        root_slash = f"{base_url.rstrip('/')}/"
+        sitemaps_to_probe = [
+            urljoin(root_slash, "sitemap.xml"),
+            urljoin(root_slash, "sitemap_index.xml"),
+            urljoin(root_slash, "sitemap-0.xml"),
+            urljoin(root_slash, "wp-sitemap.xml"),
+        ]
         for sm in sitemap_urls:
             if sm not in sitemaps_to_probe:
                 sitemaps_to_probe.append(sm)
 
-        for sm_url in sitemaps_to_probe[:3]:
+        for sm_url in sitemaps_to_probe[:8]:
             sm_routes = await cls.fetch_sitemap_paths(client, sm_url, target_host)
             routes.update(sm_routes)
 
-        # 3. Root HTML relative links (filtering static theme media assets)
-        html_routes = await cls.fetch_html_links(client, base_url, target_host)
+        # 3. Root HTML links + linked SPA/Next.js JS route bundles
+        html_routes = await cls.fetch_html_links(client, base_url, target_host, scan_scripts=True)
         routes.update(html_routes)
 
         return routes
@@ -293,7 +362,7 @@ class AsyncRouteVerificationService:
         rps_limit: float = 30.0,
         custom_headers: Optional[Dict[str, str]] = None,
     ):
-        self.concurrency: int = max(1, min(concurrency, 30))
+        self.concurrency: int = max(1, min(concurrency, 50))
         self.timeout: float = max(1.0, float(timeout))
         self.rps_limit: float = max(1.0, float(rps_limit))
         self.semaphore = asyncio.Semaphore(self.concurrency)
@@ -589,17 +658,34 @@ class AsyncRouteVerificationService:
             # -----------------------------------------------------------------
             passive_paths = await SitemapRobotsParser.discover_known_routes(active_client, target_root, target_host)
 
-            # Assemble complete candidate routes list
+            # Assemble deduplicated candidate queue
             paths_to_verify: List[str] = ["/"]
+            seen_paths: Set[str] = {"/"}
             for p in sorted(passive_paths):
-                if p not in paths_to_verify:
-                    paths_to_verify.append(p)
+                norm = normalize_route_path(p)
+                if norm not in seen_paths:
+                    seen_paths.add(norm)
+                    paths_to_verify.append(norm)
 
             if candidate_routes:
                 for c in candidate_routes:
                     norm = normalize_route_path(c)
-                    if norm not in paths_to_verify:
+                    if norm not in seen_paths:
+                        seen_paths.add(norm)
                         paths_to_verify.append(norm)
+
+            scan_mode = str(cfg.get("mode") or "QUICK").upper()
+            allow_dir_recursion = bool(cfg.get("recursive")) or len(candidate_routes or []) >= 20
+            max_dir_depth = 3 if scan_mode in ("EXHAUSTIVE", "AGGRESSIVE", "RECURSIVE") else 2
+            max_queued_routes = 12000 if scan_mode in ("EXHAUSTIVE", "AGGRESSIVE", "RECURSIVE") else 3500
+            max_html_crawls = 60 if scan_mode in ("EXHAUSTIVE", "AGGRESSIVE", "RECURSIVE") else 25
+            html_crawls_used = 0
+            expanded_dirs: Set[str] = set()
+            sub_probes = (
+                "login", "index", "admin", "dashboard", "users", "settings", "config",
+                "profile", "api", "health", "status", "docs", "search", "upload",
+                "download", "backup", "export", "list", "create", "v1", "v2",
+            )
 
             total_routes = max(len(paths_to_verify), 1)
 
@@ -618,13 +704,14 @@ class AsyncRouteVerificationService:
             )
 
             # -----------------------------------------------------------------
-            # Step 3: Batch Verification in chunks of 20 URLs
+            # Step 3: Batch Verification with Recursive Discovery (chunks of 20)
             # -----------------------------------------------------------------
             batch_size = 20
             pending_db_records: List[DiscoveredPath] = []
             consecutive_net_failures = 0
+            batch_start = 0
 
-            for batch_start in range(0, len(paths_to_verify), batch_size):
+            while batch_start < len(paths_to_verify):
                 # Live State Check: Redis / DB control flag polling
                 control_flag = state_store.get_control_flag(scan_id)
 
@@ -675,8 +762,9 @@ class AsyncRouteVerificationService:
                     broadcaster.publish(scan_id, "status_change", {"status": "RUNNING"})
 
                 batch_chunk = paths_to_verify[batch_start : batch_start + batch_size]
+                batch_start += batch_size
 
-                async def _verify_single_route(route_path: str) -> Tuple[bool, Optional[Tuple[str, str, int, int, Optional[str], Optional[str], float]]]:
+                async def _verify_single_route(route_path: str) -> Tuple[bool, Optional[Tuple[str, str, int, int, Optional[str], Optional[str], float, Optional[str]]]]:
                     full_url = f"{target_root}{route_path}"
                     start_t = time.perf_counter()
 
@@ -716,7 +804,12 @@ class AsyncRouteVerificationService:
                                 ):
                                     return (True, None)
 
-                            return (True, (route_path, full_url, resp.status_code, content_len, ctype, redir, latency))
+                            html_body = (
+                                resp.text[:250_000]
+                                if resp.status_code == 200 and ctype and "html" in ctype.lower() and resp.text
+                                else None
+                            )
+                            return (True, (route_path, full_url, resp.status_code, content_len, ctype, redir, latency, html_body))
                         except (httpx.TimeoutException, httpx.ConnectError, httpx.NetworkError, ssl.SSLError):
                             return (False, None)
                         except Exception as e:
@@ -733,7 +826,7 @@ class AsyncRouteVerificationService:
                         if not success:
                             net_errors += 1
                         elif route_data is not None:
-                            route_path, full_url, status_code, content_len, ctype, redir, latency = route_data
+                            route_path, full_url, status_code, content_len, ctype, redir, latency, html_body = route_data
                             record_uuid = str(uuid.uuid4())
                             discovered_record = DiscoveredPath(
                                 id=record_uuid,
@@ -749,6 +842,40 @@ class AsyncRouteVerificationService:
                             )
                             pending_db_records.append(discovered_record)
                             total_discovered += 1
+
+                            # Dynamic link crawling from discovered 200 HTML pages
+                            if html_body and html_crawls_used < max_html_crawls and len(paths_to_verify) < max_queued_routes:
+                                html_crawls_used += 1
+                                for match in re.finditer(r'(?:href|action|data-href)=["\']([^"\']+)["\']', html_body, re.IGNORECASE):
+                                    raw_val = match.group(1).strip()
+                                    if not raw_val or raw_val.startswith(("javascript:", "mailto:", "tel:", "#", "data:")):
+                                        continue
+                                    cand_norm: Optional[str] = None
+                                    if "://" in raw_val:
+                                        p_parts = urlsplit(raw_val)
+                                        if p_parts.hostname and SitemapRobotsParser._hosts_match(p_parts.hostname, target_host):
+                                            cand_norm = normalize_route_path(p_parts.path)
+                                    else:
+                                        cand_norm = normalize_route_path(raw_val)
+                                    if cand_norm and cand_norm not in seen_paths and len(paths_to_verify) < max_queued_routes:
+                                        last_seg = cand_norm.rsplit("/", 1)[-1]
+                                        ext = f".{last_seg.rsplit('.', 1)[-1].lower()}" if "." in last_seg else ""
+                                        if ext not in {".jpg", ".jpeg", ".png", ".gif", ".webp", ".svg", ".ico", ".css", ".woff", ".woff2", ".js", ".map", ".mp4"}:
+                                            seen_paths.add(cand_norm)
+                                            paths_to_verify.append(cand_norm)
+
+                            # Dynamic recursive subdirectory probing on discovered directories
+                            if allow_dir_recursion and status_code in (200, 301, 302, 307, 308, 401, 403):
+                                clean_dir = route_path.rstrip("/")
+                                depth = len([s for s in clean_dir.split("/") if s])
+                                has_file_ext = "." in clean_dir.rsplit("/", 1)[-1]
+                                if 1 <= depth < max_dir_depth and not has_file_ext and clean_dir not in expanded_dirs and len(paths_to_verify) < max_queued_routes:
+                                    expanded_dirs.add(clean_dir)
+                                    for sp in sub_probes:
+                                        sub_cand = f"{clean_dir}/{sp}"
+                                        if sub_cand not in seen_paths and len(paths_to_verify) < max_queued_routes:
+                                            seen_paths.add(sub_cand)
+                                            paths_to_verify.append(sub_cand)
 
                             # Publish to live SSE/WebSocket channel immediately
                             broadcaster.publish(
@@ -772,6 +899,7 @@ class AsyncRouteVerificationService:
                     else:
                         net_errors += 1
 
+                total_routes = max(len(paths_to_verify), 1)
                 processed_count += len(batch_chunk)
                 current_pct = min(99.0, round(5.0 + (processed_count / total_routes) * 94.0, 1))
                 elapsed = max(0.05, time.perf_counter() - scan_start_time)
