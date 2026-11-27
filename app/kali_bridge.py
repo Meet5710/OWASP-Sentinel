@@ -184,7 +184,7 @@ def build_kali_command(tool: str, target: str, extra_args: str = "") -> str:
     # Network Reconnaissance & Scanning
     # ------------------------------------------------------------------
     if tool_key == "nmap":
-        flags = extra if extra else "--top-ports 1000 -sV -sC -T4 -Pn --script vuln"
+        flags = extra if extra else "-p- -sV -sC -A -T4 -Pn --script vuln,vulners --script-args mincvss=7.0"
         return " ".join(f"nmap {flags} {safe_target}".split())
 
     if tool_key == "rustscan":

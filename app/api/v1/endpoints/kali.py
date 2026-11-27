@@ -41,7 +41,7 @@ class KaliScanResult(BaseModel):
 
 TOOL_CATALOG: dict[str, list[dict[str, str]]] = {
     "Network Reconnaissance & Scanning": [
-        {"name": "nmap", "description": "Network mapper & service scanner", "example_args": "--top-ports 1000 -sV -sC -T4 -Pn --script vuln"},
+        {"name": "nmap", "description": "Network mapper & service scanner", "example_args": "-p- -sV -sC -A -T4 -Pn --script vuln,vulners --script-args mincvss=7.0"},
         {"name": "rustscan", "description": "Ultra-fast port scanner", "example_args": "--ulimit 5000 -- -sV -sC -A"},
         {"name": "masscan", "description": "High-speed internet-scale port scanner", "example_args": "-p1-65535 --rate 10000 -oJ /tmp/masscan_out.json"},
         {"name": "autorecon", "description": "Comprehensive automated recon", "example_args": '--nmap-append="-p- -sV -sC -A"'},

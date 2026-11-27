@@ -949,8 +949,17 @@ export const api = {
   },
 };
 
+export const REMOTE_BACKEND_STORAGE_KEY = 'sentinel_remote_backend_url';
+
 function resolveKaliUrl(endpoint: string, backendBaseUrl?: string): string {
-  const cleaned = (backendBaseUrl || '').trim().replace(/\/+$/, '');
+  const isLocalHost =
+    typeof window !== 'undefined' &&
+    (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+  const storedUrl =
+    !isLocalHost && typeof window !== 'undefined'
+      ? window.localStorage.getItem(REMOTE_BACKEND_STORAGE_KEY) || ''
+      : '';
+  const cleaned = (backendBaseUrl || storedUrl).trim().replace(/\/+$/, '');
   if (!cleaned) {
     return `${API_BASE}${endpoint}`;
   }
