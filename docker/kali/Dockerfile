@@ -76,5 +76,12 @@ RUN curl -fsSL -o /tmp/kube-bench.deb \
     chmod +x /opt/docker-bench-security/docker-bench-security.sh && \
     ln -sf /opt/docker-bench-security/docker-bench-security.sh /usr/local/bin/docker-bench-security
 
+# Compatibility symlinks + Python 3.14 configparser fix for jwt_tool
+RUN ln -sf /usr/bin/testssl /usr/local/bin/testssl.sh && \
+    ln -sf /usr/bin/nxc /usr/local/bin/crackmapexec && \
+    ln -sf /usr/share/ghidra/support/analyzeHeadless /usr/local/bin/analyzeHeadless && \
+    python3 -c "p='/usr/local/bin/jwt_tool'; s=open(p).read().replace('allow_no_value=True', 'allow_no_value=True, delimiters=(\"=\",)'); s=s.replace(\"set this value to:\", \"set this value to\"); open(p,'w').write(s)" && \
+    rm -rf /root/.jwt_tool
+
 # Ensure standard Go & pipx tool directories are always on PATH
 ENV PATH="/usr/local/bin:/root/go/bin:/root/.local/bin:${PATH}"

@@ -8,8 +8,10 @@ server running behind the local SSH tunnel or unified Docker container
 from __future__ import annotations
 
 import ipaddress
+import json
 import logging
 import os
+import re
 import shlex
 import socket
 import time
@@ -239,23 +241,46 @@ def build_kali_command(tool: str, target: str, extra_args: str = "") -> str:
     # ------------------------------------------------------------------
     if tool_key == "gobuster":
         if extra.startswith(("dir ", "dns ", "vhost ", "fuzz ")):
-            if "-u " in extra:
+            subcmd = extra.split()[0]
+            if subcmd == "dns":
+                if "-d " in extra or "--domain " in extra:
+                    return " ".join(f"gobuster {extra}".split())
+                dns_host = normalize_target_for_tool("subfinder", target)
+                return " ".join(f"gobuster {extra} -d {shlex.quote(dns_host)}".split())
+            if "-u " in extra or "--url " in extra:
                 return " ".join(f"gobuster {extra}".split())
             return " ".join(f"gobuster {extra} -u {safe_target}".split())
-        return " ".join(
-            f"gobuster dir -u {safe_target} -w /usr/share/wordlists/dirb/common.txt -k --no-error {extra}".split()
-        )
+
+        extra_tokens = extra.split()
+        parts = [f"gobuster dir -u {safe_target}"]
+        if "-w " not in extra and "-w" not in extra_tokens and "--wordlist" not in extra:
+            parts.append("-w /usr/share/wordlists/dirb/common.txt")
+        if "-k" not in extra_tokens and "--no-tls-validation" not in extra:
+            parts.append("-k")
+        if "--no-error" not in extra and "--ne" not in extra_tokens:
+            parts.append("--no-error")
+        if "--np" not in extra_tokens and "--no-progress" not in extra:
+            parts.append("--np")
+        if extra:
+            parts.append(extra)
+        return " ".join(" ".join(parts).split())
 
     if tool_key == "feroxbuster":
-        base = f"feroxbuster -u {safe_target} -k --no-state"
-        if "-w " not in extra and "--wordlist" not in extra:
+        extra_tokens = extra.split()
+        base = f"feroxbuster -u {safe_target}"
+        if "-k" not in extra_tokens and "--insecure" not in extra:
+            base += " -k"
+        if "--no-state" not in extra:
+            base += " --no-state"
+        if "-w " not in extra and "-w" not in extra_tokens and "--wordlist" not in extra:
             base += " -w /usr/share/wordlists/dirb/common.txt"
-        if "--depth" not in extra and "-d " not in extra:
+        if "--depth" not in extra and "-d " not in extra and "-d" not in extra_tokens:
             base += " --depth 1"
         return " ".join(f"{base} {extra}".split())
 
     if tool_key == "ffuf":
-        base = f"ffuf -u {fuzz_target}"
+        ffuf_url = shlex.quote(norm_target if "FUZZ" in norm_target else norm_target.rstrip("/") + "/FUZZ")
+        base = f"ffuf -u {ffuf_url}"
         if "-w " not in extra and "--wordlist" not in extra:
             base += " -w /usr/share/wordlists/dirb/common.txt"
         if "-mc" not in extra:
@@ -320,12 +345,15 @@ def build_kali_command(tool: str, target: str, extra_args: str = "") -> str:
 
     if tool_key == "testssl.sh":
         flags = extra if extra else "--fast"
-        return " ".join(f"testssl.sh --color 0 {flags} {safe_target}".split())
+        if "--warnings" not in flags:
+            flags = f"--warnings off {flags}"
+        return " ".join(f"testssl --color 0 {flags} {safe_target}".split())
 
     if tool_key == "jwt-tool":
+        noproxy = "" if ("-np" in extra.split() or "--noproxy" in extra) else "-np"
         if norm_target.startswith("eyJ") and norm_target.count(".") >= 2:
-            return " ".join(f"jwt_tool {safe_target} {extra}".split())
-        return " ".join(f"jwt_tool -t {safe_target} {extra}".split())
+            return " ".join(f"jwt_tool {safe_target} {noproxy} {extra}".split())
+        return " ".join(f"jwt_tool -t {safe_target} {noproxy} {extra}".split())
 
     if tool_key == "zap-cli":
         return " ".join(f"zaproxy -cmd -quickurl {safe_target} -quickout /tmp/zap_report.html {extra}".split())
@@ -349,9 +377,9 @@ def build_kali_command(tool: str, target: str, extra_args: str = "") -> str:
         return " ".join(f"patator {extra}".split()) if extra else "patator --help"
 
     if tool_key == "crackmapexec":
-        if extra.startswith(("smb ", "winrm ", "ssh ", "ldap ", "ftp ", "mssql ", "rdp ")):
-            return " ".join(f"crackmapexec {extra} {safe_target}".split())
-        return " ".join(f"crackmapexec smb {safe_target} {extra}".split())
+        if extra.startswith(("smb ", "winrm ", "ssh ", "ldap ", "ftp ", "mssql ", "rdp ", "wmi ", "vnc ")):
+            return " ".join(f"nxc {extra} {safe_target}".split())
+        return " ".join(f"nxc smb {safe_target} {extra}".split())
 
     if tool_key == "smbmap":
         if "-H" in extra:
@@ -376,7 +404,7 @@ def build_kali_command(tool: str, target: str, extra_args: str = "") -> str:
         return " ".join(f'r2 -q -c "aaa;afl" {extra} {safe_target}'.split())
 
     if tool_key == "ghidra":
-        return " ".join(f"analyzeHeadless /tmp ghidra_proj -import {safe_target} -deleteProject {extra}".split())
+        return " ".join(f"/usr/share/ghidra/support/analyzeHeadless /tmp ghidra_proj -import {safe_target} -deleteProject {extra}".split())
 
     if tool_key == "binwalk":
         return " ".join(f"binwalk {extra} {safe_target}".split())
@@ -472,7 +500,8 @@ def build_kali_command(tool: str, target: str, extra_args: str = "") -> str:
         return " ".join(f"censys search {safe_target} {extra}".split())
 
     if tool_key == "subjack":
-        return " ".join(f"subjack -d {safe_target} -a {extra}".split())
+        verbose = "" if "-v" in extra.split() else "-v"
+        return " ".join(f"subjack -d {safe_target} -a {verbose} {extra}".split())
 
     if tool_key == "trufflehog":
         if extra.startswith(("git ", "github ", "filesystem ", "s3 ")):
@@ -489,7 +518,15 @@ def build_kali_command(tool: str, target: str, extra_args: str = "") -> str:
         return " ".join(f"gau {flags} {safe_target}".split())
 
     if tool_key == "searchsploit":
-        return " ".join(f"searchsploit --disable-colour {extra} {safe_target}".split())
+        query = norm_target
+        if "://" in query:
+            parsed_q = urlparse(query)
+            query = parsed_q.hostname or query
+        safe_q = shlex.quote(query)
+        is_cve = bool(re.match(r"^(?:cve[- ]?)?\d{4}-\d{4,}$", query, re.IGNORECASE))
+        if extra == "--cve" and not is_cve:
+            return " ".join(f"searchsploit --disable-colour {safe_q}".split())
+        return " ".join(f"searchsploit --disable-colour {extra} {safe_q}".split())
 
     return " ".join(f"{tool.strip()} {extra} {safe_target}".split())
 
@@ -679,27 +716,105 @@ def get_kali_mcp_logs_and_processes(lines: int = 40, known_tools: list[str] | No
     }
 
 
+def _parse_sse_command_response(body: str) -> dict:
+    """Aggregate Server-Sent Events returned by /api/command when a tool streams."""
+    stdout_lines: list[str] = []
+    stderr_lines: list[str] = []
+    returncode: int | None = None
+    error_messages: list[str] = []
+
+    for raw_line in body.splitlines():
+        line = raw_line.strip()
+        if not line.startswith("data:"):
+            continue
+        payload_str = line[len("data:"):].strip()
+        if not payload_str:
+            continue
+        try:
+            event = json.loads(payload_str)
+        except ValueError:
+            continue
+        ev_type = event.get("type")
+        if ev_type == "output":
+            source = event.get("source", "stdout")
+            text_line = str(event.get("line", ""))
+            if source == "stderr":
+                stderr_lines.append(text_line)
+            else:
+                stdout_lines.append(text_line)
+        elif ev_type == "result":
+            if event.get("return_code") is not None:
+                returncode = int(event["return_code"])
+            elif event.get("returncode") is not None:
+                returncode = int(event["returncode"])
+        elif ev_type == "error":
+            error_messages.append(str(event.get("message") or "Unknown SSE execution error"))
+
+    if error_messages and not stderr_lines:
+        stderr_lines.extend(error_messages)
+
+    return {
+        "stdout": "\n".join(stdout_lines),
+        "stderr": "\n".join(stderr_lines),
+        "returncode": returncode if returncode is not None else (-1 if error_messages else 0),
+    }
+
+
 def run_tool_on_kali(command: str, timeout: int = 600) -> dict:
     """Execute a command via the Kali MCP server."""
     candidates = _candidate_kali_urls()
     last_exc: Exception | None = None
     last_url = candidates[0]
     started = time.monotonic()
+    container_timeout = max(int(timeout) - 5, 5)
+    headers = {"ngrok-skip-browser-warning": "true"}
 
     for base_url in candidates:
         last_url = base_url
         logger.info("Sending to Kali MCP (%s): %s", base_url, command)
         try:
+            # Prefer /api/exec so streaming tools (gobuster/ffuf/feroxbuster/dirsearch/nikto)
+            # return structured JSON rather than SSE text/event-stream frames.
             response = requests.post(
-                f"{base_url}/api/command",
-                json={"command": command},
-                headers={"ngrok-skip-browser-warning": "true"},
+                f"{base_url}/api/exec",
+                json={"command": command, "timeout": container_timeout},
+                headers=headers,
                 timeout=timeout,
             )
+            if response.status_code == 404:
+                response = requests.post(
+                    f"{base_url}/api/command",
+                    json={"command": command, "streaming": False, "timeout": container_timeout},
+                    headers=headers,
+                    timeout=timeout,
+                )
+
             response.raise_for_status()
-            data = response.json()
+            content_type = (response.headers.get("content-type") or "").lower()
+            raw_text = response.text or ""
+
+            if "text/event-stream" in content_type or raw_text.lstrip().startswith("data:"):
+                parsed = _parse_sse_command_response(raw_text)
+                return {
+                    **parsed,
+                    "elapsed_seconds": round(time.monotonic() - started, 2),
+                }
+
+            try:
+                data = response.json()
+            except ValueError as json_exc:
+                elapsed = round(time.monotonic() - started, 2)
+                snippet = raw_text.strip()[:400] or "(empty response body)"
+                logger.error("Kali MCP returned non-JSON (%s, HTTP %s): %s", base_url, response.status_code, snippet)
+                return {
+                    "stdout": "",
+                    "stderr": f"[!] Kali MCP Server returned non-JSON response (HTTP {response.status_code}): {json_exc}\n{snippet}",
+                    "returncode": -1,
+                    "elapsed_seconds": elapsed,
+                }
+
             elapsed = round(
-                float(data.get("elapsed_seconds") or (time.monotonic() - started)),
+                float(data.get("elapsed_seconds") or data.get("execution_time") or (time.monotonic() - started)),
                 2,
             )
 
@@ -718,9 +833,36 @@ def run_tool_on_kali(command: str, timeout: int = 600) -> dict:
         except requests.ConnectionError as exc:
             last_exc = exc
             continue
+        except requests.Timeout as exc:
+            elapsed = round(time.monotonic() - started, 2)
+            logger.error("Kali command timed out after %ss (%s): %s", timeout, base_url, exc)
+            return {
+                "stdout": "",
+                "stderr": f"[!] Tool execution timed out after {timeout}s on Kali MCP Server ({base_url}). Pass tighter flags/wordlist in Extra Arguments.",
+                "returncode": -1,
+                "elapsed_seconds": elapsed,
+            }
+        except requests.HTTPError as exc:
+            elapsed = round(time.monotonic() - started, 2)
+            resp_obj = exc.response
+            status_code = resp_obj.status_code if resp_obj is not None else "unknown"
+            body_preview = (resp_obj.text or "").strip()[:400] if resp_obj is not None else str(exc)
+            logger.error("Kali HTTP error %s (%s): %s", status_code, base_url, body_preview)
+            return {
+                "stdout": "",
+                "stderr": f"[!] Kali MCP Server HTTP {status_code} error:\n{body_preview}",
+                "returncode": -1,
+                "elapsed_seconds": elapsed,
+            }
         except Exception as exc:
-            last_exc = exc
-            break
+            elapsed = round(time.monotonic() - started, 2)
+            logger.error("Kali execution error (%s): %s", base_url, exc)
+            return {
+                "stdout": "",
+                "stderr": f"[!] Kali execution error ({base_url}): {exc}",
+                "returncode": -1,
+                "elapsed_seconds": elapsed,
+            }
 
     elapsed = round(time.monotonic() - started, 2)
     logger.error("Kali bridge error (%s): %s", last_url, last_exc)

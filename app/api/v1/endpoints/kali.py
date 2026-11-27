@@ -125,7 +125,7 @@ TOOL_CATALOG: dict[str, list[dict[str, str]]] = {
         {"name": "trufflehog", "description": "Git/filesystem secret scanning", "example_args": ""},
         {"name": "waybackurls", "description": "Historical URL discovery", "example_args": ""},
         {"name": "gau", "description": "Get All URLs from multiple sources", "example_args": "--threads 4"},
-        {"name": "searchsploit", "description": "Exploit-DB CVE & vulnerability advisory lookup", "example_args": "--cve"},
+        {"name": "searchsploit", "description": "Exploit-DB CVE & vulnerability advisory lookup", "example_args": ""},
     ],
 }
 
