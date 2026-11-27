@@ -219,10 +219,13 @@ def build_kali_command(tool: str, target: str, extra_args: str = "") -> str:
         if "-timeout" not in extra_tokens:
             extra_flags = f"-timeout 2 {extra_flags}".strip()
         if extra.startswith("enum "):
-            return " ".join(f"amass {extra_flags} {safe_target}".split())
-        if "-d" in extra_tokens:
-            return " ".join(f"amass enum {extra_flags} {safe_target}".split())
-        return " ".join(f"amass enum -d {safe_target} {extra_flags}".split())
+            amass_cmd = " ".join(f"amass {extra_flags} {safe_target}".split())
+        elif "-d" in extra_tokens:
+            amass_cmd = " ".join(f"amass enum {extra_flags} {safe_target}".split())
+        else:
+            amass_cmd = " ".join(f"amass enum -d {safe_target} {extra_flags}".split())
+        inner = f"{amass_cmd}; rc=$?; pkill -f '[a]mass engine' 2>/dev/null || true; exit $rc"
+        return f"sh -c {shlex.quote(inner)}"
 
     if tool_key == "subfinder":
         if extra == "-d":
@@ -631,7 +634,6 @@ def get_kali_mcp_logs_and_processes(lines: int = 40, known_tools: list[str] | No
     """Fetch active processes and background jobs running inside the Kali Docker container."""
     base_url = get_kali_api_url()
     tool_tokens = {t.lower() for t in (known_tools or [])} | {
-        "kali_server.py",
         "nmap",
         "gobuster",
         "feroxbuster",
@@ -671,8 +673,9 @@ def get_kali_mcp_logs_and_processes(lines: int = 40, known_tools: list[str] | No
                 is_server = "kali_server.py" in cmd_lower or ("server.py" in cmd_lower and "5000" in cmd_lower)
                 if is_server:
                     mcp_running = True
+                    continue
                 cmd_words = {os.path.basename(w).lower() for w in cmd.split()[:3]}
-                if is_server or any(w in tool_tokens for w in cmd_words):
+                if any(w in tool_tokens for w in cmd_words):
                     active_processes.append(
                         {
                             "pid": str(proc.get("pid", "")),
@@ -684,8 +687,8 @@ def get_kali_mcp_logs_and_processes(lines: int = 40, known_tools: list[str] | No
     except Exception:
         pass
 
-    # 2. Fallback to `ps -eo` if /api/ps is unavailable
-    if not active_processes:
+    # 2. Fallback to `ps -eo` only if /api/ps was unreachable
+    if not connected:
         ps_res = run_tool_on_kali("ps -eo pid,pcpu,etime,args", timeout=5)
         if ps_res.get("returncode") != -1:
             connected = True
@@ -700,8 +703,9 @@ def get_kali_mcp_logs_and_processes(lines: int = 40, known_tools: list[str] | No
                 is_server = "kali_server.py" in cmd_lower or ("server.py" in cmd_lower and "5000" in cmd_lower)
                 if is_server:
                     mcp_running = True
+                    continue
                 cmd_words = {os.path.basename(w).lower() for w in cmd.split()[:3]}
-                if is_server or any(w in tool_tokens for w in cmd_words):
+                if any(w in tool_tokens for w in cmd_words):
                     active_processes.append(
                         {
                             "pid": pid,
