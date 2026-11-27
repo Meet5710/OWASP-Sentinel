@@ -80,6 +80,7 @@ RUN curl -fsSL -o /tmp/kube-bench.deb \
 RUN ln -sf /usr/bin/testssl /usr/local/bin/testssl.sh && \
     ln -sf /usr/bin/nxc /usr/local/bin/crackmapexec && \
     ln -sf /usr/share/ghidra/support/analyzeHeadless /usr/local/bin/analyzeHeadless && \
+    ln -sf /usr/share/dnsenum/dns.txt /usr/share/wordlists/dnsmap.txt && \
     python3 -c "p='/usr/local/bin/jwt_tool'; s=open(p).read().replace('allow_no_value=True', 'allow_no_value=True, delimiters=(\"=\",)'); s=s.replace(\"set this value to:\", \"set this value to\"); open(p,'w').write(s)" && \
     rm -rf /root/.jwt_tool
 
