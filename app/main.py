@@ -157,11 +157,11 @@ def create_app() -> FastAPI:
     def execute_scan(request: ScanRequest):
         return run_owasp_scan(target_url=request.target_url, selected_ids=request.selected_checks, auth={})
 
-    # Local-only Kali MCP Bridge Relay (allows Render -> ngrok -> local 8001 -> SSH tunnel 5001/5000)
+    # Local-only Kali Container Bridge Relay (allows Render -> ngrok -> local 8001 -> sentinel_kali 5001/5000)
     from app.kali_bridge import check_kali_health, run_tool_on_kali
 
     class KaliCommandRelayRequest(BaseModel):
-        command: str = Field(..., description="Command string to forward to local Kali MCP tunnel")
+        command: str = Field(..., description="Command string to forward to local Kali Docker container")
 
     @app.get("/health", tags=["Kali Relay"])
     def relay_kali_health():

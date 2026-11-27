@@ -138,7 +138,7 @@ def list_kali_tools():
 
 @router.get("/status")
 def get_kali_bridge_status():
-    """Check live connectivity and full per-tool availability on the Kali VM."""
+    """Check live connectivity and full per-tool availability on the Kali Docker container."""
     connected, tools_status = check_kali_health()
     if connected:
         all_names = [t["name"] for tools in TOOL_CATALOG.values() for t in tools]
@@ -154,7 +154,7 @@ def get_kali_bridge_status():
 
 @router.get("/logs")
 def get_kali_logs(lines: int = 40):
-    """Fetch recent Kali MCP server logs and active tool processes running on Kali."""
+    """Fetch live processes and background jobs running inside the Kali Docker container."""
     all_names = [t["name"] for tools in TOOL_CATALOG.values() for t in tools]
     return get_kali_mcp_logs_and_processes(lines=lines, known_tools=all_names)
 
@@ -188,7 +188,7 @@ def execute_kali_tool(request: KaliScanRequest):
         output_text = (
             f"{stderr_text}\n\n"
             "If you are viewing the hosted Render UI (owasp-sentinel.onrender.com), "
-            "Render cannot access your laptop's 127.0.0.1 SSH tunnel directly.\n"
+            "Render cannot access your laptop's local 127.0.0.1:5001 Docker container directly.\n"
             "Connect your local backend (port 8001) via ngrok or ensure the sentinel_kali Docker container is running."
         )
     elif missing_binary and not output_text:

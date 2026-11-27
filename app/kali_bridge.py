@@ -1,7 +1,6 @@
-"""OWASP Sentinel - Kali Linux MCP Bridge.
+"""OWASP Sentinel - Kali Linux Docker Container Bridge.
 
-Forwards penetration-testing tool commands to the Kali Linux Tools API / MCP
-server running behind the local SSH tunnel or unified Docker container
+Forwards penetration-testing tool commands to the unified Kali Docker container API
 (``127.0.0.1:5001`` / ``kali:5000``) or via the ngrok bridge URL on Render.
 """
 
@@ -229,7 +228,16 @@ def build_kali_command(tool: str, target: str, extra_args: str = "") -> str:
         return " ".join(f"enum4linux-ng {extra or '-A'} {safe_target}".split())
 
     if tool_key == "whois":
-        return " ".join(f"whois {extra} {safe_target}".split())
+        extra_tokens = extra.split()
+        flags = extra
+        if (
+            "--no-recursion" not in extra_tokens
+            and "-I" not in extra_tokens
+            and "-h" not in extra_tokens
+            and "--host" not in extra_tokens
+        ):
+            flags = f"--no-recursion -H {flags}".strip()
+        return " ".join(f"whois {flags} {safe_target}".split())
 
     if tool_key == "showmount":
         if "-e" in extra:
@@ -588,10 +596,9 @@ def check_catalog_tools_on_kali(tool_names: list[str], force: bool = False) -> d
 
 
 def get_kali_mcp_logs_and_processes(lines: int = 40, known_tools: list[str] | None = None) -> dict:
-    """Fetch recent Kali MCP server logs and active tool/server processes from Docker or VM."""
+    """Fetch active processes and background jobs running inside the Kali Docker container."""
     base_url = get_kali_api_url()
     tool_tokens = {t.lower() for t in (known_tools or [])} | {
-        "kali-server-mcp",
         "kali_server.py",
         "nmap",
         "gobuster",
@@ -611,14 +618,13 @@ def get_kali_mcp_logs_and_processes(lines: int = 40, known_tools: list[str] | No
         "fierce",
         "hydra",
         "theharvester",
-        "msfconsole",
     }
 
     active_processes: list[dict[str, str]] = []
     mcp_running = False
     connected = False
 
-    # 1. Prefer structured /api/ps endpoint (provided by zebbern-kali Docker container)
+    # 1. Prefer structured /api/ps endpoint (provided by sentinel_kali Docker container)
     try:
         ps_api = requests.get(
             f"{base_url}/api/ps",
@@ -630,11 +636,11 @@ def get_kali_mcp_logs_and_processes(lines: int = 40, known_tools: list[str] | No
             for proc in ps_api.json().get("processes", []):
                 cmd = str(proc.get("command") or "")
                 cmd_lower = cmd.lower()
-                is_mcp = "kali_server.py" in cmd_lower or "kali-server-mcp" in cmd_lower or ("server.py" in cmd_lower and "5000" in cmd_lower)
-                if is_mcp:
+                is_server = "kali_server.py" in cmd_lower or ("server.py" in cmd_lower and "5000" in cmd_lower)
+                if is_server:
                     mcp_running = True
                 cmd_words = {os.path.basename(w).lower() for w in cmd.split()[:3]}
-                if is_mcp or any(w in tool_tokens for w in cmd_words):
+                if is_server or any(w in tool_tokens for w in cmd_words):
                     active_processes.append(
                         {
                             "pid": str(proc.get("pid", "")),
@@ -657,13 +663,13 @@ def get_kali_mcp_logs_and_processes(lines: int = 40, known_tools: list[str] | No
                     continue
                 pid, cpu, elapsed, cmd = parts
                 cmd_lower = cmd.lower()
-                if "tail -n " in cmd_lower or "ps -eo" in cmd_lower:
+                if "ps -eo" in cmd_lower:
                     continue
-                is_mcp = "kali_server.py" in cmd_lower or "kali-server-mcp" in cmd_lower or ("server.py" in cmd_lower and "5000" in cmd_lower)
-                if is_mcp:
+                is_server = "kali_server.py" in cmd_lower or ("server.py" in cmd_lower and "5000" in cmd_lower)
+                if is_server:
                     mcp_running = True
                 cmd_words = {os.path.basename(w).lower() for w in cmd.split()[:3]}
-                if is_mcp or any(w in tool_tokens for w in cmd_words):
+                if is_server or any(w in tool_tokens for w in cmd_words):
                     active_processes.append(
                         {
                             "pid": pid,
@@ -679,33 +685,25 @@ def get_kali_mcp_logs_and_processes(lines: int = 40, known_tools: list[str] | No
             "mcp_running": False,
             "active_processes": [],
             "logs": [],
-            "error": "Kali MCP Server unreachable",
+            "error": "Kali Docker container unreachable",
         }
 
-    # 3. Fetch logs from Docker /app/tmp/jobs or VMware /tmp/kali-server-mcp.log
-    log_res = run_tool_on_kali(
-        f"sh -c 'if [ -f /tmp/kali-server-mcp.log ]; then tail -n {max(lines * 2, 60)} /tmp/kali-server-mcp.log; "
-        f"elif [ -d /app/tmp/jobs ]; then ls -lt /app/tmp/jobs 2>/dev/null | head -n 20; fi'",
-        timeout=5,
-    )
-
-    noise_markers = (
-        "GET /health HTTP",
-        "GET /live HTTP",
-        "Executing command: ['which',",
-        "Executing command: which ",
-        "which ",
-        "tail -n ",
-        "ps -eo",
-    )
+    # 3. Fetch structured background jobs from /api/jobs inside sentinel_kali
     filtered_logs: list[str] = []
-    for raw_line in (log_res.get("stdout") or "").splitlines():
-        if any(m in raw_line for m in noise_markers):
-            continue
-        filtered_logs.append(raw_line)
-
-    if not filtered_logs and active_processes:
-        filtered_logs = [f"[active] PID {p['pid']} ({p['elapsed']}): {p['command']}" for p in active_processes]
+    try:
+        jobs_resp = requests.get(
+            f"{base_url}/api/jobs",
+            headers={"ngrok-skip-browser-warning": "true"},
+            timeout=3,
+        )
+        if jobs_resp.status_code == 200:
+            for job in jobs_resp.json().get("jobs", []):
+                job_id = job.get("job_id", "?")
+                status_str = job.get("status", "unknown")
+                job_cmd = job.get("command", "")
+                filtered_logs.append(f"[{status_str}] job={job_id}: {job_cmd}")
+    except Exception:
+        pass
 
     return {
         "connected": True,
@@ -761,7 +759,7 @@ def _parse_sse_command_response(body: str) -> dict:
 
 
 def run_tool_on_kali(command: str, timeout: int = 600) -> dict:
-    """Execute a command via the Kali MCP server."""
+    """Execute a command inside the Kali Docker container API."""
     candidates = _candidate_kali_urls()
     last_exc: Exception | None = None
     last_url = candidates[0]
@@ -771,7 +769,7 @@ def run_tool_on_kali(command: str, timeout: int = 600) -> dict:
 
     for base_url in candidates:
         last_url = base_url
-        logger.info("Sending to Kali MCP (%s): %s", base_url, command)
+        logger.info("Sending to Kali Container (%s): %s", base_url, command)
         try:
             # Prefer /api/exec so streaming tools (gobuster/ffuf/feroxbuster/dirsearch/nikto)
             # return structured JSON rather than SSE text/event-stream frames.
@@ -805,10 +803,10 @@ def run_tool_on_kali(command: str, timeout: int = 600) -> dict:
             except ValueError as json_exc:
                 elapsed = round(time.monotonic() - started, 2)
                 snippet = raw_text.strip()[:400] or "(empty response body)"
-                logger.error("Kali MCP returned non-JSON (%s, HTTP %s): %s", base_url, response.status_code, snippet)
+                logger.error("Kali Container returned non-JSON (%s, HTTP %s): %s", base_url, response.status_code, snippet)
                 return {
                     "stdout": "",
-                    "stderr": f"[!] Kali MCP Server returned non-JSON response (HTTP {response.status_code}): {json_exc}\n{snippet}",
+                    "stderr": f"[!] Kali Container Server returned non-JSON response (HTTP {response.status_code}): {json_exc}\n{snippet}",
                     "returncode": -1,
                     "elapsed_seconds": elapsed,
                 }
@@ -838,7 +836,7 @@ def run_tool_on_kali(command: str, timeout: int = 600) -> dict:
             logger.error("Kali command timed out after %ss (%s): %s", timeout, base_url, exc)
             return {
                 "stdout": "",
-                "stderr": f"[!] Tool execution timed out after {timeout}s on Kali MCP Server ({base_url}). Pass tighter flags/wordlist in Extra Arguments.",
+                "stderr": f"[!] Tool execution timed out after {timeout}s on Kali Container ({base_url}). Pass tighter flags/wordlist in Extra Arguments.",
                 "returncode": -1,
                 "elapsed_seconds": elapsed,
             }
@@ -850,7 +848,7 @@ def run_tool_on_kali(command: str, timeout: int = 600) -> dict:
             logger.error("Kali HTTP error %s (%s): %s", status_code, base_url, body_preview)
             return {
                 "stdout": "",
-                "stderr": f"[!] Kali MCP Server HTTP {status_code} error:\n{body_preview}",
+                "stderr": f"[!] Kali Container Server HTTP {status_code} error:\n{body_preview}",
                 "returncode": -1,
                 "elapsed_seconds": elapsed,
             }
@@ -869,8 +867,8 @@ def run_tool_on_kali(command: str, timeout: int = 600) -> dict:
     return {
         "stdout": "",
         "stderr": (
-            f"[!] Failed to connect to Kali MCP Server at {last_url}. "
-            f"Is the container running?\nError: {last_exc}"
+            f"[!] Failed to connect to Kali Docker container at {last_url}. "
+            f"Is the sentinel_kali container running?\nError: {last_exc}"
         ),
         "returncode": -1,
         "elapsed_seconds": elapsed,
