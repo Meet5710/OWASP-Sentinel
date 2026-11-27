@@ -193,11 +193,17 @@ def build_kali_command(tool: str, target: str, extra_args: str = "") -> str:
         return " ".join(f"{base} {extra} {safe_target}".split())
 
     if tool_key == "amass":
+        extra_tokens = extra.split()
+        extra_flags = extra
+        if "-nocolor" not in extra_tokens:
+            extra_flags = f"-nocolor {extra_flags}".strip()
+        if "-timeout" not in extra_tokens:
+            extra_flags = f"-timeout 2 {extra_flags}".strip()
         if extra.startswith("enum "):
-            return " ".join(f"amass {extra} {safe_target}".split())
-        if "-d" in extra:
-            return " ".join(f"amass enum {extra} {safe_target}".split())
-        return " ".join(f"amass enum -d {safe_target} {extra}".split())
+            return " ".join(f"amass {extra_flags} {safe_target}".split())
+        if "-d" in extra_tokens:
+            return " ".join(f"amass enum {extra_flags} {safe_target}".split())
+        return " ".join(f"amass enum -d {safe_target} {extra_flags}".split())
 
     if tool_key == "subfinder":
         if extra == "-d":
@@ -296,7 +302,14 @@ def build_kali_command(tool: str, target: str, extra_args: str = "") -> str:
         return " ".join(f"{base} {extra}".split())
 
     if tool_key == "dirsearch":
+        extra_tokens = extra.split()
         flags = extra if extra else "-e php,html,js"
+        if "-q" not in extra_tokens and "--quiet-mode" not in extra_tokens:
+            flags = f"-q {flags}"
+        if "--no-color" not in extra_tokens:
+            flags = f"--no-color {flags}"
+        if "--max-time" not in extra:
+            flags = f"--max-time=180 {flags}"
         return " ".join(f"dirsearch -u {safe_target} {flags}".split())
 
     if tool_key == "nuclei":
@@ -714,6 +727,20 @@ def get_kali_mcp_logs_and_processes(lines: int = 40, known_tools: list[str] | No
     }
 
 
+_ANSI_ESCAPE_RE = re.compile(
+    r"\x1b\[[0-9;?]*[ -/]*[@-~]|\x1b\][^\x07\x1b]*(?:\x07|\x1b\\)|\x1b[@-Z\\-_]"
+)
+
+
+def _sanitize_terminal_output(text: str) -> str:
+    """Strip ANSI escape sequences and collapse carriage-return progress overwrites."""
+    if not text:
+        return ""
+    cleaned = _ANSI_ESCAPE_RE.sub("", text).replace("\r\n", "\n")
+    lines = [line.rsplit("\r", 1)[-1] for line in cleaned.split("\n")]
+    return "\n".join(lines).strip("\n")
+
+
 def _parse_sse_command_response(body: str) -> dict:
     """Aggregate Server-Sent Events returned by /api/command when a tool streams."""
     stdout_lines: list[str] = []
@@ -794,7 +821,9 @@ def run_tool_on_kali(command: str, timeout: int = 600) -> dict:
             if "text/event-stream" in content_type or raw_text.lstrip().startswith("data:"):
                 parsed = _parse_sse_command_response(raw_text)
                 return {
-                    **parsed,
+                    "stdout": _sanitize_terminal_output(parsed.get("stdout", "")),
+                    "stderr": _sanitize_terminal_output(parsed.get("stderr", "")),
+                    "returncode": parsed.get("returncode", 0),
                     "elapsed_seconds": round(time.monotonic() - started, 2),
                 }
 
@@ -816,8 +845,8 @@ def run_tool_on_kali(command: str, timeout: int = 600) -> dict:
                 2,
             )
 
-            output = data.get("output") or data.get("stdout") or ""
-            stderr = data.get("stderr") or data.get("error") or ""
+            output = _sanitize_terminal_output(data.get("output") or data.get("stdout") or "")
+            stderr = _sanitize_terminal_output(data.get("stderr") or data.get("error") or "")
             returncode = data.get("return_code")
             if returncode is None:
                 returncode = data.get("returncode", 0)

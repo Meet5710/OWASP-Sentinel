@@ -198,6 +198,24 @@ def execute_kali_tool(request: KaliScanRequest):
             f"or switch to an 'Installed' tool in the dropdown (check 'Installed only')."
         )
 
+    combined_msg = f"{output_text}\n{stderr_text}"
+    tool_lower = tool.lower()
+    if tool_lower == "jwt-tool" and "No JWT provided" in combined_msg:
+        output_text = (
+            f"{output_text.rstrip()}\n\n"
+            "[Hint] jwt-tool expects a JWT token (eyJ...). Paste a JWT in Target URL/IP or Extra Arguments (e.g. eyJ... -M at)."
+        ).lstrip()
+    elif tool_lower == "shodan" and "shodan init" in combined_msg:
+        output_text = (
+            f"{output_text.rstrip()}\n\n"
+            "[Hint] Shodan CLI requires an API key. Run 'docker exec sentinel_kali shodan init <API_KEY>' once to enable queries."
+        ).lstrip()
+    elif tool_lower == "censys" and "No API ID or API secret configured" in combined_msg:
+        output_text = (
+            f"{output_text.rstrip()}\n\n"
+            "[Hint] Censys CLI requires API credentials configured inside sentinel_kali ('censys config' or CENSYS_API_ID/CENSYS_API_SECRET)."
+        ).lstrip()
+
     return KaliScanResult(
         target=target,
         tool_executed=tool,
