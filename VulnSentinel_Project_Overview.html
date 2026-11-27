@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OWASP Sentinel (VulnSentinel) — Full Project Architecture & Reference</title>
+  <style>
+    :root {
+      --bg: #0b1120;
+      --panel: #111827;
+      --panel-alt: #1e293b;
+      --border: rgba(148, 163, 184, 0.18);
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --accent: #38bdf8;
+      --green: #34d399;
+      --purple: #a78bfa;
+      --amber: #fbbf24;
+      --rose: #fb7185;
+      --cyan: #22d3ee;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: radial-gradient(circle at top right, #0f172a 0%, var(--bg) 55%);
+      color: var(--text);
+      line-height: 1.55;
+      min-height: 100vh;
+    }
+    header {
+      background: rgba(15, 23, 42, 0.9);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      padding: 18px 28px;
+    }
+    .header-top {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .logo {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #2563eb, #06b6d4);
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      font-size: 18px;
+      color: white;
+      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.35);
+    }
+    .brand h1 { font-size: 1.35rem; font-weight: 700; letter-spacing: -0.02em; }
+    .brand p { font-size: 0.85rem; color: var(--muted); }
+    .live-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .live-pill {
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 7px 13px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--panel-alt);
+      color: var(--text);
+      transition: all 0.15s ease;
+    }
+    .live-pill:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
+    .live-pill.green { border-color: rgba(52, 211, 153, 0.4); color: var(--green); }
+    .live-pill.cyan { border-color: rgba(34, 211, 238, 0.4); color: var(--cyan); }
+
+    main {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 26px 28px 60px;
+    }
+
+    /* Architecture Strip */
+    .arch-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 22px;
+      margin-bottom: 24px;
+    }
+    .arch-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 14px;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .arch-flow {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+    }
+    .arch-node {
+      background: rgba(30, 41, 59, 0.7);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+    }
+    .arch-node .step {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--green);
+      margin-bottom: 4px;
+    }
+    .arch-node h3 { font-size: 0.96rem; margin-bottom: 6px; }
+    .arch-node p { font-size: 0.82rem; color: var(--muted); }
+
+    /* Controls */
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .search-box {
+      flex: 1 1 300px;
+      position: relative;
+    }
+    .search-box input {
+      width: 100%;
+      padding: 11px 16px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--panel);
+      color: var(--text);
+      font-size: 0.92rem;
+      outline: none;
+    }
+    .search-box input:focus { border-color: var(--accent); }
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .filter-btn {
+      padding: 8px 14px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--panel);
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .filter-btn:hover { color: var(--text); border-color: rgba(148,163,184,0.4); }
+    .filter-btn.active {
+      background: rgba(56, 189, 248, 0.16);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .stats-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-bottom: 22px;
+      font-size: 0.84rem;
+      color: var(--muted);
+    }
+    .stats-bar strong { color: var(--text); }
+
+    /* Section & Table */
+    .section {
+      margin-bottom: 28px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+    .section-header {
+      padding: 16px 22px;
+      background: rgba(30, 41, 59, 0.55);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .section-header h2 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .badge {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.15);
+      color: var(--accent);
+    }
+    .badge.green { background: rgba(52, 211, 153, 0.15); color: var(--green); }
+    .badge.purple { background: rgba(167, 139, 250, 0.15); color: var(--purple); }
+    .badge.amber { background: rgba(251, 191, 36, 0.15); color: var(--amber); }
+    .badge.rose { background: rgba(251, 113, 133, 0.15); color: var(--rose); }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      text-align: left;
+      padding: 13px 18px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+      font-size: 0.86rem;
+    }
+    th {
+      font-size: 0.74rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      background: rgba(15, 23, 42, 0.5);
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: rgba(255, 255, 255, 0.02); }
+    .name-col { font-weight: 700; color: #e2e8f0; min-width: 190px; }
+    .name-sub { display: block; font-size: 0.76rem; font-weight: 500; color: var(--muted); margin-top: 2px; }
+    .why-col { color: #cbd5e1; max-width: 440px; }
+    .where-col { font-family: Consolas, monospace; font-size: 0.79rem; color: var(--cyan); }
+    .links-col { min-width: 180px; display: flex; flex-wrap: wrap; gap: 6px; }
+    .link-btn {
+      display: inline-block;
+      text-decoration: none;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 5px 10px;
+      border-radius: 8px;
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      background: rgba(56, 189, 248, 0.1);
+      color: var(--accent);
+      transition: all 0.12s;
+    }
+    .link-btn:hover { background: rgba(56, 189, 248, 0.22); }
+    .link-btn.docs {
+      border-color: rgba(167, 139, 250, 0.35);
+      background: rgba(167, 139, 250, 0.1);
+      color: var(--purple);
+    }
+    .link-btn.docs:hover { background: rgba(167, 139, 250, 0.22); }
+    .link-btn.live {
+      border-color: rgba(52, 211, 153, 0.35);
+      background: rgba(52, 211, 153, 0.1);
+      color: var(--green);
+    }
+    .link-btn.live:hover { background: rgba(52, 211, 153, 0.22); }
+    code {
+      background: rgba(15, 23, 42, 0.85);
+      padding: 2px 6px;
+      border-radius: 5px;
+      font-family: Consolas, monospace;
+      font-size: 0.8rem;
+      color: #7dd3fc;
+    }
+    .hidden { display: none !important; }
+    @media (max-width: 900px) {
+      table, thead, tbody, th, td, tr { display: block; }
+      thead { display: none; }
+      tr { border-bottom: 1px solid var(--border); padding: 10px 0; }
+      td { border-bottom: none; padding: 6px 16px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-top">
+      <div class="brand">
+        <div class="logo">OS</div>
+        <div>
+          <h1>OWASP Sentinel (VulnSentinel) — Complete Technical Map</h1>
+          <p>Cybersecurity Engineer Guide: Frameworks, APIs, Databases, Scanners, UI Components &amp; Built-in Functions</p>
+        </div>
+      </div>
+      <div class="live-links">
+        <a class="live-pill green" href="http://localhost:5173/" target="_blank">React UI (:5173)</a>
+        <a class="live-pill cyan" href="http://127.0.0.1:8001/docs" target="_blank">FastAPI Swagger Docs (:8001/docs)</a>
+        <a class="live-pill" href="http://127.0.0.1:8001/health" target="_blank">Backend Health (:8001/health)</a>
+        <a class="live-pill" href="http://127.0.0.1:5001/live" target="_blank">Kali Container (:5001/live)</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="arch-card">
+      <div class="arch-title">How Everything Connects (Request Flow)</div>
+      <div class="arch-flow">
+        <div class="arch-node">
+          <div class="step">1. Frontend UI (Browser)</div>
+          <h3>React 19 + TypeScript + Vite</h3>
+          <p>Renders tabs (Overview, Subdomain Finder, Path Finder, SQL, XSSpect, Kali Pentester). Sends REST requests to <code>/api/v1/*</code>.</p>
+        </div>
+        <div class="arch-node">
+          <div class="step">2. Backend API (Python)</div>
+          <h3>FastAPI + Uvicorn (:8001)</h3>
+          <p>Receives API calls, validates inputs with Pydantic, enforces scope/SSRF rules, and dispatches scans or queries.</p>
+        </div>
+        <div class="arch-node">
+          <div class="step">3. Storage &amp; Queue</div>
+          <h3>SQLAlchemy + SQLite/Postgres + Redis/Celery</h3>
+          <p>Stores assets, scan jobs, findings, OWASP taxonomy, schedules, and audit logs. Celery + Redis run scheduled background tasks.</p>
+        </div>
+        <div class="arch-node">
+          <div class="step">4. Execution &amp; OSINT</div>
+          <h3>Kali Docker (:5001) + External APIs</h3>
+          <p>Runs 76 Kali tools (nmap, sqlmap, nuclei, gobuster, commix, jaeles, etc.) inside <code>sentinel_kali</code>, plus live OSINT/DNS lookups.</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="controls">
+      <div class="search-box">
+        <input id="searchInput" type="text" placeholder="Search anything (e.g., FastAPI, SQLAlchemy, PathFinder, crt.sh, nmap, React, asyncio, httpx)..." />
+      </div>
+      <div class="filters" id="filterButtons">
+        <button class="filter-btn active" data-cat="all">All</button>
+        <button class="filter-btn" data-cat="backend-lib">Backend Libraries</button>
+        <button class="filter-btn" data-cat="database">Database &amp; Models</button>
+        <button class="filter-btn" data-cat="api">APIs We Created</button>
+        <button class="filter-btn" data-cat="services">Services &amp; Scanner Rules</button>
+        <button class="filter-btn" data-cat="external">External APIs &amp; Kali</button>
+        <button class="filter-btn" data-cat="frontend">Frontend UI &amp; Libs</button>
+        <button class="filter-btn" data-cat="builtins">Built-in Functions</button>
+      </div>
+    </div>
+
+    <div class="stats-bar">
+      <span>Showing <strong id="visibleCount">0</strong> items across <strong id="sectionCount">0</strong> sections</span>
+      <span>•</span>
+      <span>Tip: Click <strong>Open File</strong> links to jump directly to the exact file in your workspace.</span>
+    </div>
+
+    <div id="catalogContainer"></div>
+  </main>
+
+  <script>
+    const BASE = 'file:///C:/VSCode/VulnSentinel';
+
+    const SECTIONS = [
+      {
+        id: 'backend-lib',
+        title: '1. Backend Frameworks & Python Libraries',
+        badge: 'Python 3.13 • requirements.txt',
+        badgeClass: '',
+        items: [
+          {
+            name: 'FastAPI (v0.115.0)',
+            sub: 'Web API Framework',
+            why: 'Powers all REST API endpoints (/api/v1/*), automatic request validation, CORS, security headers middleware, and auto-generated Swagger UI at /docs.',
+            where: 'app/main.py, app/api/v1/api.py',
+            links: [
+              { label: 'Open main.py', href: `${BASE}/app/main.py`, kind: 'file' },
+              { label: 'Live Swagger /docs', href: 'http://127.0.0.1:8001/docs', kind: 'live' },
+              { label: 'FastAPI Docs', href: 'https://fastapi.tiangolo.com/', kind: 'docs' }
+            ]
+          },
+          {
+            name: 'Uvicorn (v0.30.6)',
+            sub: 'ASGI Web Server',
+            why: 'Runs the FastAPI Python backend asynchronously on port 8001 (local dev) or 8000 (Docker), handling concurrent HTTP & SSE/WebSocket-style streams.',
+            where: 'app/main.py, docker-compose.yml',
+            links: [
+              { label: 'Open docker-compose.yml', href: `${BASE}/docker-compose.yml`, kind: 'file' },
+              { label: 'Uvicorn Docs', href: 'https://www.uvicorn.org/', kind: 'docs' }
+            ]
+          },
+          {
+            name: 'Pydantic & pydantic-settings',
+            sub: 'v2.9.2 / v2.16.2',
+            why: 'Validates every incoming JSON request & outgoing response (URLs, scan configs, ports, tool names) and loads environment variables (.env) safely.',
+            where: 'app/core/config.py, app/models/schemas/',
+            links: [
+              { label: 'Open config.py', href: `${BASE}/app/core/config.py`, kind: 'file' },
+              { label: 'Pydantic Docs', href: 'https://docs.pydantic.dev/', kind: 'docs' }
+            ]
+          },
+          {
+            name: 'HTTPX (v0.27.2)',
+            sub: 'Async HTTP Client',
+            why: 'Used by Path Finder, Subdomain Finder, XSSpect, and the scanner engine to probe thousands of URLs/endpoints asynchronously without blocking.',
+            where: 'app/services/route_checker.py, app/services/subdomain_service.py',
+            links: [
+              { label: 'Open route_checker.py', href: `${BASE}/app/services/route_checker.py`, kind: 'file' },
+              { label: 'HTTPX Docs', href: 'https://www.python-httpx.org/', kind: 'docs' }
+            ]
+          },
+          {
+            name: 'Requests (v2.32.3)',
+            sub: 'Sync HTTP Client',
+            why: 'Communicates with the Kali Docker container bridge (http://127.0.0.1:5001) to execute tools, check /api/ps processes, and fetch /api/jobs logs.',
+            where: 'app/kali_bridge.py, app/api/v1/endpoints/sql.py',
+            links: [
+              { label: 'Open kali_bridge.py', href: `${BASE}/app/kali_bridge.py`, kind: 'file' },
+              { label: 'Requests Docs', href: 'https://requests.readthedocs.io/', kind: 'docs' }
+            ]
+          },
+          {
+            name: 'BeautifulSoup4 (v4.13.3)',
+            sub: 'HTML/XML Parser',
+            why: 'Parses live target HTML pages to extract forms, links, input parameters (for XSS/SQLi/Path Finder crawling) and sitemaps.',
+            where: 'app/services/route_checker.py, app/api/v1/endpoints/xssspect.py',
+            links: [
+              { label: 'Open route_checker.py', href: `${BASE}/app/services/route_checker.py`, kind: 'file' },
+              { label: 'BS4 Docs', href: 'https://www.crummy.com/software/BeautifulSoup/bs4/doc/', kind: 'docs' }
+            ]
+          },
+          {
+            name: 'Celery (v5.6.3) + Redis (v8.1.0) + Croniter',
+            sub: 'Task Queue & Cron Scheduler',
+            why: 'Runs recurring/scheduled security scans in the background using cron expressions (e.g., daily or weekly OWASP scans).',
+            where: 'app/services/scheduler_service.py, docker-compose.yml',
+            links: [
+              { label: 'Open scheduler_service.py', href: `${BASE}/app/services/scheduler_service.py`, kind: 'file' },
+              { label: 'Celery Docs', href: 'https://docs.celeryq.dev/', kind: 'docs' }
+            ]
+          },
+          {
+            name: 'Pytest (v8.3.3)',
+            sub: 'Testing Framework',
+            why: 'Automated security & regression tests verifying SSRF blocking, Soft-404 filtering, Path Finder cancellation, and scanner safeguards.',
+            where: 'tests/test_route_checker.py, tests/test_path_finder_safeguards.py',
+            links: [
+              { label: 'Open test_route_checker.py', href: `${BASE}/tests/test_route_checker.py`, kind: 'file' },
+              { label: 'Open safeguards tests', href: `${BASE}/tests/test_path_finder_safeguards.py`, kind: 'file' }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'database',
+        title: '2. Database Engine & Data Models',
+        badge: 'SQLAlchemy 2.1 + Alembic + SQLite/Postgres',
+        badgeClass: 'green',
+        items: [
+          {
+            name: 'SQLAlchemy + Alembic + psycopg2',
+            sub: 'ORM & Schema Migrations',
+            why: 'Connects Python objects to SQLite (local dev) or PostgreSQL (Docker/production) and enforces foreign keys safely.',
+            where: 'app/db/session.py, app/db/base.py, requirements.txt',
+            links: [
+              { label: 'Open session.py', href: `${BASE}/app/db/session.py`, kind: 'file' },
+              { label: 'SQLAlchemy Docs', href: 'https://docs.sqlalchemy.org/', kind: 'docs' }
+            ]
+          },
+          {
+            name: 'AuthorizedAsset & ScopeGrant Models',
+            sub: 'Target & Scope Authorization Tables',
+            why: 'Stores approved targets (URLs/hostnames) and authorization scopes so scans only run against authorized assets.',
+            where: 'app/models/db/asset.py, app/models/db/scope.py',
+            links: [
+              { label: 'Open asset.py', href: `${BASE}/app/models/db/asset.py`, kind: 'file' },
+              { label: 'Open scope.py', href: `${BASE}/app/models/db/scope.py`, kind: 'file' }
+            ]
+          },
+          {
+            name: 'ScanJob & Finding Models',
+            sub: 'Assessment Results & OWASP Mapping Tables',
+            why: 'Persists every scan execution, severity (Critical/High/Medium/Low), evidence, remediation, and OWASP Top 10 category mapping.',
+            where: 'app/models/db/scan.py, app/models/db/finding.py',
+            links: [
+              { label: 'Open scan.py', href: `${BASE}/app/models/db/scan.py`, kind: 'file' },
+              { label: 'Open finding.py', href: `${BASE}/app/models/db/finding.py`, kind: 'file' }
+            ]
+          },
+          {
+            name: 'PathFinderScan & DiscoveredPath Models',
+            sub: 'Endpoint Discovery Tables',
+            why: 'Saves Path Finder scan status (Quick/Recursive/Exhaustive), discovered routes, HTTP status codes, content lengths, and fingerprints.',
+            where: 'app/models/db/path_finder.py',
+            links: [
+              { label: 'Open path_finder.py', href: `${BASE}/app/models/db/path_finder.py`, kind: 'file' }
+            ]
+          },
+          {
+            name: 'Taxonomy, Rule, Schedule, History, Audit',
+            sub: 'Governance & Intelligence Tables',
+            why: 'Tracks OWASP Top 10 editions (2017/2021/2025), detection rules, cron schedules, patch verification history, and full audit trail events.',
+            where: 'app/models/db/taxonomy.py, rule.py, schedule.py, history.py, audit.py',
+            links: [
+              { label: 'Open taxonomy.py', href: `${BASE}/app/models/db/taxonomy.py`, kind: 'file' },
+              { label: 'Open audit.py', href: `${BASE}/app/models/db/audit.py`, kind: 'file' }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'api',
+        title: '3. Backend REST APIs We Created (/api/v1/*)',
+        badge: '17 Router Modules',
+        badgeClass: 'purple',
+        items: [
+          {
+            name: '/api/v1/health',
+            sub: 'Health & Kali Bridge Check',
+            why: 'Reports backend status, Kali Docker connectivity, and tool readiness.',
+            where: 'app/api/v1/endpoints/health.py',
+            links: [
+              { label: 'Open health.py', href: `${BASE}/app/api/v1/endpoints/health.py`, kind: 'file' },
+              { label: 'Test /health', href: 'http://127.0.0.1:8001/health', kind: 'live' }
+            ]
+          },
+          {
+            name: '/api/v1/kali/*',
+            sub: 'Kali Pentester Arsenal API (76 Tools)',
+            why: 'Lists all 76 categorized Kali tools (/tools), checks live container binary availability (/status), monitors running processes (/logs), and runs commands (/execute).',
+            where: 'app/api/v1/endpoints/kali.py',
+            links: [
+              { label: 'Open kali.py', href: `${BASE}/app/api/v1/endpoints/kali.py`, kind: 'file' },
+              { label: 'Live /kali/tools', href: 'http://127.0.0.1:8001/api/v1/kali/tools', kind: 'live' }
+            ]
+          },
+          {
+            name: '/api/v1/terminal/*',
+            sub: 'Interactive Kali & Practice Terminal API',
+            why: 'Powers the in-browser terminal tab with live whois, whatweb, wpscan, nmap, and command execution.',
+            where: 'app/api/v1/endpoints/terminal.py',
+            links: [
+              { label: 'Open terminal.py', href: `${BASE}/app/api/v1/endpoints/terminal.py`, kind: 'file' }
+            ]
+          },
+          {
+            name: '/api/v1/path-finder/*',
+            sub: 'Authorized Endpoint Discovery API',
+            why: 'Starts, pauses, cancels, and streams discovered directories/routes (sitemap, robots.txt, JS bundle routes, HTML crawl, and wordlist probing).',
+            where: 'app/api/v1/endpoints/path_finder.py',
+            links: [
+              { label: 'Open path_finder.py', href: `${BASE}/app/api/v1/endpoints/path_finder.py`, kind: 'file' }
+            ]
+          },
+          {
+            name: '/api/v1/targets/* & /assets/* & /scopes/*',
+            sub: 'Target Validation, Subdomains & Scope Control',
+            why: 'Validates targets, runs multi-source Subdomain Discovery, manages AuthorizedAssets, and enforces ScopeGrants.',
+            where: 'app/api/v1/endpoints/targets.py, assets.py, scopes.py',
+            links: [
+              { label: 'Open targets.py', href: `${BASE}/app/api/v1/endpoints/targets.py`, kind: 'file' },
+              { label: 'Open assets.py', href: `${BASE}/app/api/v1/endpoints/assets.py`, kind: 'file' }
+            ]
+          },
+          {
+            name: '/api/v1/sql/*',
+            sub: 'SQL Dork Engine & SQLi Testing API',
+            why: 'Generates Google/GitHub/Shodan dorks, harvests target URLs, manages proxy pools, and integrates multi-layer SQL assessment.',
+            where: 'app/api/v1/endpoints/sql.py',
+            links: [
+              { label: 'Open sql.py', href: `${BASE}/app/api/v1/endpoints/sql.py`, kind: 'file' }
+            ]
+          },
+          {
+            name: '/api/v1/xssspect/*',
+            sub: 'XSSpect Reflected XSS Scanner API',
+            why: 'Crawls parameters and tests reflected XSS payloads with context-aware reflection analysis.',
+            where: 'app/api/v1/endpoints/xssspect.py',
+            links: [
+              { label: 'Open xssspect.py', href: `${BASE}/app/api/v1/endpoints/xssspect.py`, kind: 'file' }
+            ]
+          },
+          {
+            name: '/api/v1/scans/*, /findings/*, /rules/*, /taxonomy/*',
+            sub: 'OWASP Scanner, Findings & Coverage APIs',
+            why: 'Runs automated OWASP Top 10 checks, lists findings, maps rules to OWASP 2017/2021/2025 taxonomy, and tracks patch verification.',
+            where: 'app/api/v1/endpoints/scans.py, findings.py, rules.py, taxonomy.py, history.py',
+            links: [
+              { label: 'Open scans.py', href: `${BASE}/app/api/v1/endpoints/scans.py`, kind: 'file' },
+              { label: 'Open findings.py', href: `${BASE}/app/api/v1/endpoints/findings.py`, kind: 'file' }
+            ]
+          },
+          {
+            name: '/api/v1/schedules/*, /audit/*, /tunnel/*',
+            sub: 'Automation, Audit Trail & Ngrok Tunnel APIs',
+            why: 'Schedules recurring scans, records security audit logs, and exposes local backend via Ngrok when using remote UI.',
+            where: 'app/api/v1/endpoints/schedules.py, audit.py, tunnel.py',
+            links: [
+              { label: 'Open tunnel.py', href: `${BASE}/app/api/v1/endpoints/tunnel.py`, kind: 'file' },
+              { label: 'Open audit.py', href: `${BASE}/app/api/v1/endpoints/audit.py`, kind: 'file' }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'services',
+        title: '4. Core Security Services & Built-in Scanner Rules',
+        badge: '20 OWASP Detection Modules',
+        badgeClass: 'amber',
+        items: [
+          {
+            name: 'Subdomain Discovery Service',
+            sub: 'Passive + Active DNS Enumeration',
+            why: 'Combines Certificate Transparency, passive DNS, DNS record mining (TXT/MX/NS/CNAME), CSP/CORS scraping, and wildcard DNS suppression.',
+            where: 'app/services/subdomain_service.py',
+            links: [
+              { label: 'Open subdomain_service.py', href: `${BASE}/app/services/subdomain_service.py`, kind: 'file' }
+            ]
+          },
+          {
+            name: 'Path Finder & Route Checker',
+            sub: 'Directory, Sitemap, JS & HTML Crawler',
+            why: 'Generates 1,485+ (Quick) to 6,072+ (Exhaustive) paths, parses sitemaps/robots/JS bundles, crawls HTML links, and filters Soft-404/wildcard redirects.',
+            where: 'app/services/path_finder_service.py, app/services/route_checker.py',
+            links: [
+              { label: 'Open path_finder_service.py', href: `${BASE}/app/services/path_finder_service.py`, kind: 'file' },
+              { label: 'Open route_checker.py', href: `${BASE}/app/services/route_checker.py`, kind: 'file' }
+            ]
+          },
+          {
+            name: 'OWASP Scanner Engine & 20 Rules',
+            sub: 'Custom Python Vulnerability Engine',
+            why: 'Runs built-in checks for Injection, Auth Failures, SSRF, XXE, CSRF, CORS, Security Headers, Cookies, TLS, Sensitive Files, Info Leaks, Open Redirects, DoS Resilience, and Vulnerable Components.',
+            where: 'app/scanner/engine.py, app/scanner/registry.py, app/scanner/rules/',
+            links: [
+              { label: 'Open engine.py', href: `${BASE}/app/scanner/engine.py`, kind: 'file' },
+              { label: 'Open registry.py', href: `${BASE}/app/scanner/registry.py`, kind: 'file' }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'external',
+        title: '5. External APIs, OSINT Feeds & Kali Docker Container',
+        badge: 'Docker + 76 Kali Tools + OSINT',
+        badgeClass: 'rose',
+        items: [
+          {
+            name: 'Unified Kali Linux Docker Container (sentinel_kali)',
+            sub: 'Port 5001:5000 & 1080:1080 (SOCKS)',
+            why: 'Isolates 76 real Linux pentesting tools (nmap, masscan, rustscan, autorecon, sqlmap, nuclei, gobuster, feroxbuster, ffuf, dirsearch, commix, nosqlmap, jaeles, wpscan, dalfox, whatweb, hydra, john, hashcat, ghidra, trivy, prowler, etc.) safely inside Docker.',
+            where: 'docker/kali/Dockerfile, docker-compose.yml',
+            links: [
+              { label: 'Open Kali Dockerfile', href: `${BASE}/docker/kali/Dockerfile`, kind: 'file' },
+              { label: 'Container /live', href: 'http://127.0.0.1:5001/live', kind: 'live' }
+            ]
+          },
+          {
+            name: 'SecLists & Dirb Wordlists',
+            sub: 'Inside sentinel_kali (/usr/share/seclists)',
+            why: 'Supplies industry-standard wordlists like raft-large-directories.txt (62k entries), big.txt (20k), and rockyou.txt for fuzzing & brute-forcing.',
+            where: 'app/api/v1/endpoints/kali.py, app/kali_bridge.py',
+            links: [
+              { label: 'Open kali.py', href: `${BASE}/app/api/v1/endpoints/kali.py`, kind: 'file' }
+            ]
+          },
+          {
+            name: 'External OSINT & Recon APIs',
+            sub: 'crt.sh, CertSpotter, HackerTarget, AlienVault, Anubis, DoH, Shodan/WHOIS',
+            why: 'Provides zero-packet passive subdomain & threat intelligence without touching the target directly.',
+            where: 'app/services/subdomain_service.py, app/api/v1/endpoints/terminal.py',
+            links: [
+              { label: 'Open subdomain_service.py', href: `${BASE}/app/services/subdomain_service.py`, kind: 'file' }
+            ]
+          },
+          {
+            name: 'Ngrok Tunnel Integration',
+            sub: 'Public HTTPS Bridge',
+            why: 'Exposes your local FastAPI backend (port 8001) securely so a hosted Render UI can reach your local Kali Docker container.',
+            where: 'app/services/ngrok_service.py, frontend/src/components/NgrokModal.tsx',
+            links: [
+              { label: 'Open NgrokModal.tsx', href: `${BASE}/frontend/src/components/NgrokModal.tsx`, kind: 'file' }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'frontend',
+        title: '6. Frontend UI Framework, Libraries & Components',
+        badge: 'React 19 + TypeScript + Vite 8',
+        badgeClass: '',
+        items: [
+          {
+            name: 'React 19 + TypeScript + Vite 8 + TailwindCSS 4',
+            sub: 'Core Frontend Stack',
+            why: 'Builds a fast, type-safe single-page security dashboard with modern dark/light UI styling and instant hot reload.',
+            where: 'frontend/package.json, frontend/src/App.tsx',
+            links: [
+              { label: 'Open package.json', href: `${BASE}/frontend/package.json`, kind: 'file' },
+              { label: 'Open App.tsx', href: `${BASE}/frontend/src/App.tsx`, kind: 'file' },
+              { label: 'Open Live UI', href: 'http://localhost:5173/', kind: 'live' }
+            ]
+          },
+          {
+            name: 'react-select, lucide-react, recharts, framer-motion',
+            sub: 'UI Controls, Icons, Charts & Animations',
+            why: 'react-select powers searchable grouped tool dropdowns; lucide-react provides security icons; recharts renders posture/OWASP charts; framer-motion animates transitions.',
+            where: 'frontend/package.json, frontend/src/components/',
+            links: [
+              { label: 'Open OverviewTab.tsx', href: `${BASE}/frontend/src/components/OverviewTab.tsx`, kind: 'file' }
+            ]
+          },
+          {
+            name: 'jsPDF & html2pdf.js',
+            sub: 'PDF Report Generation',
+            why: 'Exports executive OWASP vulnerability & compliance reports directly to PDF from the browser.',
+            where: 'frontend/src/components/ReportsTab.tsx',
+            links: [
+              { label: 'Open ReportsTab.tsx', href: `${BASE}/frontend/src/components/ReportsTab.tsx`, kind: 'file' }
+            ]
+          },
+          {
+            name: 'Central API Client (api.ts)',
+            sub: 'Typed Fetch Wrapper',
+            why: 'Single clean layer connecting every React tab to /api/v1/* backend endpoints with error handling.',
+            where: 'frontend/src/services/api.ts',
+            links: [
+              { label: 'Open api.ts', href: `${BASE}/frontend/src/services/api.ts`, kind: 'file' }
+            ]
+          },
+          {
+            name: 'Security Tabs (KaliPentester, PathFinder, SubdomainFinder, SQL, XSSpect, Findings)',
+            sub: '21 Modular React Components',
+            why: 'Each security workflow has its own dedicated UI workspace, terminal output viewer, history log, and live status monitor.',
+            where: 'frontend/src/components/',
+            links: [
+              { label: 'KaliPentesterTab.tsx', href: `${BASE}/frontend/src/components/KaliPentesterTab.tsx`, kind: 'file' },
+              { label: 'PathFinderTab.tsx', href: `${BASE}/frontend/src/components/PathFinderTab.tsx`, kind: 'file' },
+              { label: 'SubdomainFinderTab.tsx', href: `${BASE}/frontend/src/components/SubdomainFinderTab.tsx`, kind: 'file' },
+              { label: 'SQLTab.tsx', href: `${BASE}/frontend/src/components/SQLTab.tsx`, kind: 'file' },
+              { label: 'XSSpectTab.tsx', href: `${BASE}/frontend/src/components/XSSpectTab.tsx`, kind: 'file' }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'builtins',
+        title: '7. Key Built-in Python & JavaScript Functions Used',
+        badge: 'Standard Library & Web APIs',
+        badgeClass: 'green',
+        items: [
+          {
+            name: 'asyncio (gather, Semaphore, create_task, run)',
+            sub: 'Python Built-in Concurrency',
+            why: 'Runs up to 50+ HTTP endpoint checks or DNS lookups simultaneously without freezing the server.',
+            where: 'app/services/route_checker.py, app/services/subdomain_service.py',
+            links: [
+              { label: 'Open route_checker.py', href: `${BASE}/app/services/route_checker.py`, kind: 'file' },
+              { label: 'Python asyncio Docs', href: 'https://docs.python.org/3/library/asyncio.html', kind: 'docs' }
+            ]
+          },
+          {
+            name: 'shlex.quote(), shlex.split(), re (Regex)',
+            sub: 'Command Safety & Parsing',
+            why: 'Safely escapes targets before passing them to Kali shell commands (preventing command injection) and parses tool outputs/URLs.',
+            where: 'app/kali_bridge.py, app/services/route_checker.py',
+            links: [
+              { label: 'Open kali_bridge.py', href: `${BASE}/app/kali_bridge.py`, kind: 'file' }
+            ]
+          },
+          {
+            name: 'ipaddress & socket & urllib.parse',
+            sub: 'SSRF Defense & DNS Resolution',
+            why: 'Blocks private/loopback IPs (127.0.0.1, 10.x, 169.254.169.254) to prevent SSRF attacks and resolves hostnames cleanly.',
+            where: 'app/services/path_finder_service.py, app/services/subdomain_service.py',
+            links: [
+              { label: 'Open path_finder_service.py', href: `${BASE}/app/services/path_finder_service.py`, kind: 'file' }
+            ]
+          },
+          {
+            name: 'hashlib (sha256) & difflib',
+            sub: 'Soft-404 Fingerprinting',
+            why: 'Hashes baseline 404/error pages to detect fake "200 OK" Soft-404 pages and avoid false positives.',
+            where: 'app/services/route_checker.py',
+            links: [
+              { label: 'Open route_checker.py', href: `${BASE}/app/services/route_checker.py`, kind: 'file' }
+            ]
+          },
+          {
+            name: 'Browser fetch(), EventSource, localStorage, URL',
+            sub: 'Built-in Browser / JS APIs',
+            why: 'fetch() calls backend APIs, EventSource streams real-time scan updates, localStorage persists UI preferences/history, and URL parses target domains.',
+            where: 'frontend/src/services/api.ts, KaliPentesterTab.tsx, PathFinderTab.tsx',
+            links: [
+              { label: 'Open api.ts', href: `${BASE}/frontend/src/services/api.ts`, kind: 'file' },
+              { label: 'MDN Fetch Docs', href: 'https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API', kind: 'docs' }
+            ]
+          }
+        ]
+      }
+    ];
+
+    const container = document.getElementById('catalogContainer');
+    const searchInput = document.getElementById('searchInput');
+    const filterButtons = document.getElementById('filterButtons');
+    const visibleCountEl = document.getElementById('visibleCount');
+    const sectionCountEl = document.getElementById('sectionCount');
+
+    let activeCategory = 'all';
+
+    function render() {
+      const q = searchInput.value.trim().toLowerCase();
+      container.innerHTML = '';
+      let totalItems = 0;
+      let totalSections = 0;
+
+      SECTIONS.forEach(sec => {
+        if (activeCategory !== 'all' && sec.id !== activeCategory) return;
+
+        const matchingItems = sec.items.filter(item => {
+          if (!q) return true;
+          return (
+            item.name.toLowerCase().includes(q) ||
+            item.sub.toLowerCase().includes(q) ||
+            item.why.toLowerCase().includes(q) ||
+            item.where.toLowerCase().includes(q)
+          );
+        });
+
+        if (matchingItems.length === 0) return;
+
+        totalSections++;
+        totalItems += matchingItems.length;
+
+        const secEl = document.createElement('section');
+        secEl.className = 'section';
+        secEl.innerHTML = `
+          <div class="section-header">
+            <h2>${sec.title}</h2>
+            <span class="badge ${sec.badgeClass}">${sec.badge} (${matchingItems.length})</span>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>What Is Used</th>
+                <th>Why We Used It</th>
+                <th>Where Located</th>
+                <th>Redirect / Open</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${matchingItems.map(item => `
+                <tr>
+                  <td class="name-col">
+                    ${item.name}
+                    <span class="name-sub">${item.sub}</span>
+                  </td>
+                  <td class="why-col">${item.why}</td>
+                  <td class="where-col">${item.where}</td>
+                  <td>
+                    <div class="links-col">
+                      ${item.links.map(l => `
+                        <a class="link-btn ${l.kind}" href="${l.href}" target="_blank" rel="noopener noreferrer">${l.label}</a>
+                      `).join('')}
+                    </div>
+                  </td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        `;
+        container.appendChild(secEl);
+      });
+
+      visibleCountEl.textContent = totalItems;
+      sectionCountEl.textContent = totalSections;
+    }
+
+    searchInput.addEventListener('input', render);
+    filterButtons.addEventListener('click', (e) => {
+      const btn = e.target.closest('.filter-btn');
+      if (!btn) return;
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeCategory = btn.dataset.cat;
+      render();
+    });
+
+    render();
+  </script>
+</body>
+</html>
+

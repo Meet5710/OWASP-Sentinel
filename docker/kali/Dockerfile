@@ -68,6 +68,7 @@ RUN apt-get update && \
     whatweb \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* && \
+    ln -sf /usr/bin/commix /usr/local/bin/commix && \
     git clone --depth 1 https://github.com/codingo/NoSQLMap.git /opt/nosqlmap && \
     printf '#!/bin/sh\nexec python3 /opt/nosqlmap/nosqlmap.py "$@"\n' > /usr/local/bin/nosqlmap && \
     chmod +x /usr/local/bin/nosqlmap

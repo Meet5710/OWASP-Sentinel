@@ -163,8 +163,17 @@ def normalize_target_for_tool(tool: str, target: str) -> str:
     return cleaned
 
 
+def _run_file_tool_on_target(norm_target: str, safe_target: str, cmd_prefix: str) -> str:
+    """If target is an http(s) URL, fetch it to a temp file before running a file-based tool."""
+    if norm_target.startswith(("http://", "https://")):
+        tmp_file = "/tmp/sentinel_target_asset"
+        inner = f"rm -f {tmp_file} && curl -skL --max-time 60 -o {tmp_file} {safe_target} && {cmd_prefix} {tmp_file}"
+        return f"sh -c {shlex.quote(inner)}"
+    return f"{cmd_prefix} {safe_target}"
+
+
 def build_kali_command(tool: str, target: str, extra_args: str = "") -> str:
-    """Build a reliable, non-interactive command string for any of the 72 Kali tools."""
+    """Build a reliable, non-interactive command string for any of the 76 Kali tools."""
     tool_key = tool.strip().lower()
     norm_target = normalize_target_for_tool(tool_key, target)
     safe_target = shlex.quote(norm_target)
@@ -175,7 +184,7 @@ def build_kali_command(tool: str, target: str, extra_args: str = "") -> str:
     # Network Reconnaissance & Scanning
     # ------------------------------------------------------------------
     if tool_key == "nmap":
-        flags = extra if extra else "-p- -sV -sC -A -T4 -Pn --script vuln,vulners --script-args mincvss=7.0"
+        flags = extra if extra else "--top-ports 1000 -sV -sC -T4 -Pn --script vuln"
         return " ".join(f"nmap {flags} {safe_target}".split())
 
     if tool_key == "rustscan":
@@ -354,8 +363,6 @@ def build_kali_command(tool: str, target: str, extra_args: str = "") -> str:
             flags = f"-q {flags}"
         if "--no-color" not in extra_tokens:
             flags = f"--no-color {flags}"
-        if "--max-time" not in extra:
-            flags = f"--max-time=480 {flags}"
         return " ".join(f"dirsearch -u {safe_target} {flags}".split())
 
     if tool_key == "nuclei":
@@ -363,7 +370,7 @@ def build_kali_command(tool: str, target: str, extra_args: str = "") -> str:
         return " ".join(f"nuclei -u {safe_target} {flags}".split())
 
     if tool_key == "nikto":
-        flags = extra if extra else "-C all -Tuning 1234567890bde -maxtime 9m"
+        flags = extra if extra else "-C all -Tuning 1234567890bde"
         return " ".join(f"nikto -h {safe_target} {flags}".split())
 
     if tool_key == "sqlmap":
@@ -389,14 +396,35 @@ def build_kali_command(tool: str, target: str, extra_args: str = "") -> str:
     if tool_key == "commix":
         flags = extra if extra else "--batch --level=3"
         batch_flag = "" if "--batch" in flags else "--batch"
-        return " ".join(f"commix --url={safe_target} {batch_flag} {flags}".split())
+        crawl_flag = "" if ("?" in norm_target or "--crawl" in flags) else "--crawl=2"
+        return " ".join(f"/usr/bin/commix --url={safe_target} {batch_flag} {crawl_flag} {flags}".split())
 
     if tool_key == "nosqlmap":
-        flags = extra if extra else "--attack 2"
-        return " ".join(f"nosqlmap -u {safe_target} {flags}".split())
+        parsed = urlparse(norm_target if "://" in norm_target else f"https://{norm_target}")
+        victim_host = parsed.hostname or norm_target
+        is_https = parsed.scheme.lower() == "https"
+        web_port = parsed.port or (443 if is_https else 80)
+        uri = parsed.path or "/"
+        if parsed.query:
+            uri = f"{uri}?{parsed.query}"
+        https_flag = "ON" if is_https else "OFF"
+        flags = extra if extra else "--attack 2 --httpMethod GET --verb OFF --injectSize 6 --injectFormat 1 --doTimeAttack OFF --savePath /tmp/nosqlmap_out"
+        if "--injectSize" not in flags:
+            flags = f"{flags} --injectSize 6"
+        if "--injectFormat" not in flags:
+            flags = f"{flags} --injectFormat 1"
+        if "--doTimeAttack" not in flags:
+            flags = f"{flags} --doTimeAttack OFF"
+        base_cmd = " ".join(
+            f"nosqlmap --victim {shlex.quote(victim_host)} --webPort {web_port} --https {https_flag} --uri {shlex.quote(uri)} {flags}".split()
+        )
+        inner = f"printf 'n\\nn\\nn\\nn\\n' | {base_cmd}"
+        return f"sh -c {shlex.quote(inner)}"
 
     if tool_key == "jaeles":
-        flags = extra if extra else "-c 20"
+        flags = extra if extra else "-s /root/.jaeles/base-signatures/common -c 20"
+        if "-s " not in flags and "--sign" not in flags:
+            flags = f"-s /root/.jaeles/base-signatures/common {flags}"
         return " ".join(f"jaeles scan {flags} -u {safe_target}".split())
 
     if tool_key == "whatweb":
@@ -518,14 +546,14 @@ def build_kali_command(tool: str, target: str, extra_args: str = "") -> str:
 
     if tool_key == "binwalk":
         flags = extra if extra else "-e -M -A"
-        return " ".join(f"binwalk {flags} {safe_target}".split())
+        return _run_file_tool_on_target(norm_target, safe_target, " ".join(f"binwalk {flags}".split()))
 
     if tool_key in {"checksec", "pwntools"}:
         return " ".join(f"pwn checksec --file={safe_target} {extra}".split())
 
     if tool_key == "strings":
         flags = extra if extra else "-a -n 8"
-        return " ".join(f"strings {flags} {safe_target}".split())
+        return _run_file_tool_on_target(norm_target, safe_target, " ".join(f"strings {flags}".split()))
 
     if tool_key == "objdump":
         flags = extra if extra else "-d -M intel"
@@ -593,15 +621,23 @@ def build_kali_command(tool: str, target: str, extra_args: str = "") -> str:
 
     if tool_key == "foremost":
         flags = extra if extra else "-T -v -o /tmp/foremost_out"
+        if norm_target.startswith(("http://", "https://")):
+            tmp_file = "/tmp/sentinel_target_asset"
+            inner = f"rm -f {tmp_file} && curl -skL --max-time 60 -o {tmp_file} {safe_target} && foremost {flags} -i {tmp_file}"
+            return f"sh -c {shlex.quote(inner)}"
         return " ".join(f"foremost {flags} -i {safe_target}".split())
 
     if tool_key == "steghide":
         flags = extra if extra else 'extract -p "" -f'
+        if norm_target.startswith(("http://", "https://")):
+            tmp_file = "/tmp/sentinel_target_asset"
+            inner = f"rm -f {tmp_file} && curl -skL --max-time 60 -o {tmp_file} {safe_target} && steghide {flags} -sf {tmp_file}"
+            return f"sh -c {shlex.quote(inner)}"
         return " ".join(f"steghide {flags} -sf {safe_target}".split())
 
     if tool_key == "exiftool":
         flags = extra if extra else "-a -u -g1 -s"
-        return " ".join(f"exiftool {flags} {safe_target}".split())
+        return _run_file_tool_on_target(norm_target, safe_target, " ".join(f"exiftool {flags}".split()))
 
     if tool_key == "autopsy":
         return " ".join(f"autopsy {extra}".split()) if extra else "autopsy -h"
@@ -915,7 +951,7 @@ def _parse_sse_command_response(body: str) -> dict:
     }
 
 
-def run_tool_on_kali(command: str, timeout: int = 600) -> dict:
+def run_tool_on_kali(command: str, timeout: int = 7200) -> dict:
     """Execute a command inside the Kali Docker container API."""
     candidates = _candidate_kali_urls()
     last_exc: Exception | None = None

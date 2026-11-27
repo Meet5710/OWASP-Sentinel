@@ -41,7 +41,7 @@ class KaliScanResult(BaseModel):
 
 TOOL_CATALOG: dict[str, list[dict[str, str]]] = {
     "Network Reconnaissance & Scanning": [
-        {"name": "nmap", "description": "Network mapper & service scanner", "example_args": "-p- -sV -sC -A -T4 -Pn --script vuln,vulners --script-args mincvss=7.0"},
+        {"name": "nmap", "description": "Network mapper & service scanner", "example_args": "--top-ports 1000 -sV -sC -T4 -Pn --script vuln"},
         {"name": "rustscan", "description": "Ultra-fast port scanner", "example_args": "--ulimit 5000 -- -sV -sC -A"},
         {"name": "masscan", "description": "High-speed internet-scale port scanner", "example_args": "-p1-65535 --rate 10000 -oJ /tmp/masscan_out.json"},
         {"name": "autorecon", "description": "Comprehensive automated recon", "example_args": '--nmap-append="-p- -sV -sC -A"'},
@@ -62,13 +62,13 @@ TOOL_CATALOG: dict[str, list[dict[str, str]]] = {
         {"name": "ffuf", "description": "Fast web fuzzer", "example_args": "-w /usr/share/seclists/Discovery/Web-Content/raft-large-directories.txt -mc 200,204,301,302,307,401,403 -t 50 -recursion -recursion-depth 2"},
         {"name": "dirsearch", "description": "Advanced directory discovery", "example_args": "-e '*' -r -R 4 -t 50 --crawl --random-agent"},
         {"name": "nuclei", "description": "Template-based vulnerability scanner", "example_args": "-severity critical,high,medium -stats -rl 100 -c 50"},
-        {"name": "nikto", "description": "Web server vulnerability scanner", "example_args": "-C all -Tuning 1234567890bde -maxtime 9m"},
+        {"name": "nikto", "description": "Web server vulnerability scanner", "example_args": "-C all -Tuning 1234567890bde"},
         {"name": "sqlmap", "description": "Automated SQL injection tool", "example_args": "--batch --level=5 --risk=3 --dbs --threads=10 --random-agent"},
         {"name": "wpscan", "description": "WordPress security scanner", "example_args": "--enumerate vp,vt,u,dbe --plugins-detection aggressive --random-user-agent"},
         {"name": "dalfox", "description": "Advanced XSS vulnerability scanner", "example_args": "--deep-domxss --mining-dom"},
-        {"name": "commix", "description": "Command injection vulnerability scanner", "example_args": "--batch --level=3"},
-        {"name": "nosqlmap", "description": "Automated NoSQL injection & database exploitation", "example_args": "--attack 2"},
-        {"name": "jaeles", "description": "Signature-based web vulnerability scanner", "example_args": "-c 20"},
+        {"name": "commix", "description": "Command injection vulnerability scanner", "example_args": "--batch --level=3 --crawl=2"},
+        {"name": "nosqlmap", "description": "Automated NoSQL injection & database exploitation", "example_args": "--attack 2 --httpMethod GET --injectSize 6"},
+        {"name": "jaeles", "description": "Signature-based web vulnerability scanner", "example_args": "-s /root/.jaeles/base-signatures/common -c 20"},
         {"name": "whatweb", "description": "Web technology fingerprinter", "example_args": "-a 3 --log-verbose=/tmp/whatweb_out.txt"},
         {"name": "wafw00f", "description": "WAF detector", "example_args": "-a -v"},
         {"name": "arjun", "description": "HTTP parameter discovery", "example_args": "-m GET,POST,JSON --stable"},
