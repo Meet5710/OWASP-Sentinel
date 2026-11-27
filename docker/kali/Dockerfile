@@ -50,13 +50,27 @@ RUN apt-get update && \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Go-based OSINT/Bug Bounty tools + symlink existing Go/pipx binaries into /usr/local/bin
+# Go-based OSINT/Bug Bounty & Exploitation tools + symlink existing Go/pipx binaries into /usr/local/bin
 RUN go install github.com/haccer/subjack@latest && \
     go install github.com/lc/gau/v2/cmd/gau@latest && \
+    go install github.com/jaeles-project/jaeles@latest && \
+    go install github.com/hahwul/dalfox/v2@latest && \
     go clean -cache -modcache && \
     for b in /root/go/bin/* /root/.local/bin/*; do \
         [ -e "$b" ] && ln -sf "$b" "/usr/local/bin/$(basename "$b")"; \
     done
+
+# Top Exploitation Tools (commix, wpscan, whatweb via apt; nosqlmap via GitHub since it is not in kali-rolling apt)
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    commix \
+    wpscan \
+    whatweb \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* && \
+    git clone --depth 1 https://github.com/codingo/NoSQLMap.git /opt/nosqlmap && \
+    printf '#!/bin/sh\nexec python3 /opt/nosqlmap/nosqlmap.py "$@"\n' > /usr/local/bin/nosqlmap && \
+    chmod +x /usr/local/bin/nosqlmap
 
 # Cloud, Container & Censys tools installed cleanly into isolated Python 3.12 envs via uv
 RUN curl -LsSf https://astral.sh/uv/install.sh | env UV_INSTALL_DIR=/usr/local/bin sh && \

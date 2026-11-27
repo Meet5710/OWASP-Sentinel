@@ -67,6 +67,8 @@ TOOL_CATALOG: dict[str, list[dict[str, str]]] = {
         {"name": "wpscan", "description": "WordPress security scanner", "example_args": "--enumerate vp,vt,u,dbe --plugins-detection aggressive --random-user-agent"},
         {"name": "dalfox", "description": "Advanced XSS vulnerability scanner", "example_args": "--deep-domxss --mining-dom"},
         {"name": "commix", "description": "Command injection vulnerability scanner", "example_args": "--batch --level=3"},
+        {"name": "nosqlmap", "description": "Automated NoSQL injection & database exploitation", "example_args": "--attack 2"},
+        {"name": "jaeles", "description": "Signature-based web vulnerability scanner", "example_args": "-c 20"},
         {"name": "whatweb", "description": "Web technology fingerprinter", "example_args": "-a 3 --log-verbose=/tmp/whatweb_out.txt"},
         {"name": "wafw00f", "description": "WAF detector", "example_args": "-a -v"},
         {"name": "arjun", "description": "HTTP parameter discovery", "example_args": "-m GET,POST,JSON --stable"},

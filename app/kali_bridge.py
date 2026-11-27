@@ -90,6 +90,8 @@ URL_TOOLS = {
     "wpscan",
     "dalfox",
     "commix",
+    "nosqlmap",
+    "jaeles",
     "whatweb",
     "wafw00f",
     "arjun",
@@ -388,6 +390,14 @@ def build_kali_command(tool: str, target: str, extra_args: str = "") -> str:
         flags = extra if extra else "--batch --level=3"
         batch_flag = "" if "--batch" in flags else "--batch"
         return " ".join(f"commix --url={safe_target} {batch_flag} {flags}".split())
+
+    if tool_key == "nosqlmap":
+        flags = extra if extra else "--attack 2"
+        return " ".join(f"nosqlmap -u {safe_target} {flags}".split())
+
+    if tool_key == "jaeles":
+        flags = extra if extra else "-c 20"
+        return " ".join(f"jaeles scan {flags} -u {safe_target}".split())
 
     if tool_key == "whatweb":
         flags = extra if extra else "-a 3 --log-verbose=/tmp/whatweb_out.txt"
@@ -718,6 +728,17 @@ def check_catalog_tools_on_kali(tool_names: list[str], force: bool = False) -> d
     return dict(result_map)
 
 
+def _is_active_tool_process(cmd: str, tool_tokens: set[str]) -> bool:
+    """Return True if cmd is an active security tool process (excluding shell wrappers)."""
+    cmd_lower = cmd.strip().lower()
+    if not cmd_lower:
+        return False
+    if cmd_lower.startswith(("/bin/sh -c ", "sh -c ", "/bin/bash -c ", "bash -c ")):
+        return False
+    cmd_words = {os.path.basename(w).lower() for w in cmd.split()[:3]}
+    return any(w in tool_tokens for w in cmd_words)
+
+
 def get_kali_mcp_logs_and_processes(lines: int = 40, known_tools: list[str] | None = None) -> dict:
     """Fetch active processes and background jobs running inside the Kali Docker container."""
     base_url = get_kali_api_url()
@@ -762,8 +783,7 @@ def get_kali_mcp_logs_and_processes(lines: int = 40, known_tools: list[str] | No
                 if is_server:
                     mcp_running = True
                     continue
-                cmd_words = {os.path.basename(w).lower() for w in cmd.split()[:3]}
-                if any(w in tool_tokens for w in cmd_words):
+                if _is_active_tool_process(cmd, tool_tokens):
                     active_processes.append(
                         {
                             "pid": str(proc.get("pid", "")),
@@ -792,8 +812,7 @@ def get_kali_mcp_logs_and_processes(lines: int = 40, known_tools: list[str] | No
                 if is_server:
                     mcp_running = True
                     continue
-                cmd_words = {os.path.basename(w).lower() for w in cmd.split()[:3]}
-                if any(w in tool_tokens for w in cmd_words):
+                if _is_active_tool_process(cmd, tool_tokens):
                     active_processes.append(
                         {
                             "pid": pid,
