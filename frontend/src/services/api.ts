@@ -947,6 +947,30 @@ export const api = {
       backendBaseUrl,
     );
   },
+
+  async verifyAllKaliTools(
+    flag = '-h',
+    backendBaseUrl?: string,
+  ): Promise<{
+    target: string;
+    tool_executed: string;
+    command_ran: string;
+    output: string;
+    stderr: string;
+    returncode: number;
+    elapsed_seconds: number;
+    timestamp: string;
+    tool_available: boolean;
+  }> {
+    return kaliRequest(
+      '/kali/verify-all',
+      {
+        method: 'POST',
+        body: JSON.stringify({ flag }),
+      },
+      backendBaseUrl,
+    );
+  },
 };
 
 export const REMOTE_BACKEND_STORAGE_KEY = 'sentinel_remote_backend_url';

@@ -73,23 +73,34 @@ RUN apt-get update && \
     printf '#!/bin/sh\nexec python3 /opt/nosqlmap/nosqlmap.py "$@"\n' > /usr/local/bin/nosqlmap && \
     chmod +x /usr/local/bin/nosqlmap
 
-# Cloud, Container & Censys tools installed cleanly into isolated Python 3.12 envs via uv
+# Cloud, Container, Censys & NoSQLMap Python 3.12 isolated environments via uv
 RUN curl -LsSf https://astral.sh/uv/install.sh | env UV_INSTALL_DIR=/usr/local/bin sh && \
     UV_TOOL_BIN_DIR=/usr/local/bin uv tool install --python 3.12 prowler && \
     UV_TOOL_BIN_DIR=/usr/local/bin uv tool install --python 3.12 scoutsuite && \
     UV_TOOL_BIN_DIR=/usr/local/bin uv tool install --python 3.12 checkov && \
     UV_TOOL_BIN_DIR=/usr/local/bin uv tool install --python 3.12 kube-hunter && \
     UV_TOOL_BIN_DIR=/usr/local/bin uv tool install --python 3.12 censys && \
+    /root/.local/share/uv/python/cpython-3.12*/bin/2to3 -w -n /opt/nosqlmap && \
+    uv venv --python 3.12 /opt/nosqlmap/.venv && \
+    uv pip install --python /opt/nosqlmap/.venv/bin/python CouchDB httplib2 ipcalc pbkdf2 pymongo requests six && \
+    printf '#!/bin/sh\nexec /opt/nosqlmap/.venv/bin/python /opt/nosqlmap/nosqlmap.py "$@"\n' > /usr/local/bin/nosqlmap && \
+    chmod +x /usr/local/bin/nosqlmap && \
     uv cache clean
 
-# kube-bench & docker-bench-security
-RUN curl -fsSL -o /tmp/kube-bench.deb \
+# kube-bench & docker-bench-security (+ docker-cli for Docker Bench daemon checks)
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends docker-cli && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* && \
+    curl -fsSL -o /tmp/kube-bench.deb \
         https://github.com/aquasecurity/kube-bench/releases/download/v0.16.0/kube-bench_0.16.0_linux_amd64.deb && \
     dpkg -i /tmp/kube-bench.deb && \
     rm -f /tmp/kube-bench.deb && \
     git clone --depth 1 https://github.com/docker/docker-bench-security.git /opt/docker-bench-security && \
     chmod +x /opt/docker-bench-security/docker-bench-security.sh && \
-    ln -sf /opt/docker-bench-security/docker-bench-security.sh /usr/local/bin/docker-bench-security
+    sed -i 's|^LIBEXEC="\."|LIBEXEC="/opt/docker-bench-security"|' /opt/docker-bench-security/docker-bench-security.sh && \
+    printf '#!/bin/sh\nif [ "$1" = "-h" ] || [ "$1" = "--help" ]; then\n  sed -n "/^usage ()/,/^EOF$/p" /opt/docker-bench-security/docker-bench-security.sh | sed "1d;2d;\$d"\n  exit 0\nfi\ncd /opt/docker-bench-security && exec bash docker-bench-security.sh "$@"\n' > /usr/local/bin/docker-bench-security && \
+    chmod +x /usr/local/bin/docker-bench-security
 
 # Compatibility symlinks + Python 3.14 configparser fix for jwt_tool
 RUN ln -sf /usr/bin/testssl /usr/local/bin/testssl.sh && \

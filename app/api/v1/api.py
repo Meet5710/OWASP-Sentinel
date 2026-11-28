@@ -20,9 +20,7 @@ from app.api.v1.endpoints import (
     taxonomy,
     terminal,
     tunnel,
-    sql,
     path_finder,
-    xssspect,
 )
 
 api_router = APIRouter()
@@ -36,7 +34,6 @@ api_router.include_router(assets.router, prefix="/assets", tags=["Asset Inventor
 api_router.include_router(scans.router, prefix="/scans", tags=["Assessments & Scans"])
 api_router.include_router(path_finder.router, prefix="/path-finder", tags=["Path Finder (Authorized Endpoint Discovery)"])
 api_router.include_router(path_finder.router, prefix="/pathfinder", tags=["Path Finder (Authorized Endpoint Discovery)"])
-api_router.include_router(xssspect.router, prefix="/xssspect", tags=["XSSpect (Reflected XSS Scanner)"])
 api_router.include_router(schedules.router, prefix="/schedules", tags=["Assessment Scheduling"])
 api_router.include_router(findings.router, prefix="/findings", tags=["Finding Management & OWASP Mappings"])
 api_router.include_router(history.router, prefix="/history", tags=["Posture History & Patch Verification"])
@@ -44,4 +41,3 @@ api_router.include_router(rules.router, prefix="/rules", tags=["Detection Rules 
 api_router.include_router(taxonomy.router, prefix="/taxonomy", tags=["OWASP Intelligence & Taxonomy"])
 api_router.include_router(audit.router, prefix="/audit", tags=["Audit Log"])
 api_router.include_router(kali.router, prefix="/kali", tags=["Kali Pentester"])
-api_router.include_router(sql.router, prefix="/sql", tags=["SQL Target Discovery & Dork Engine"])

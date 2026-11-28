@@ -6,8 +6,6 @@ import { OverviewTab } from './components/OverviewTab';
 import { TargetAssessmentTab } from './components/TargetAssessmentTab';
 import { SubdomainFinderTab } from './components/SubdomainFinderTab';
 import { PathFinderTab } from './components/PathFinderTab';
-import { SQLTab } from './components/SQLTab';
-import { XSSpectTab } from './components/XSSpectTab';
 import { KaliPentesterTab } from './components/KaliPentesterTab';
 import { FindingsTab } from './components/FindingsTab';
 import { TaxonomyTab } from './components/TaxonomyTab';
@@ -590,28 +588,6 @@ export function App() {
                 assets={displayAssets}
                 onRefreshData={loadAllData}
                 onNavigateToTab={(tab) => setActiveTab(tab)}
-              />
-            </div>
-
-            <div
-              className={`w-full ${activeTab === 'sql' ? 'spatial-tab-pane block' : 'hidden'}`}
-              aria-hidden={activeTab !== 'sql'}
-            >
-              <SQLTab
-                assets={displayAssets}
-                onNavigateToTab={(tab) => setActiveTab(tab)}
-                onRefreshData={loadAllData}
-              />
-            </div>
-
-            <div
-              className={`w-full ${activeTab === 'xssspect' ? 'spatial-tab-pane block' : 'hidden'}`}
-              aria-hidden={activeTab !== 'xssspect'}
-            >
-              <XSSpectTab
-                assets={displayAssets}
-                onNavigateToTab={(tab) => setActiveTab(tab)}
-                onRefreshData={loadAllData}
               />
             </div>
 

@@ -95,8 +95,9 @@ services:
         hard: 65535
     volumes:
       - kali_tmp:/app/tmp
+      - /var/run/docker.sock:/var/run/docker.sock:ro
     healthcheck:
-      test: ["CMD-SHELL", "curl -sf http://localhost:5000/live || exit 1"]
+      test: [ "CMD-SHELL", "curl -sf http://localhost:5000/live || exit 1" ]
       interval: 30s
       timeout: 5s
       start_period: 15s
@@ -130,10 +131,23 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U sentinel_user -d sentinel_db"]
+      test: [ "CMD-SHELL", "pg_isready -U sentinel_user -d sentinel_db" ]
       interval: 5s
       timeout: 5s
       retries: 5
+    networks:
+      - sentinel_net
+
+  # 7. Metasploit Framework Container (Rapid7 Official Image)
+  metasploit:
+    image: metasploitframework/metasploit-framework:latest
+    container_name: sentinel_metasploit
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+    entrypoint: ["/bin/sh", "-c", "sleep infinity"]
+    volumes:
+      - msf_data:/home/msf/.msf4
     networks:
       - sentinel_net
 
@@ -143,6 +157,8 @@ volumes:
   redis_data:
     driver: local
   kali_tmp:
+    driver: local
+  msf_data:
     driver: local
 
 networks:

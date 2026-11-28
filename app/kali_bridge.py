@@ -184,7 +184,7 @@ def build_kali_command(tool: str, target: str, extra_args: str = "") -> str:
     # Network Reconnaissance & Scanning
     # ------------------------------------------------------------------
     if tool_key == "nmap":
-        flags = extra if extra else "-p- -sV -sC -A -T4 -Pn --script vuln,vulners --script-args mincvss=7.0"
+        flags = extra if extra else "-p- -sV -sC -A -T4 -Pn --script vuln"
         return " ".join(f"nmap {flags} {safe_target}".split())
 
     if tool_key == "rustscan":
@@ -705,6 +705,16 @@ def build_kali_command(tool: str, target: str, extra_args: str = "") -> str:
         flags = extra if extra else "--id"
         return " ".join(f"searchsploit --disable-colour {flags} {safe_q}".split())
 
+    if tool_key == "msfconsole":
+        query = norm_target
+        if "://" in query:
+            parsed_q = urlparse(query)
+            query = parsed_q.hostname or query
+        clean_q = re.sub(r"[^A-Za-z0-9_.\-/: ]", "", query).strip() or "ssh"
+        if "-x" in extra or "-r" in extra:
+            return " ".join(f"msfconsole -q {extra}".split())
+        return f"msfconsole -q -x {shlex.quote(f'version; search {clean_q}; exit')}"
+
     return " ".join(f"{tool.strip()} {extra} {safe_target}".split())
 
 
@@ -1067,4 +1077,186 @@ def run_tool_on_kali(command: str, timeout: int = 7200) -> dict:
         ),
         "returncode": -1,
         "elapsed_seconds": elapsed,
+    }
+
+
+def verify_all_kali_tools(catalog: dict[str, list[dict[str, str]]], flag: str = "-h") -> dict:
+    """Run a quick CLI flag check (default -h) across all cataloged tools inside sentinel_kali."""
+    import base64
+
+    cleaned_flag = (flag or "-h").strip() or "-h"
+    try:
+        flag_tokens = shlex.split(cleaned_flag)
+    except ValueError:
+        flag_tokens = ["-h"]
+    if not flag_tokens:
+        flag_tokens = ["-h"]
+
+    seen: set[str] = set()
+    entries: list[dict[str, object]] = []
+    for category, tools in catalog.items():
+        for t in tools:
+            name = t["name"]
+            if name in seen:
+                continue
+            seen.add(name)
+            cands = TOOL_BINARY_ALIASES.get(name.lower(), [name])
+            entries.append({"name": name, "category": category, "cands": cands})
+
+    runner_code = r"""
+import concurrent.futures, json, os, shutil, subprocess, sys, time
+
+payload = json.loads(sys.stdin.read())
+entries = payload["entries"]
+flag_tokens = payload["flag_tokens"]
+
+CRASH_MARKERS = (
+    "Traceback (most recent call last)",
+    "ModuleNotFoundError",
+    "SyntaxError",
+    "ImportError",
+    "No such file or directory",
+    "command not found",
+    "Exec format error",
+    "cannot execute binary file",
+    "Error connecting to docker daemon",
+)
+
+def check_one(entry):
+    name = entry["name"]
+    bpath = None
+    for cand in entry["cands"]:
+        found = shutil.which(cand)
+        if found:
+            bpath = found
+            break
+    if not bpath:
+        return {
+            "name": name,
+            "category": entry["category"],
+            "binary": None,
+            "working": False,
+            "returncode": 127,
+            "elapsed": 0.0,
+            "summary": "Binary not found in PATH",
+        }
+    if name.lower() == "commix" and bpath == "/usr/local/bin/commix" and shutil.which("/usr/bin/commix"):
+        bpath = "/usr/bin/commix"
+
+    args = [bpath, *flag_tokens]
+    if name.lower() == "zap-cli" and os.path.basename(bpath) == "zaproxy" and "-cmd" not in flag_tokens:
+        args = [bpath, "-cmd", *flag_tokens]
+
+    started = time.monotonic()
+    try:
+        proc = subprocess.run(
+            args,
+            stdin=subprocess.DEVNULL,
+            capture_output=True,
+            text=True,
+            timeout=90,
+        )
+        elapsed = round(time.monotonic() - started, 2)
+        combined = ((proc.stdout or "") + "\n" + (proc.stderr or "")).strip()
+        lines = [ln.strip() for ln in combined.splitlines() if ln.strip()]
+        first_line = lines[0][:100] if lines else "(no output)"
+        broken = any(marker in combined for marker in CRASH_MARKERS) or proc.returncode in (126, 127)
+        return {
+            "name": name,
+            "category": entry["category"],
+            "binary": bpath,
+            "working": not broken,
+            "returncode": proc.returncode,
+            "elapsed": elapsed,
+            "summary": first_line,
+        }
+    except subprocess.TimeoutExpired:
+        return {
+            "name": name,
+            "category": entry["category"],
+            "binary": bpath,
+            "working": False,
+            "returncode": -2,
+            "elapsed": round(time.monotonic() - started, 2),
+            "summary": f"Timed out after 90s running {' '.join(flag_tokens)}",
+        }
+    except Exception as exc:
+        return {
+            "name": name,
+            "category": entry["category"],
+            "binary": bpath,
+            "working": False,
+            "returncode": -3,
+            "elapsed": round(time.monotonic() - started, 2),
+            "summary": str(exc)[:100],
+        }
+
+with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:
+    results = list(pool.map(check_one, entries))
+
+print(json.dumps(results))
+"""
+    b64_runner = base64.b64encode(runner_code.encode("utf-8")).decode("ascii")
+    b64_payload = base64.b64encode(json.dumps({"entries": entries, "flag_tokens": flag_tokens}).encode("utf-8")).decode("ascii")
+    cmd = (
+        f"python3 -c {shlex.quote(f'import base64, sys; sys.stdin=__import__(\"io\").StringIO(base64.b64decode(\"{b64_payload}\").decode()); exec(base64.b64decode(\"{b64_runner}\").decode())')}"
+    )
+
+    started = time.monotonic()
+    res = run_tool_on_kali(cmd, timeout=300)
+    elapsed = res.get("elapsed_seconds") or round(time.monotonic() - started, 2)
+    if res.get("returncode") == -1 and "Failed to connect" in (res.get("stderr") or ""):
+        return {
+            "output": "",
+            "stderr": res.get("stderr", ""),
+            "returncode": -1,
+            "elapsed_seconds": elapsed,
+            "tool_available": False,
+            "command_ran": f"<all-{len(entries)}-tools> {' '.join(flag_tokens)}",
+        }
+
+    raw_out = (res.get("stdout") or "").strip()
+    try:
+        items = json.loads(raw_out)
+    except Exception:
+        return {
+            "output": raw_out,
+            "stderr": res.get("stderr") or "Failed to parse verification output from sentinel_kali.",
+            "returncode": res.get("returncode", 1) or 1,
+            "elapsed_seconds": elapsed,
+            "tool_available": True,
+            "command_ran": f"<all-{len(entries)}-tools> {' '.join(flag_tokens)}",
+        }
+
+    working_items = [it for it in items if it.get("working")]
+    failed_items = [it for it in items if not it.get("working")]
+
+    lines = [
+        f"=== Kali Tool Verification Report ({len(items)} tools checked with `{' '.join(flag_tokens)}`) ===",
+        f"Summary: WORKING: {len(working_items)} / {len(items)}  |  NOT WORKING: {len(failed_items)} / {len(items)}",
+        "",
+        f"--- WORKING TOOLS ({len(working_items)}) ---",
+    ]
+    for idx, it in enumerate(working_items, 1):
+        lines.append(
+            f"[PASS] {idx:02d}. {it['name']:<22} ({it['binary']}, rc={it['returncode']}, {it['elapsed']}s) — {it['summary']}"
+        )
+
+    lines.append("")
+    lines.append(f"--- NOT WORKING / ERRORS ({len(failed_items)}) ---")
+    if failed_items:
+        for idx, it in enumerate(failed_items, 1):
+            lines.append(
+                f"[FAIL] {idx:02d}. {it['name']:<22} ({it.get('binary') or 'missing'}, rc={it['returncode']}, {it['elapsed']}s) — {it['summary']}"
+            )
+    else:
+        lines.append("(None — all checked tools responded without errors!)")
+
+    return {
+        "output": "\n".join(lines),
+        "stderr": res.get("stderr") or "",
+        "returncode": 0 if not failed_items else 1,
+        "elapsed_seconds": elapsed,
+        "tool_available": True,
+        "command_ran": f"<all-{len(items)}-tools> {' '.join(flag_tokens)}",
     }

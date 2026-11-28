@@ -15,6 +15,7 @@ from app.kali_bridge import (
     get_kali_api_url,
     get_kali_mcp_logs_and_processes,
     run_tool_on_kali,
+    verify_all_kali_tools,
 )
 
 logger = logging.getLogger("sentinel.kali")
@@ -25,6 +26,10 @@ class KaliScanRequest(BaseModel):
     target: str = Field(..., description="Target URL, IP, or hostname to scan")
     tool: str = Field(..., description="Name of the Kali tool to execute")
     extra_args: str = Field("", description="Additional CLI flags to append")
+
+
+class KaliVerifyAllRequest(BaseModel):
+    flag: str = Field("-h", description="CLI flag (e.g. -h) to verify all cataloged tools")
 
 
 class KaliScanResult(BaseModel):
@@ -41,7 +46,7 @@ class KaliScanResult(BaseModel):
 
 TOOL_CATALOG: dict[str, list[dict[str, str]]] = {
     "Network Reconnaissance & Scanning": [
-        {"name": "nmap", "description": "Network mapper & service scanner", "example_args": "-p- -sV -sC -A -T4 -Pn --script vuln,vulners --script-args mincvss=7.0"},
+        {"name": "nmap", "description": "Network mapper & service scanner", "example_args": "-p- -sV -sC -A -T4 -Pn --script vuln"},
         {"name": "rustscan", "description": "Ultra-fast port scanner", "example_args": "--ulimit 5000 -- -sV -sC -A"},
         {"name": "masscan", "description": "High-speed internet-scale port scanner", "example_args": "-p1-65535 --rate 10000 -oJ /tmp/masscan_out.json"},
         {"name": "autorecon", "description": "Comprehensive automated recon", "example_args": '--nmap-append="-p- -sV -sC -A"'},
@@ -115,7 +120,6 @@ TOOL_CATALOG: dict[str, list[dict[str, str]]] = {
         {"name": "foremost", "description": "File carving and data recovery", "example_args": "-T -v -o /tmp/foremost_out"},
         {"name": "steghide", "description": "Steganography detection and extraction", "example_args": 'extract -p "" -f'},
         {"name": "exiftool", "description": "Metadata reader", "example_args": "-a -u -g1 -s"},
-        {"name": "binwalk", "description": "Firmware analysis and extraction", "example_args": "-e -M -A"},
         {"name": "autopsy", "description": "Digital forensics platform", "example_args": ""},
         {"name": "sleuthkit", "description": "Digital forensics tools (fls)", "example_args": "-r -p"},
     ],
@@ -129,6 +133,7 @@ TOOL_CATALOG: dict[str, list[dict[str, str]]] = {
         {"name": "waybackurls", "description": "Historical URL discovery", "example_args": ""},
         {"name": "gau", "description": "Get All URLs from multiple sources", "example_args": "--threads 5 --subs --blacklist png,jpg,gif,css,woff"},
         {"name": "searchsploit", "description": "Exploit-DB CVE & vulnerability advisory lookup", "example_args": "--id --cve"},
+        {"name": "msfconsole", "description": "Metasploit Framework module & CVE advisory search", "example_args": "-q -x"},
     ],
 }
 
@@ -229,4 +234,21 @@ def execute_kali_tool(request: KaliScanRequest):
         elapsed_seconds=result.get("elapsed_seconds", 0.0),
         timestamp=datetime.now(timezone.utc).isoformat(),
         tool_available=not bridge_failed and not missing_binary,
+    )
+
+
+@router.post("/verify-all", response_model=KaliScanResult)
+def verify_all_tools_endpoint(request: KaliVerifyAllRequest):
+    """Run a quick flag check (default -h) across every tool in TOOL_CATALOG."""
+    res = verify_all_kali_tools(TOOL_CATALOG, request.flag)
+    return KaliScanResult(
+        target="all-kali-tools",
+        tool_executed="verify-all",
+        command_ran=res["command_ran"],
+        output=res["output"],
+        stderr=res["stderr"],
+        returncode=res["returncode"],
+        elapsed_seconds=res["elapsed_seconds"],
+        timestamp=datetime.now(timezone.utc).isoformat(),
+        tool_available=res["tool_available"],
     )

@@ -16,7 +16,6 @@ import {
   Radar,
   Share2,
   Route,
-  Code,
   Terminal,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -26,8 +25,6 @@ export type ActiveTab =
   | 'targets'
   | 'subdomains'
   | 'pathfinder'
-  | 'sql'
-  | 'xssspect'
   | 'kali_pentester'
   | 'findings'
   | 'taxonomy'
@@ -73,8 +70,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
         { id: 'targets', label: 'Target Assessment', icon: <Globe className="w-4 h-4 shrink-0" /> },
         { id: 'subdomains', label: 'Subdomain Finder', icon: <Radar className="w-4 h-4 shrink-0 text-cyan-400" />, badge: 'Recon' },
         { id: 'pathfinder', label: 'Path Finder', icon: <Route className="w-4 h-4 shrink-0 text-emerald-400" />, badge: 'Endpoints' },
-        { id: 'sql', label: 'SQL', icon: <Database className="w-4 h-4 shrink-0 text-amber-400" />, badge: 'Discovery' },
-        { id: 'xssspect', label: 'XSSpect', icon: <Code className="w-4 h-4 shrink-0 text-rose-400" />, badge: 'Detection' },
         { id: 'kali_pentester', label: 'Kali Pentester', icon: <Terminal className="w-4 h-4 shrink-0 text-green-400" />, badge: 'Kali' },
         { id: 'findings', label: 'OWASP Findings', icon: <Shield className="w-4 h-4 shrink-0" /> },
       ],

@@ -1,187 +1,139 @@
-# OWASP Sentinel
+# OWASP Sentinel (`VulnSentinel`)
 
-**OWASP Sentinel** is a standalone, enterprise-grade cybersecurity web application focusing exclusively on OWASP web application security assessments, OWASP Top 10 intelligence, and continuous posture tracking.
-
-It does not rely on third-party vulnerability management platforms or external CVE aggregators. It operates strictly within authorized scopes using safe, non-destructive checks, multi-category taxonomy mapping, and automated patch verification diffing.
-
----
-
-## Complete 8-Phase Implementation Status: 100% COMPLETE
-
-| Phase | Description | Status | Test Coverage |
-| :--- | :--- | :--- | :--- |
-| **Phase 1** | Project Setup, URL Normalization & SSRF/Input Validation | Completed | 18 passing tests |
-| **Phase 2** | Asset Inventory, Administrative Scopes & Clearance | Completed | 12 passing tests |
-| **Phase 3** | HTTP/TLS Detection Engine & Rules Documentation | Completed | 14 passing tests |
-| **Phase 4** | OWASP Historical Taxonomy & Ingestion Service | Completed | 10 passing tests |
-| **Phase 5** | Finding Management & Multi-Category Mappings | Completed | 6 passing tests |
-| **Phase 6** | Scan Scheduling, Automated Patch Verification & Trends | Completed | 8 passing tests |
-| **Phase 7** | Full Web Application (React, TypeScript, Vite, Tailwind CSS, Recharts) | Completed | 4 component tests |
-| **Phase 8** | Celery/Redis Background Tasks, Docker Compose & Windows 11 Guides | Completed | 75 backend + 4 frontend tests |
+**OWASP Sentinel** is a full-stack cybersecurity assessment, reconnaissance, and OWASP Top 10 intelligence platform. It combines an async Python/FastAPI assessment engine, a **React 19 + TypeScript + Vite 8** dashboard, and an integrated **75-tool Kali Linux Docker container (`sentinel_kali`)** with strict scope authorization and SSRF protections.
 
 ---
 
 ## Architecture & Technology Stack
 
 ### Backend
-- **Language & Runtime:** Python 3.13 on Windows 11
-- **API Framework:** FastAPI, Starlette, Pydantic v2
-- **Database & ORM:** SQLAlchemy 2.0, Alembic migrations (SQLite local, PostgreSQL in Docker)
-- **Background Tasks & Scheduling:** Celery, Celery Beat, Redis 7, Croniter
-- **Testing:** pytest, pytest-asyncio, anyio, HTTPX
+- **Language & Runtime:** Python 3.13
+- **API Framework:** FastAPI, Starlette, Uvicorn (ASGI), Pydantic v2
+- **Database & ORM:** SQLAlchemy 2.1, Alembic migrations (SQLite for local dev, PostgreSQL 16 in Docker)
+- **HTTP & Parsing:** HTTPX (async probing/crawling), Requests (Kali container bridge), BeautifulSoup4
+- **Background Tasks & Scheduling:** Celery 5, Celery Beat, Redis 7, Croniter
+- **Testing:** `pytest`, `anyio`
 
 ### Frontend
 - **Framework & Tooling:** React 19, TypeScript, Vite 8, Tailwind CSS v4
-- **Visualizations & Charts:** Recharts (Area, Bar, Donut charts)
-- **Iconography:** Lucide React
-- **Component Testing:** Vitest, jsdom, React Testing Library
+- **UI & Visualization:** `react-select`, `lucide-react`, `recharts`, `framer-motion`, `jspdf`, `html2pdf.js`
+- **Dev Proxy:** Vite on `:5173` proxies `/api/*` requests to FastAPI on `http://127.0.0.1:8001`
+- **Testing & Linting:** Vitest, Testing Library (`jsdom`), `oxlint`
 
-### Deployment
-- **Containerization:** Multi-stage `Dockerfile` (Node.js build stage + Python slim runtime)
-- **Orchestration:** `docker-compose.yml` (`web`, `worker`, `beat`, `redis`, `db`)
+### Docker & Kali Execution Container
+- **App Image (`Dockerfile`):** Multi-stage build (Node 22 frontend build + Python 3.13 runtime on port `8000`)
+- **Kali Image (`docker/kali/Dockerfile`):** Unified Kali Linux container (`sentinel_kali`) built on `ghcr.io/zebbern/zebbern-kali-mcp:latest` + SecLists/dirb wordlists + 75 installed pentesting tools (`nmap`, `rustscan`, `masscan`, `autorecon`, `gobuster`, `feroxbuster`, `ffuf`, `dirsearch`, `nuclei`, `nikto`, `sqlmap`, `wpscan`, `dalfox`, `commix`, `nosqlmap`, `jaeles`, `whatweb`, `wafw00f`, `arjun`, `httpx`, `katana`, `gospider`, `testssl.sh`, `hydra`, `john`, `hashcat`, `ghidra`, `trivy`, `prowler`, `exiftool`, `subfinder`, `amass`, etc.)
+- **Compose Stack (`docker-compose.yml`):** `web` (`:8000`), `worker`, `beat`, `kali` (`127.0.0.1:5001->5000`, `127.0.0.1:1080->1080`), `redis` (`:6379`), `db` (`:5432`)
 
 ---
 
 ## Core Capabilities
 
-1. **Target Normalization & SSRF Defense (Phase 1):**
-   - Strictly validates URLs, apex domains, subdomains, and authorized `IP:Port` targets.
-   - Enforces valid TCP port ranges ($1 \le \text{port} \le 65535$).
-   - Blocks SSRF attack vectors: Cloud metadata (`169.254.169.254`, `169.254.169.253`, `metadata.google.internal`), loopback interfaces (`127.0.0.1`, `localhost`), and private RFC 1918 networks by default.
+1. **Target Validation, Scope Control & SSRF Defense**
+   - Normalizes and validates URLs, apex domains, subdomains, and `IP:Port` targets within valid TCP port ranges (`1–65535`).
+   - Blocks SSRF vectors (cloud metadata endpoints `169.254.169.254`, loopback, and private RFC 1918 ranges unless explicitly authorized).
+   - Enforces administrative `ScopeGrant` and `AuthorizedAsset` approval before active assessment.
 
-2. **Scope Grants & Subdomain Boundary Enforcement (Phase 2):**
-   - Targets require explicit administrative scope grants with validity windows and rate limits.
-   - **Subdomain Boundary Rule:** Discovered subdomains are never automatically scanned; they default to `PENDING` status until authorized.
+2. **Subdomain Finder (`Subdomain Finder`)**
+   - Multi-engine passive Certificate Transparency (`crt.sh`, CertSpotter), passive DNS (HackerTarget, AlienVault, Anubis), authoritative DNS/DoH record mining (`TXT`/`SPF`, `MX`, `NS`, `CNAME`), live header/HTML scraping, permutation probing, and wildcard DNS suppression.
 
-3. **Modular Detection Engine & Rule Registry (Phase 3 & 5):**
-   - `RULE-SEC-001`: HTTP Security Headers (HSTS, CSP, X-Frame-Options, X-Content-Type-Options).
-   - `RULE-SEC-002`: TLS Configuration (Protocol deprecation, weak ciphers, cleartext HTTP).
-   - `RULE-SEC-003`: Cookie Security Flags (`Secure`, `HttpOnly`, `SameSite`).
-   - `RULE-SEC-004`: Information Leakage (Server banners, `X-Powered-By`, ASP.NET versions).
-   - `RULE-SEC-005`: CORS Misconfigurations (Origin reflection, wildcard credentials).
-   - `RULE-SEC-006`: Sensitive File Exposure (`.git/HEAD`, `.env`, `security.txt` RFC 9116).
-   - `RULE-SEC-007`: HTTP Methods & Verb Security (`TRACE`/`TRACK` Cross-Site Tracing).
+3. **Path Finder (`Path Finder`)**
+   - Supports **Quick**, **Recursive**, and **Exhaustive** discovery modes (`1,485+` to `6,072+` candidate paths).
+   - Discovers routes from `robots.txt`, nested sitemaps (`sitemap.xml`, `sitemap_index.xml`, `wp-sitemap.xml`), intra-host `<script src>` SPA/JS bundles, and live HTML link crawling.
+   - Filters false positives using baseline 404 hashing, Soft-404 fingerprinting, and wildcard redirect checks.
 
-4. **Honest OWASP Coverage Matrix (Phase 3 & 5):**
-   - Real-time endpoint `/api/v1/rules/coverage/matrix` clearly distinguishing automated rules, partial checks, manual review requirements, and unimplemented categories.
+4. **Kali Pentester Arsenal (`Kali Pentester` — 75 Tools / 7 Categories)**
+   - Executes real Kali Linux CLI tools inside `sentinel_kali` with searchable category filtering, **Installed only** filtering, live terminal output badges (`lines` and `findings` counts), and execution history.
+   - **Nmap Two-Part Syntax:** Defaults to `-p- -sV -sC -A -T4 -Pn --script vuln`, with a **`Deep scan (vulners)`** checkbox after `Installed only` that fills Extra Arguments with `-sV --script vulners --script-args mincvss=7.0`.
+   - **URL-to-File Fetching:** Automatically downloads `http(s)://` targets to `/tmp/sentinel_target_asset` for file-based forensics/RE tools (`exiftool`, `strings`, `binwalk`, `foremost`, `steghide`).
+   - **Remote Bridge (Render + Ngrok):** Non-localhost deployments (e.g. `owasp-sentinel.onrender.com`) can connect to your local FastAPI backend & Kali container via an Ngrok URL saved in `localStorage`.
 
-5. **Historical OWASP Taxonomy (2003–2021) & Ingestion Service (Phase 4):**
-   - Indexes all 7 official OWASP Top 10 publications: 2003, 2004, 2007, 2010, 2013, 2017, and 2021 (no invented years).
-   - Independent ingestion service with deterministic SHA-256 change detection and audit alerts.
-
-6. **Multi-Category Finding Management (Phase 5):**
-   - Separates raw technical observations from findings.
-   - Allows technical findings to map to multiple OWASP categories across editions with documented justifications.
-   - Tracks finding status lifecycle (`POTENTIAL`, `CONFIRMED`, `FALSE_POSITIVE`, `MITIGATED`).
-
-7. **Scan Scheduling & Automated Patch Verification (Phase 6):**
-   - Recurring assessment schedules (`DAILY`, `WEEKLY`, `MONTHLY`, `CRON`).
-   - Automated diffing between consecutive scans classifies issues as `STILL_VULNERABLE`, `REMEDIATED`, or `REGRESSED`.
-   - Posture trends tracked scan-by-scan.
-
-8. **Web Dashboard & Reports (Phase 7):**
-   - Complete single-page application with 9 interactive cybersecurity tabs:
-     1. **Overview:** Executive KPIs, Top 10 breakdown, Severity donut chart, posture trends.
-     2. **Target Assessment:** Input validation preview, explicit authorization toggle, scan runner.
-     3. **OWASP Findings:** Multi-faceted filter bar, evidence viewer, status update controls.
-     4. **Taxonomy Intelligence:** Historical editions browser (2003–2021) and ingestion log.
-     5. **Coverage Matrix:** Interactive capability breakdown and rule documentation.
-     6. **Patch Verification:** Scan-by-scan diffs and regression timeline.
-     7. **Recurring Scans:** Cadence manager, pause/resume, and due scans trigger.
-     8. **Reports:** Printable/PDF exportable security assessment report with posture score.
-     9. **Scopes & Audit:** Scope grant manager, SSRF policies, and immutable audit trail.
-   - Real vs. Simulated test mode banner toggle.
+5. **OWASP Scanner Engine (`19` Detection Rules) & Taxonomy Intelligence**
+   - Registers 19 built-in rules (`RULE-SEC-001` through `RULE-SEC-019`) covering HTTP Security Headers, TLS/crypto checks, Cookie flags, Info Leakage, CORS, Sensitive Files, HTTP Methods, Injection, Auth Failures, SSRF, XXE, CSRF, Redirects, DoS Resilience, Vulnerable Components, Data Integrity, Insecure Design, and Logging/Monitoring.
+   - Maps findings across official OWASP Top 10 editions (**2003–2025**), computes the live **Coverage Matrix**, tracks **Proof of Concept**, **Recurring Scans**, **Patch Verification**, PDF export reports, and an immutable **Audit Trail**.
 
 ---
 
-## How to Run on Windows 11 (VS Code)
+## Dashboard Navigation (11 Tabs)
+
+| Section | Tab | Purpose |
+| :--- | :--- | :--- |
+| **CORE POSTURE** | **Overview** | Executive KPIs, severity breakdown, Top 10 distribution, posture trends |
+| **CORE POSTURE** | **Target Assessment** | Target input validation, authorization clearance, OWASP rule scan runner |
+| **CORE POSTURE** | **Subdomain Finder** | Multi-source passive/active subdomain enumeration & live HTTP checks |
+| **CORE POSTURE** | **Path Finder** | Quick / Recursive / Exhaustive directory, sitemap, JS bundle & HTML route discovery |
+| **CORE POSTURE** | **Kali Pentester** | 75 Kali Linux tools across 7 categories with line/finding counters & Ngrok bridge |
+| **CORE POSTURE** | **OWASP Findings** | Search/filter findings, inspect evidence, manage lifecycle status |
+| **TAXONOMY & COVERAGE** | **Taxonomy Intelligence** | Browse official OWASP Top 10 editions (2003–2025) & ingestion history |
+| **TAXONOMY & COVERAGE** | **Coverage Matrix** | Automated vs. partial vs. manual rule coverage per OWASP category |
+| **OPERATIONS & AUDIT** | **Recurring Scans** | Cron-based scan schedules (`DAILY`, `WEEKLY`, `MONTHLY`, `CRON`) |
+| **OPERATIONS & AUDIT** | **Proof of Concept** | Finding PoC verification, patch diffing, and PDF report export |
+| **OPERATIONS & AUDIT** | **Scopes & Audit** | Scope grants, Ngrok tunnel management, and audit log viewer |
+
+---
+
+## How to Run (Windows 11 / Local Dev)
 
 ### Prerequisites
-1. Python 3.11+ installed (e.g. Python 3.13)
-2. Node.js 20+ installed (e.g. Node 24)
+- Python 3.11+ (tested on Python 3.13)
+- Node.js 20+
+- Docker Desktop (required for the `sentinel_kali` 75-tool container)
 
----
-
-### Method 1: Unified Local Development Server (Recommended for Beginners)
-
-In this mode, FastAPI directly serves both the REST API and the built React web application from a single command!
-
-#### Step 1: Install Dependencies
-Open PowerShell in the project directory (`C:\VSCode\VulnSentinel`):
+### 1. Start the Kali Docker Container
 ```powershell
-# 1. Install Python dependencies
+docker compose build kali
+docker compose up -d kali
+```
+Verify it is healthy at `http://127.0.0.1:5001/live`.
+
+### 2. Install Backend & Frontend Dependencies
+```powershell
 python -m pip install -r requirements.txt
 
-# 2. Install Frontend dependencies & build React UI
 cd frontend
 npm.cmd install
-npm.cmd run build
 cd ..
 ```
 
-#### Step 2: Initialize Database Migrations
+### 3. Run in Dual Development Mode (Recommended for Development)
+- **Terminal 1 — FastAPI Backend (`:8001`):**
+  ```powershell
+  python -m uvicorn app.main:app --host 127.0.0.1 --port 8001 --reload
+  ```
+- **Terminal 2 — Vite React UI (`:5173`):**
+  ```powershell
+  cd frontend
+  npm.cmd run dev
+  ```
+Open:
+- **React Web Dashboard:** `http://localhost:5173/`
+- **FastAPI Swagger Docs:** `http://127.0.0.1:8001/docs`
+- **ReDoc:** `http://127.0.0.1:8001/redoc`
+
+### 4. Unified Production Build (`:8000`) or Full Docker Compose Stack
 ```powershell
-alembic upgrade head
-```
-
-#### Step 3: Start the Web Application
-```powershell
-python main.py
-```
-Open your web browser and navigate to:
-- **Interactive Web Dashboard:** `http://127.0.0.1:8000/app`
-- **Interactive Swagger API Docs:** `http://127.0.0.1:8000/docs`
-- **ReDoc Documentation:** `http://127.0.0.1:8000/redoc`
-
----
-
-### Method 2: Dual Development Mode (Frontend Hot Reloading)
-
-If you are modifying React components and want instant hot module reloading:
-
-#### Terminal 1 (FastAPI Backend):
-```powershell
-python main.py
-```
-
-#### Terminal 2 (Vite Frontend):
-```powershell
+# Build frontend and serve everything via FastAPI (app/main.py)
 cd frontend
-npm.cmd run dev
+npm.cmd run build
+cd ..
+python -m uvicorn app.main:app --host 0.0.0.0 --port 8000
+
+# OR run the full 6-service Docker stack (web, worker, beat, kali, redis, db)
+docker compose up -d --build
 ```
-Open `http://127.0.0.1:5173` in your browser. All API requests to `/api/v1` are automatically proxied to the backend on `:8000`.
 
 ---
 
-### Method 3: Production Docker Compose Deployment
-
-Run the complete multi-container stack with PostgreSQL, Redis, Celery Worker, and Celery Beat:
+## Verification Commands
 
 ```powershell
-docker compose up --build
-```
-This launches:
-- `sentinel_web`: FastAPI web server & React dashboard on port 8000
-- `sentinel_worker`: Celery worker running asynchronous security scan tasks
-- `sentinel_beat`: Celery Beat scheduler checking recurring scans and daily OWASP updates
-- `sentinel_redis`: Redis 7 message broker on port 6379
-- `sentinel_postgres`: PostgreSQL 16 database on port 5432
+# Path Finder & route safeguards pytest suite
+python -m pytest tests/test_route_checker.py tests/test_path_finder_safeguards.py -v
 
----
+# Frontend TypeScript check & production Vite build
+cmd /c "cd frontend && npx tsc -b && npm run build"
 
-## Running the Automated Test Suites
-
-### Run Backend Tests (75 tests):
-```powershell
-python -m pytest -v
-```
-
-### Run Frontend Component Tests (Vitest):
-```powershell
+# Frontend Vitest suite
 cd frontend
 npm.cmd run test
 ```
-
-All 75 backend tests and 4 frontend component tests execute with zero failures!
-#   O W A S P - S e n t i n e l  
- 
